@@ -1,0 +1,56 @@
+# Ignore files in root
+/*.html
+/*.xml
+/*.css
+/*.js
+/*.txt
+/*.conf
+
+# General ignore
+*.cut
+*.ist
+*.xdy
+*.aux
+*.idx
+*.ilg
+*.ind
+*.loa
+*.lof
+*.lol
+*.log
+*.lot
+*.new
+*.mw
+*.glg
+*.glo
+*.gls
+*.sidetoc
+*.synctex(busy)
+*.toc
+*.out
+*.lwarpmkconf
+*.gz
+
+ceng4AN_html.pdf
+
+# General files types
+*.zip
+# Ignore copied tex files in chapters
+docs/chapters/**/*.tex
+docs
+# Ignore image files in chapters
+chapters/**/*.png
+chapters/**/*.pdf
+chapters/**/*.gif
+chapters/**/*.svg
+*.glo
+*.glg
+*.alg
+*.acn
+*.acr
+*.blg
+*.bbl
+*.glsdefs
+ceng4AN-images
+ceng4AN_html-blx.bib
+ceng4AN-blx.bib

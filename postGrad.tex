@@ -1,0 +1,262 @@
+
+% Save this as tutorial.tex for the lwarp package tutorial.
+
+% Listings works with book
+\documentclass{book}
+
+\usepackage{iftex}
+
+% --- LOAD FONT SELECTION AND ENCODING BEFORE LOADING LWARP ---
+
+\ifPDFTeX
+\usepackage{lmodern}            % pdflatex or dvi latex
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\else
+\usepackage{fontspec}           % XeLaTeX or LuaLaTeX
+\fi
+
+% --- LWARP IS LOADED NEXT ---
+\usepackage[
+%   HomeHTMLFilename=index,     % Filename of the homepage.
+%   HTMLFilename={node-},       % Filename prefix of other pages.
+%   IndexLanguage=english,      % Language for xindy index, glossary.
+%   latexmk,                    % Use latexmk to compile.
+%   OSWindows,                  % Force Windows. (Usually automatic.)
+% Mathjax is the way to go, if I lose mathjax, host it myself????? Don't have too much math involved in my equations.
+mathjax,                    % Use MathJax to display math.
+]{lwarp}
+% \boolfalse{FileSectionNames}  % If false, numbers the files.
+
+% --- LOAD PDFLATEX MATH FONTS HERE ---
+
+% --- OTHER PACKAGES ARE LOADED AFTER LWARP ---
+\usepackage{makeidx} \makeindex
+\usepackage{xcolor}             % (Demonstration purposes only.)
+\usepackage{hyperref,cleveref}  % LOAD THESE LAST!
+
+% --- Custom non tutorial content
+% --- Listings
+\usepackage{listings}
+
+% Styling only for pdf --- for now
+\lstset{language=C++,
+	basicstyle=\ttfamily,
+	keywordstyle=\color{blue}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	commentstyle=\color{green}\ttfamily,
+	morecomment=[l][\color{magenta}]{\#},
+	captionpos=t,
+}
+
+% --- Glossary Terms
+\usepackage[acronym, toc, xindy]{glossaries}
+\input{config/glossary.tex} % Glossary File
+\makeglossaries
+
+\input{config/acronym.tex}
+\glsaddall
+
+
+% --- MDFFRAMED CUSTOMIZATION
+\usepackage{mdframed}
+
+\mdfdefinestyle{example}{
+	linecolor=blue!50,
+	align=center, 
+	backgroundcolor=blue!30, 
+	frametitlebackgroundcolor=blue!15,
+	shadow=true
+}
+\mdfdefinestyle{definition}{
+	linecolor=red!50,
+	align=center, 
+	backgroundcolor=red!30, 
+	frametitlebackgroundcolor=red!15,
+	shadow=true
+}
+\mdfdefinestyle{theorem}{
+	linecolor=yellow!50,
+	align=center, 
+	backgroundcolor=yellow!30, 
+	frametitlebackgroundcolor=yellow!15,
+	shadow=true
+}
+
+\mdfdefinestyle{important}{
+	linecolor=purple!50,
+	align=center, 
+	backgroundcolor=purple!30, 
+	frametitlebackgroundcolor=purple!15,
+	shadow=true
+}
+
+% --- References ---
+\newcommand{\onlineCite}{[Online] Available: }	% Used in BIBLIOGRAPHY 
+\usepackage[backend=bibtex,sorting=none]{biblatex}	% Sort by citation order, IEEE
+\addbibresource{config/references.bib}
+
+% --- MATH LIBRARIES ---
+\usepackage{amssymb}
+
+% --- LATEX AND HTML CUSTOMIZATION ---
+\title{The Lwarp Tutorial}
+\author{Some Author}
+\setcounter{tocdepth}{2}        % Include subsections in the \TOC.
+\setcounter{secnumdepth}{2}     % Number down to subsections.
+\setcounter{FileDepth}{1}       % Split \HTML\ files at sections
+\booltrue{CombineHigherDepths}  % Combine parts/chapters/sections
+\setcounter{SideTOCDepth}{1}    % Include subsections in the side\TOC
+\HTMLTitle{Webpage Title}       % Overrides \title for the web page.
+\HTMLAuthor{Some Author}        % Sets the HTML meta author tag.
+\HTMLLanguage{en-US}            % Sets the HTML meta language.
+\HTMLDescription{A description.}% Sets the HTML meta description.
+\HTMLFirstPageTop{Name and \fbox{HOMEPAGE LOGO}}
+\HTMLPageTop{\fbox{LOGO}}
+\HTMLPageBottom{Contact Information and Copyright}
+\CSSFilename{lwarp_sagebrush.css}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%% UTILITY COMMANDS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% REFERENCE COMMANDS OF INTEREST %%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%  replacementTerms = ["Cpp Code", cplusplus, "Latex Code", latex, "Python Script", python, 
+% "Bash Script", bash,"Matlab Script", matlab,"Yaml File",yaml,"JSON Output", json, "Golang", golang]
+% These are the terms that are manually converted to code listings, by default it is converted to cpp, thanks to SENG475
+
+% Other Notes
+
+% --- Mdframed examples
+% 	Values include:	example, definition, theorem and important
+%
+%	\begin{mdframed}[style=definition, frametitle={SENG475 Example Code Listing}]
+%		All for the sake of glory city. We see that in \cref{ex:1} that mdframed makes 
+%		environments look nice
+%	\end{mdframed}
+%	
+%	\begin{mdframed}[style=theorem, frametitle={SENG475 Example Code Listing}]
+%		All for the sake of glory city. We see that in \cref{ex:1} that mdframed makes 
+%		environments look nice
+%	\end{mdframed}
+%	
+%	\begin{mdframed}[style=important, frametitle={SENG475 Example Code Listing}]
+%		All for the sake of glory city. We see that in \cref{ex:1} that mdframed makes 
+%		environments look nice
+%	\end{mdframed}
+\begin{document}
+
+
+\begin{warpHTML}
+	\maketitle                   % Or titlepage/titlingpage environment.
+\end{warpHTML}
+\begin{center}
+	%		{\vspace*{3pt} }
+	{\Huge \textsc{Personal Study Notes} \\ \vspace{40pt}}
+	%	{\Huge  \\ \vspace{4pt}}  
+	\rule[13pt]{1\textwidth}{1pt} \\ \vspace{1pt}
+	{\LARGE \textbf{{\textsc{Software Engineer}}} \\ }
+	{\Large \textsc{Post Grad Notes} \\} 
+	\vspace{4pt} 
+	%{\Large \textsc{Spring 2018}} \\ 
+	\vspace{20pt}
+	{\Large \textsc{Victoria, British Columbia, Canada} \\ \vspace{45pt} }
+	
+	%		\\ \vspace{10pt}
+	{\Large \textsc{\today} \\ \vspace{15pt}
+		\textbf{Name:} \hfill David Li \\
+		\textbf{Student Number:} \hfill V00818631 \\
+		\textbf{Email:} \hfill \href{mailto:davidli012345@gmail.ca}{davidli012345@gmail.ca} \\
+		\vspace{15pt}
+		{\Large \textsc{In partial fulfillment of the never ending quest to learn. \\
+			}
+		}	
+	}
+\end{center}
+
+% An article abstract would go here.
+
+\tableofcontents                % MUST BE BEFORE THE FIRST SECTION BREAK!
+\listoffigures
+\lstlistoflistings
+\chapter{Example chapter}
+
+\section{A section}
+
+This is some text which is indexed.\index{Some text.}
+
+\subsection{A subsection}
+
+See \cref{fig:withtext}.
+
+\begin{mdframed}[style=definition, frametitle={SENG475 Example Code Listing}]
+	All for the sake of glory city. We see that in \cref{ex:1} that mdframed makes 
+	environments look nice
+\end{mdframed}
+
+\begin{mdframed}[style=theorem, frametitle={SENG475 Example Code Listing}]
+	All for the sake of glory city. We see that in \cref{ex:1} that mdframed makes 
+	environments look nice
+\end{mdframed}
+
+\begin{mdframed}[style=important, frametitle={SENG475 Example Code Listing}]
+	All for the sake of glory city. We see that in \cref{ex:1} that mdframed makes 
+	environments look nice
+\end{mdframed}
+	
+\begin{figure}\begin{center}
+\fbox{\textcolor{blue!50!green}{Text in a figure.}}
+\caption{A figure with text\label{fig:withtext}}
+\end{center}\end{figure}
+
+\begin{lstlisting}[language=C++, caption={Cpp Testing}]
+#include <iostream>
+\end{lstlisting}
+
+% Note to self, refer to all go programs are go programs, golang is reserved for the code.
+\begin{lstlisting}[caption={Golang Program}]
+package main
+
+import (
+"fmt"
+"io/ioutil"
+)
+\end{lstlisting}
+
+\section{Some math}
+
+Inline math: $r = r_0 + vt - \frac{1}{2}at^2$
+followed by display math:
+\begin{equation}
+a^2 + b^2 = c^2
+\end{equation}
+
+
+\begin{lstlisting}[language=C++, caption={Cpp Testing}]
+#include <iostream>
+\end{lstlisting}
+
+% Note to self, refer to all go programs are go programs, golang is reserved for the code.
+\begin{lstlisting}[caption={Golang Program}]
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+)
+\end{lstlisting}
+
+\begin{warpprint}   % For print output ...
+\cleardoublepage    % ... a common method to place index entry into TOC.
+\phantomsection
+\addcontentsline{toc}{chapter}{\indexname}
+\end{warpprint}
+\ForceHTMLPage      % HTML index will be on its own page.
+\ForceHTMLTOC       % HTML index will have its own toc entry.
+\printindex
+
+\end{document}

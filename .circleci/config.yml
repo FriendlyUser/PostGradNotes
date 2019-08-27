@@ -1,0 +1,103 @@
+version: 2
+jobs:
+  lwarp:
+    docker:
+      - image: grandfleet/dolwarp:v0.73
+    working_directory: ~/latex
+    steps:
+      - checkout
+      - run: apt-get update && apt-get install poppler-utils -y
+      - run: lwarpmk --help || true
+      - run: lualatex -synctex=1 postGrad.tex || lualatex -synctex=1 postGrad.tex || lualatex -synctex=1 postGrad.tex
+      - run: lwarpmk limages || true
+      - run: lwarpmk printglossary
+      - run: lwarpmk printindex
+      - run: lwarpmk print
+      - run: lwarpmk html && lwarpmk html1
+      - run: lwarpmk htmlglossary
+      - run: lwarpmk htmlindex
+      - run: lwarpmk html1 && lwarpmk limages || true
+      - run: lwarpmk htmlglossary
+      - run: lwarpmk htmlindex
+      - run: lwarpmk html1 && lwarpmk limages || true
+      - run: lwarpmk pdftohtml
+      - run: mkdir -p temp_lwarpmk && mv *.html temp_lwarpmk/ && mv *.css temp_lwarpmk/ || true
+      - run: cp -R images temp_lwarpmk || true
+      - run: cd temp_lwarpmk && ls && cd ../
+      - store_artifacts:
+          path: temp_lwarpmk
+      - persist_to_workspace:
+          root: .
+          paths: 
+            - temp_lwarpmk/*.html
+            - temp_lwarpmk
+
+  python:
+    docker:
+      - image: python:latest
+    environment:
+      - TARGET_BRANCH: gh-pages
+    working_directory: ~/html
+    steps:
+      - checkout
+      - attach_workspace:
+         at: .
+      - run: ls || true
+      - run: cd temp_lwarpmk || true && ls && cd temp_lwarpmk || true && ls || true
+      - run: mv temp_lwarpmk/*.html . || true 
+      - run: mv temp_lwarpmk/temp_lwarpmk/*.html . || true 
+      - run: mv temp_lwarpmk/*.css . || true
+      - run: mv temp_lwarpmk/images . || true
+      - run: ls || true
+      - run: cd scripts && chmod +x ./moveFiles.sh && ./moveFiles.sh
+      - run: cd ../
+      - run:
+          name: Deployment
+          command: |
+              git config --global user.email "davidli012345@uvic.ca"
+              git config --global user.name "$USERNAME"
+              git clone $CIRCLE_REPOSITORY_URL out
+              cd out
+              git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
+              git rm -rf .
+              cd ..
+              ls
+              cp -a docs/. out/.
+              mkdir -p out/.circleci && cp -a .circleci/. out/.circleci/.
+              cd out
+              git remote rm origin
+              git remote add origin https://$USERNAME:$GITHUB_TOKEN@github.com/$USERNAME/$REPO.git
+              git add -A
+              git commit -m "Automated deployment: ${CIRCLE_SHA1} [ci skip]" --allow-empty
+              git push origin $TARGET_BRANCH
+      - store_artifacts:
+          root: .
+          path: docs
+      - persist_to_workspace:
+          root: .
+          paths: 
+            - docs
+          
+  surge:
+    docker:
+      - image: node:latest
+    working_directory: ~/docs
+    steps:
+      - checkout
+      - attach_workspace:
+         at: docs
+      - run: mv CNAME docs/CNAME
+      - run: npm install surge --save-dev
+      - run: echo | ./node_modules/.bin/surge --project docs
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - lwarp
+      - python:
+          requires:
+            - lwarp
+      - surge:
+          requires:
+            - python
