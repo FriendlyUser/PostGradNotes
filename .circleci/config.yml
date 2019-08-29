@@ -14,11 +14,13 @@ jobs:
       - run: lwarpmk printindex
       - run: lwarpmk print
       - run: lwarpmk html && lwarpmk html1
+      - run: bibtex postGrad_html
       - run: lwarpmk htmlglossary
       - run: lwarpmk htmlindex
-      - run: lwarpmk html1 && lwarpmk limages || true
+      - run: lwarpmk html1 && lwarpmk html1 && lwarpmk html1 && lwarpmk limages || true
       - run: lwarpmk htmlglossary
       - run: lwarpmk htmlindex
+      - run: bibtex postGrad_html
       - run: lwarpmk html1 && lwarpmk limages || true
       - run: lwarpmk pdftohtml
       - run: mkdir -p temp_lwarpmk && mv *.html temp_lwarpmk/ && mv *.css temp_lwarpmk/ || true
