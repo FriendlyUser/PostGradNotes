@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="author" content="Some Author" />
+<meta name="generator" content="LaTeX lwarp package" />
+<meta name="description" content="A description." />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<title>Webpage Title</title>
+<link rel="stylesheet" href="prism.css" type="text/css">
+<script src="prism.js" type="text/javascript"> </script>
+<link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
+
+
+
+<!-- https://groups.google.com/forum/#!topic/
+                                     mathjax-users/jUtewUcE2bY -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Register.StartupHook("TeX AMSmath Ready",function () {
+      var seteqsectionDefault = {name: "", num: 0};
+      var seteqsections = {}, seteqsection = seteqsectionDefault;
+      var TEX = MathJax.InputJax.TeX, PARSE = TEX.Parse;
+      var AMS = MathJax.Extension["TeX/AMSmath"];
+      TEX.Definitions.Add({
+      macros: {
+            seteqsection: "mySection",
+            seteqnumber: "mySetEqNumber"
+      }
+      });
+
+
+      PARSE.Augment({
+      mySection: function (name) {
+            seteqsection.num = AMS.number;
+            var n = this.GetArgument(name);
+            if (n === "") {
+                seteqsection = seteqsectionDefault;
+            } else {
+                if (!seteqsections["_"+n])
+                       seteqsections["_"+n] = {name:n, num:0};
+                seteqsection = seteqsections["_"+n];
+            }
+            AMS.number = seteqsection.num;
+      },
+      mySetEqNumber: function (name) {
+            var n = this.GetArgument(name);
+            if (!n || !n.match(/^ *[0-9]+ *$/))
+                n = "";
+            else
+                n = parseInt(n)-1;
+            <!-- $ syntax highlighting -->
+            if (n === "" || n < 1)
+                TEX.Error
+                ("Argument to "+name+" should be a positive integer");
+            AMS.number = n;
+      }
+      });
+      MathJax.Hub.Config({
+      TeX: {
+            equationNumbers: {
+                formatTag: function (n) {
+                       <!-- if not numeric, don't include the chapter -->
+                       if (!n.match(/^ *[0-9]+ *$/ ))
+                       <!-- $ syntax highlighting -->
+                          return "("+(n).replace(/^\./,"")+")" ;
+                       else
+                          return "("+(seteqsection.name+"."+n).replace(/^\./,"")+")" ;
+                },
+                formatID: function (n) {
+                       n = (seteqsection.name+'.'+n).replace
+                          (/[:"'<>&]/g,"").replace(/^\./,"");
+                       return 'mjx-eqn-' + n;
+                }
+            }
+      }
+      });
+});
+</script>
+
+
+<!-- http://docs.mathjax.org/en/latest/options/ThirdParty.html -->
+<script type="text/x-mathjax-config">
+  MathJax.Ajax.config.path["Contrib"] =
+      "https://cdn.mathjax.org/mathjax/contrib";
+</script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+      TeX: {
+            extensions: ["autoload-all.js"] ,
+            equationNumbers: {
+                autoNumber: "AMS"
+            }
+      }
+});
+</script>
+
+
+<!-- Alternative CDN provider: -->
+<script type="text/javascript" async
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML-full">
+</script>
+
+
+<!-- No longer supported after April 30, 2017: -->
+<!--
+<script
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
+</script>
+-->
+
+
+
+</head>
+<body>
+<header>
+
+
+<p>
+Name and <span
+    class="fbox"
+    style="display:inline-block ; border:1pt solid #000000; padding:3pt ; color:#000000"
+>HOMEPAGE LOGO</span>
+</p>
+</header>
+
+<div class="bodywithoutsidetoc" >
+
+
+<div class="bodycontainer" >
+
+
+<section class="textbody" >
+
+<!--Nullify \ensuremath, footnotes for MathJax:-->
+
+\(\newcommand \ensuremath [1]{#1}\)
+
+\(\newcommand \footnote [2][]{\text {( Footnote #1 )}}\)
+
+\(\newcommand \footnotemark [1][]{\text {( Footnote #1 )}}\)
+
+<!--Additional customizations for MathJax:-->
+
+<a id="postGrad-autopage-1"></a>
+<div class="titlepage" >
+
+<h1>The Lwarp Tutorial</h1>
+
+
+<div class="author" >
+
+
+<div class="oneauthor" >
+
+<p>
+Some Author
+</p>
+</div>
+
+</div>
+
+
+<div class="titledate" >
+
+<p>
+August 29, 2019
+</p>
+</div>
+
+</div>
+<div class="center" >
+
+<p>
+<span class="textsc" >Personal Study Notes</span><br />
+<span
+    style="background:black; width:1012pt ; height:1pt ;
+    -ms-transform: translate(0pt,-26pt);
+    -webkit-transform: translate(0pt,-26pt);
+    transform: translate(0pt,-26pt);
+    display:inline-block;"
+><!----></span><br />
+<b><span class="textsc" >Software Engineer</span></b><br />
+<span class="textsc" >Post Grad Notes</span><br />
+<span class="textsc" >Victoria, British Columbia, Canada</span><br />
+
+</p>
+
+<p>
+<span class="textsc" >August 29, 2019</span><br />
+<b>Name:</b> &#x2003;&#x2003;David Li<br />
+<b>Student Number:</b> &#x2003;&#x2003;V00818631<br />
+<b>Email:</b> &#x2003;&#x2003;<a href="mailto:davidli012345@gmail.ca" target="_blank" >davidli012345@gmail.ca</a><br />
+<span class="textsc" >In partial fulfillment of the never ending quest to learn.<br />
+</span>
+</p>
+</div>
+<h3 id="autosec-4">Contents</h3>
+<a id="postGrad-autopage-4"></a>
+
+
+
+<nav class="toc" >
+
+<p>
+<a href=" Example-chapter.html#autosec-8" class="tocchapter" >
+<span class="sectionnumber" >1</span>&#x2003;Example chapter
+</a>
+</p>
+
+
+<p>
+<a href=" Example-chapter.html#autosec-9" class="tocsection" >
+<span class="sectionnumber" >1.1</span>&#x2003;A section
+</a>
+</p>
+
+
+<p>
+<a href=" Example-chapter.html#autosec-10" class="tocsubsection" >
+<span class="sectionnumber" >1.1.1</span>&#x2003;A subsection
+</a>
+</p>
+
+
+<p>
+<a href=" Some-math.html#autosec-15" class="tocsection" >
+<span class="sectionnumber" >1.2</span>&#x2003;Some math
+</a>
+</p>
+
+
+<p>
+<a href=" Real-Content.html#autosec-17" class="tocchapter" >
+<span class="sectionnumber" >2</span>&#x2003;Real Content
+</a>
+</p>
+
+
+<p>
+<a href=" Index.html#autosec-22" class="tocchapter" >
+Index
+</a>
+</p>
+</nav>
+<h3 id="autosec-5">List of Figures</h3>
+<a id="postGrad-autopage-5"></a>
+
+
+
+<nav class="lof" >
+
+<p>
+<a href=" Example-chapter.html#autoid-1" class="tocfigure" >
+<span class="sectionnumber" >1.1</span>&#x2003;A figure with text
+</a>
+</p>
+</nav>
+<h3 id="autosec-6">Listings</h3>
+<a id="postGrad-autopage-6"></a>
+
+
+
+<nav class="lol" >
+
+<p>
+<a href=" Example-chapter.html#autoid-2" class="toclstlisting" >
+<span class="sectionnumber" >1.1</span>&#x2003;Cpp Testing
+</a>
+</p>
+
+
+<p>
+<a href=" Example-chapter.html#autoid-3" class="toclstlisting" >
+<span class="sectionnumber" >1.2</span>&#x2003;Golang Program
+</a>
+</p>
+
+
+<p>
+<a href=" Real-Content.html#autoid-4" class="toclstlisting" >
+<span class="sectionnumber" >2.1</span>&#x2003;Cpp Testing
+</a>
+</p>
+
+
+<p>
+<a href=" Real-Content.html#autoid-5" class="toclstlisting" >
+<span class="sectionnumber" >2.2</span>&#x2003;Golang Program
+</a>
+</p>
+</nav>
+
+</section>
+
+</div>
+
+</div>
+
+<footer>
+
+<p>
+Contact Information and Copyright
+</p>
+
+</footer>
+
+</body>
+</html>
+<!--|Start file|Example-chapter.html|-->
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="author" content="Some Author" />
+<meta name="generator" content="LaTeX lwarp package" />
+<meta name="description" content="A description." />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<title>Webpage Title — Example chapter</title>
+<link rel="stylesheet" href="prism.css" type="text/css">
+<script src="prism.js" type="text/javascript"> </script>
+<link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
+
+
+
+<!-- https://groups.google.com/forum/#!topic/
+                                     mathjax-users/jUtewUcE2bY -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Register.StartupHook("TeX AMSmath Ready",function () {
+      var seteqsectionDefault = {name: "", num: 0};
+      var seteqsections = {}, seteqsection = seteqsectionDefault;
+      var TEX = MathJax.InputJax.TeX, PARSE = TEX.Parse;
+      var AMS = MathJax.Extension["TeX/AMSmath"];
+      TEX.Definitions.Add({
+      macros: {
+            seteqsection: "mySection",
+            seteqnumber: "mySetEqNumber"
+      }
+      });
+
+
+      PARSE.Augment({
+      mySection: function (name) {
+            seteqsection.num = AMS.number;
+            var n = this.GetArgument(name);
+            if (n === "") {
+                seteqsection = seteqsectionDefault;
+            } else {
+                if (!seteqsections["_"+n])
+                       seteqsections["_"+n] = {name:n, num:0};
+                seteqsection = seteqsections["_"+n];
+            }
+            AMS.number = seteqsection.num;
+      },
+      mySetEqNumber: function (name) {
+            var n = this.GetArgument(name);
+            if (!n || !n.match(/^ *[0-9]+ *$/))
+                n = "";
+            else
+                n = parseInt(n)-1;
+            <!-- $ syntax highlighting -->
+            if (n === "" || n < 1)
+                TEX.Error
+                ("Argument to "+name+" should be a positive integer");
+            AMS.number = n;
+      }
+      });
+      MathJax.Hub.Config({
+      TeX: {
+            equationNumbers: {
+                formatTag: function (n) {
+                       <!-- if not numeric, don't include the chapter -->
+                       if (!n.match(/^ *[0-9]+ *$/ ))
+                       <!-- $ syntax highlighting -->
+                          return "("+(n).replace(/^\./,"")+")" ;
+                       else
+                          return "("+(seteqsection.name+"."+n).replace(/^\./,"")+")" ;
+                },
+                formatID: function (n) {
+                       n = (seteqsection.name+'.'+n).replace
+                          (/[:"'<>&]/g,"").replace(/^\./,"");
+                       return 'mjx-eqn-' + n;
+                }
+            }
+      }
+      });
+});
+</script>
+
+
+<!-- http://docs.mathjax.org/en/latest/options/ThirdParty.html -->
+<script type="text/x-mathjax-config">
+  MathJax.Ajax.config.path["Contrib"] =
+      "https://cdn.mathjax.org/mathjax/contrib";
+</script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+      TeX: {
+            extensions: ["autoload-all.js"] ,
+            equationNumbers: {
+                autoNumber: "AMS"
+            }
+      }
+});
+</script>
+
+
+<!-- Alternative CDN provider: -->
+<script type="text/javascript" async
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML-full">
+</script>
+
+
+<!-- No longer supported after April 30, 2017: -->
+<!--
+<script
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
+</script>
+-->
+
+
+
+</head>
+<body>
+
+
+<a id="postGrad-autopage-7"></a>
+<nav class="topnavigation" ><a href="postGrad.html" class="linkhome" >
+Home
+</a></nav>
+
+<header>
+
+<p>
+<span
+    class="fbox"
+    style="display:inline-block ; border:1pt solid #000000; padding:3pt ; color:#000000"
+>LOGO</span>
+</p>
+
+</header>
+
+
+<div class="bodyandsidetoc" >
+<div class="sidetoccontainer" >
+
+
+<nav class="sidetoc" >
+
+
+<div class="sidetoctitle" >
+
+<p>
+<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+</p>
+
+<p>
+Contents
+</p>
+</div>
+
+
+<div class="sidetoccontents" >
+
+<p>
+<a href="postGrad.html" class="linkhome" >
+Home
+</a>
+</p>
+
+<p>
+<a href=" Example-chapter.html#autosec-8" class="tocchapter" >
+<span class="sectionnumber" >1</span>&#x2003;Example chapter
+</a>
+</p>
+
+
+<p>
+<a href=" Example-chapter.html#autosec-9" class="tocsection" >
+<span class="sectionnumber" >1.1</span>&#x2003;A section
+</a>
+</p>
+
+
+<p>
+<a href=" Some-math.html#autosec-15" class="tocsection" >
+<span class="sectionnumber" >1.2</span>&#x2003;Some math
+</a>
+</p>
+
+
+<p>
+<a href=" Real-Content.html#autosec-17" class="tocchapter" >
+<span class="sectionnumber" >2</span>&#x2003;Real Content
+</a>
+</p>
+
+
+<p>
+<a href=" Index.html#autosec-22" class="tocchapter" >
+Index
+</a>
+</p>
+
+
+</div>
+
+</nav>
+
+</div>
+
+
+<div class="bodycontainer" >
+
+
+<section class="textbody" >
+
+<h1>The Lwarp Tutorial</h1>
+
+<!--Nullify \ensuremath, footnotes for MathJax:-->
+
+\(\newcommand \ensuremath [1]{#1}\)
+
+\(\newcommand \footnote [2][]{\text {( Footnote #1 )}}\)
+
+\(\newcommand \footnotemark [1][]{\text {( Footnote #1 )}}\)
+
+<!--Additional customizations for MathJax:-->
+
+<p>
+<h3 id="autosec-8"><span class="sectionnumber" >1&#x2003;</span>Example chapter</h3>
+<a id="postGrad-autopage-8"></a>
+<h4 id="autosec-9"><span class="sectionnumber" >1.1&#x2003;</span>A section</h4>
+<a id="postGrad-autopage-9"></a>
+
+
+<p>
+This is some text which is indexed.<a id="LWRindex-1"></a>
+</p>
+<h5 id="autosec-10"><span class="sectionnumber" >1.1.1&#x2003;</span>A subsection</h5>
+<a id="postGrad-autopage-10"></a>
+
+
+<p>
+See fig. <a href=" Example-chapter.html#fig:withtext">1.1</a>.
+</p>
+
+<div class="mdframed"
+style="
+background: #FFB2B2 ;
+border: 1pt solid #FF8080 ;
+border-radius: 0pt ;
+box-shadow: 8pt 8pt 8pt #808080 ;
+">
+
+<div
+     class="mdframedtitle"
+     style="background: #FFD9D9 ;
+"
+>
+<p>
+<span class="textrm textbf textup textulc" >SENG475 Example Code Listing</span>
+</p>
+</div>
+<p>
+All for the sake of glory city. We see that in ?? that mdframed makes environments look nice
+</p>
+
+</div>
+
+<div class="mdframed"
+style="
+background: #FFFFB2 ;
+border: 1pt solid #FFFF80 ;
+border-radius: 0pt ;
+box-shadow: 8pt 8pt 8pt #808080 ;
+">
+
+<div
+     class="mdframedtitle"
+     style="background: #FFFFD9 ;
+"
+>
+<p>
+<span class="textrm textbf textup textulc" >SENG475 Example Code Listing</span>
+</p>
+</div>
+<p>
+All for the sake of glory city. We see that in ?? that mdframed makes environments look nice
+</p>
+
+</div>
+
+<div class="mdframed"
+style="
+background: #ECB2C6 ;
+border: 1pt solid #DF809F ;
+border-radius: 0pt ;
+box-shadow: 8pt 8pt 8pt #808080 ;
+">
+
+<div
+     class="mdframedtitle"
+     style="background: #F5D9E2 ;
+"
+>
+<p>
+<span class="textrm textbf textup textulc" >SENG475 Example Code Listing</span>
+</p>
+</div>
+<p>
+All for the sake of glory city. We see that in ?? that mdframed makes environments look nice
+</p>
+
+</div>
+
+<figure id="autoid-1" class="figure ">
+<div class="center" >
+
+<p>
+<span
+    class="fbox"
+    style="display:inline-block ; border:1pt solid #000000; padding:3pt ; color:#000000"
+> <span
+    class="textcolor"
+    style="color:#008080"
+>Text in a figure.</span></span>
+</p>
+
+
+<div class="figurecaption" >
+<p>
+Figure 1.1:&nbsp;A figure with text<a id="fig:withtext"></a>
+</p>
+
+</div>
+
+</div>
+
+</figure>
+
+
+<div class="figurecaption" >
+
+<p>
+<a id="autoid-2"></a>
+</p>
+Listing&nbsp;1.1:&nbsp;Cpp Testing </div>
+<pre><code class = "language-cpp">
+#include &lt;iostream&gt;
+</code>
+</pre>
+
+
+
+<div class="figurecaption" >
+</div>
+
+
+<div class="figurecaption" >
+
+<p>
+<a id="autoid-3"></a>
+</p>
+Listing&nbsp;1.2:&nbsp;Golang Program </div>
+<pre><code class = "language-go">
+package main
+
+
+import (
+"fmt"
+"io/ioutil"
+)
+</code>
+</pre>
+
+
+
+<div class="figurecaption" >
+</div>
+
+<p>
+Using references is [book:2300108]
+</p>
+
+
+</section>
+
+</div>
+
+</div>
+
+<footer>
+
+<p>
+Contact Information and Copyright
+</p>
+
+</footer>
+
+
+<nav class="botnavigation" ><a href="postGrad.html" class="linkhome" >
+Home
+</a></nav>
+
+</body>
+</html>
+<!--|Start file|Some-math.html|-->
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="author" content="Some Author" />
+<meta name="generator" content="LaTeX lwarp package" />
+<meta name="description" content="A description." />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<title>Webpage Title — Some math</title>
+<link rel="stylesheet" href="prism.css" type="text/css">
+<script src="prism.js" type="text/javascript"> </script>
+<link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
+
+
+
+<!-- https://groups.google.com/forum/#!topic/
+                                     mathjax-users/jUtewUcE2bY -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Register.StartupHook("TeX AMSmath Ready",function () {
+      var seteqsectionDefault = {name: "", num: 0};
+      var seteqsections = {}, seteqsection = seteqsectionDefault;
+      var TEX = MathJax.InputJax.TeX, PARSE = TEX.Parse;
+      var AMS = MathJax.Extension["TeX/AMSmath"];
+      TEX.Definitions.Add({
+      macros: {
+            seteqsection: "mySection",
+            seteqnumber: "mySetEqNumber"
+      }
+      });
+
+
+      PARSE.Augment({
+      mySection: function (name) {
+            seteqsection.num = AMS.number;
+            var n = this.GetArgument(name);
+            if (n === "") {
+                seteqsection = seteqsectionDefault;
+            } else {
+                if (!seteqsections["_"+n])
+                       seteqsections["_"+n] = {name:n, num:0};
+                seteqsection = seteqsections["_"+n];
+            }
+            AMS.number = seteqsection.num;
+      },
+      mySetEqNumber: function (name) {
+            var n = this.GetArgument(name);
+            if (!n || !n.match(/^ *[0-9]+ *$/))
+                n = "";
+            else
+                n = parseInt(n)-1;
+            <!-- $ syntax highlighting -->
+            if (n === "" || n < 1)
+                TEX.Error
+                ("Argument to "+name+" should be a positive integer");
+            AMS.number = n;
+      }
+      });
+      MathJax.Hub.Config({
+      TeX: {
+            equationNumbers: {
+                formatTag: function (n) {
+                       <!-- if not numeric, don't include the chapter -->
+                       if (!n.match(/^ *[0-9]+ *$/ ))
+                       <!-- $ syntax highlighting -->
+                          return "("+(n).replace(/^\./,"")+")" ;
+                       else
+                          return "("+(seteqsection.name+"."+n).replace(/^\./,"")+")" ;
+                },
+                formatID: function (n) {
+                       n = (seteqsection.name+'.'+n).replace
+                          (/[:"'<>&]/g,"").replace(/^\./,"");
+                       return 'mjx-eqn-' + n;
+                }
+            }
+      }
+      });
+});
+</script>
+
+
+<!-- http://docs.mathjax.org/en/latest/options/ThirdParty.html -->
+<script type="text/x-mathjax-config">
+  MathJax.Ajax.config.path["Contrib"] =
+      "https://cdn.mathjax.org/mathjax/contrib";
+</script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+      TeX: {
+            extensions: ["autoload-all.js"] ,
+            equationNumbers: {
+                autoNumber: "AMS"
+            }
+      }
+});
+</script>
+
+
+<!-- Alternative CDN provider: -->
+<script type="text/javascript" async
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML-full">
+</script>
+
+
+<!-- No longer supported after April 30, 2017: -->
+<!--
+<script
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
+</script>
+-->
+
+
+
+</head>
+<body>
+
+
+<a id="postGrad-autopage-14"></a>
+<nav class="topnavigation" ><a href="postGrad.html" class="linkhome" >
+Home
+</a></nav>
+
+<header>
+
+<p>
+<span
+    class="fbox"
+    style="display:inline-block ; border:1pt solid #000000; padding:3pt ; color:#000000"
+>LOGO</span>
+</p>
+
+</header>
+
+
+<div class="bodyandsidetoc" >
+<div class="sidetoccontainer" >
+
+
+<nav class="sidetoc" >
+
+
+<div class="sidetoctitle" >
+
+<p>
+<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+</p>
+
+<p>
+Contents
+</p>
+</div>
+
+
+<div class="sidetoccontents" >
+
+<p>
+<a href="postGrad.html" class="linkhome" >
+Home
+</a>
+</p>
+
+<p>
+<a href=" Example-chapter.html#autosec-8" class="tocchapter" >
+<span class="sectionnumber" >1</span>&#x2003;Example chapter
+</a>
+</p>
+
+
+<p>
+<a href=" Example-chapter.html#autosec-9" class="tocsection" >
+<span class="sectionnumber" >1.1</span>&#x2003;A section
+</a>
+</p>
+
+
+<p>
+<a href=" Some-math.html#autosec-15" class="tocsection" >
+<span class="sectionnumber" >1.2</span>&#x2003;Some math
+</a>
+</p>
+
+
+<p>
+<a href=" Real-Content.html#autosec-17" class="tocchapter" >
+<span class="sectionnumber" >2</span>&#x2003;Real Content
+</a>
+</p>
+
+
+<p>
+<a href=" Index.html#autosec-22" class="tocchapter" >
+Index
+</a>
+</p>
+
+
+</div>
+
+</nav>
+
+</div>
+
+
+<div class="bodycontainer" >
+
+
+<section class="textbody" >
+
+<h1>The Lwarp Tutorial</h1>
+
+<!--Nullify \ensuremath, footnotes for MathJax:-->
+
+\(\newcommand \ensuremath [1]{#1}\)
+
+\(\newcommand \footnote [2][]{\text {( Footnote #1 )}}\)
+
+\(\newcommand \footnotemark [1][]{\text {( Footnote #1 )}}\)
+
+<!--Additional customizations for MathJax:-->
+
+<p>
+<h4 id="autosec-15"><span class="sectionnumber" >1.2&#x2003;</span>Some math</h4>
+<a id="postGrad-autopage-15"></a>
+
+
+<p>
+Inline math: \(r = r_0 + vt - \frac {1}{2}at^2\) followed by display math:
+</p>
+
+<p>
+<span class="hidden" > \( \seteqsection {1} \) </span>
+</p>
+<!--
+
+
+                                                                                    a2 + b2 = c2   (1.1)
+
+
+-->
+
+<p>
+
+\begin{equation} a^2 + b^2 = c^2 \end{equation}
+
+</p>
+
+</section>
+
+</div>
+
+</div>
+
+<footer>
+
+<p>
+Contact Information and Copyright
+</p>
+
+</footer>
+
+
+<nav class="botnavigation" ><a href="postGrad.html" class="linkhome" >
+Home
+</a></nav>
+
+</body>
+</html>
+<!--|Start file|Real-Content.html|-->
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="author" content="Some Author" />
+<meta name="generator" content="LaTeX lwarp package" />
+<meta name="description" content="A description." />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<title>Webpage Title — Real Content</title>
+<link rel="stylesheet" href="prism.css" type="text/css">
+<script src="prism.js" type="text/javascript"> </script>
+<link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
+
+
+
+<!-- https://groups.google.com/forum/#!topic/
+                                     mathjax-users/jUtewUcE2bY -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Register.StartupHook("TeX AMSmath Ready",function () {
+      var seteqsectionDefault = {name: "", num: 0};
+      var seteqsections = {}, seteqsection = seteqsectionDefault;
+      var TEX = MathJax.InputJax.TeX, PARSE = TEX.Parse;
+      var AMS = MathJax.Extension["TeX/AMSmath"];
+      TEX.Definitions.Add({
+      macros: {
+            seteqsection: "mySection",
+            seteqnumber: "mySetEqNumber"
+      }
+      });
+
+
+      PARSE.Augment({
+      mySection: function (name) {
+            seteqsection.num = AMS.number;
+            var n = this.GetArgument(name);
+            if (n === "") {
+                seteqsection = seteqsectionDefault;
+            } else {
+                if (!seteqsections["_"+n])
+                       seteqsections["_"+n] = {name:n, num:0};
+                seteqsection = seteqsections["_"+n];
+            }
+            AMS.number = seteqsection.num;
+      },
+      mySetEqNumber: function (name) {
+            var n = this.GetArgument(name);
+            if (!n || !n.match(/^ *[0-9]+ *$/))
+                n = "";
+            else
+                n = parseInt(n)-1;
+            <!-- $ syntax highlighting -->
+            if (n === "" || n < 1)
+                TEX.Error
+                ("Argument to "+name+" should be a positive integer");
+            AMS.number = n;
+      }
+      });
+      MathJax.Hub.Config({
+      TeX: {
+            equationNumbers: {
+                formatTag: function (n) {
+                       <!-- if not numeric, don't include the chapter -->
+                       if (!n.match(/^ *[0-9]+ *$/ ))
+                       <!-- $ syntax highlighting -->
+                          return "("+(n).replace(/^\./,"")+")" ;
+                       else
+                          return "("+(seteqsection.name+"."+n).replace(/^\./,"")+")" ;
+                },
+                formatID: function (n) {
+                       n = (seteqsection.name+'.'+n).replace
+                          (/[:"'<>&]/g,"").replace(/^\./,"");
+                       return 'mjx-eqn-' + n;
+                }
+            }
+      }
+      });
+});
+</script>
+
+
+<!-- http://docs.mathjax.org/en/latest/options/ThirdParty.html -->
+<script type="text/x-mathjax-config">
+  MathJax.Ajax.config.path["Contrib"] =
+      "https://cdn.mathjax.org/mathjax/contrib";
+</script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+      TeX: {
+            extensions: ["autoload-all.js"] ,
+            equationNumbers: {
+                autoNumber: "AMS"
+            }
+      }
+});
+</script>
+
+
+<!-- Alternative CDN provider: -->
+<script type="text/javascript" async
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML-full">
+</script>
+
+
+<!-- No longer supported after April 30, 2017: -->
+<!--
+<script
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
+</script>
+-->
+
+
+
+</head>
+<body>
+
+
+<a id="postGrad-autopage-16"></a>
+<nav class="topnavigation" ><a href="postGrad.html" class="linkhome" >
+Home
+</a></nav>
+
+<header>
+
+<p>
+<span
+    class="fbox"
+    style="display:inline-block ; border:1pt solid #000000; padding:3pt ; color:#000000"
+>LOGO</span>
+</p>
+
+</header>
+
+
+<div class="bodyandsidetoc" >
+<div class="sidetoccontainer" >
+
+
+<nav class="sidetoc" >
+
+
+<div class="sidetoctitle" >
+
+<p>
+<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+</p>
+
+<p>
+Contents
+</p>
+</div>
+
+
+<div class="sidetoccontents" >
+
+<p>
+<a href="postGrad.html" class="linkhome" >
+Home
+</a>
+</p>
+
+<p>
+<a href=" Example-chapter.html#autosec-8" class="tocchapter" >
+<span class="sectionnumber" >1</span>&#x2003;Example chapter
+</a>
+</p>
+
+
+<p>
+<a href=" Example-chapter.html#autosec-9" class="tocsection" >
+<span class="sectionnumber" >1.1</span>&#x2003;A section
+</a>
+</p>
+
+
+<p>
+<a href=" Some-math.html#autosec-15" class="tocsection" >
+<span class="sectionnumber" >1.2</span>&#x2003;Some math
+</a>
+</p>
+
+
+<p>
+<a href=" Real-Content.html#autosec-17" class="tocchapter" >
+<span class="sectionnumber" >2</span>&#x2003;Real Content
+</a>
+</p>
+
+
+<p>
+<a href=" Index.html#autosec-22" class="tocchapter" >
+Index
+</a>
+</p>
+
+
+</div>
+
+</nav>
+
+</div>
+
+
+<div class="bodycontainer" >
+
+
+<section class="textbody" >
+
+<h1>The Lwarp Tutorial</h1>
+
+<!--Nullify \ensuremath, footnotes for MathJax:-->
+
+\(\newcommand \ensuremath [1]{#1}\)
+
+\(\newcommand \footnote [2][]{\text {( Footnote #1 )}}\)
+
+\(\newcommand \footnotemark [1][]{\text {( Footnote #1 )}}\)
+
+<!--Additional customizations for MathJax:-->
+
+<p>
+<h3 id="autosec-17"><span class="sectionnumber" >2&#x2003;</span>Real Content</h3>
+<a id="postGrad-autopage-17"></a>
+
+
+
+<div class="figurecaption" >
+
+<p>
+<a id="autoid-4"></a>
+</p>
+Listing&nbsp;2.1:&nbsp;Cpp Testing </div>
+<pre><code class = "language-cpp">
+#include &lt;iostream&gt;
+</code>
+</pre>
+
+
+
+<div class="figurecaption" >
+</div>
+
+
+<div class="figurecaption" >
+
+<p>
+<a id="autoid-5"></a>
+</p>
+Listing&nbsp;2.2:&nbsp;Golang Program </div>
+<pre><code class = "language-go">
+package main
+
+
+import (
+         "fmt"
+         "io/ioutil"
+)
+</code>
+</pre>
+
+
+
+<div class="figurecaption" >
+</div>
+</section>
+
+</div>
+
+</div>
+
+<footer>
+
+<p>
+Contact Information and Copyright
+</p>
+
+</footer>
+
+
+<nav class="botnavigation" ><a href="postGrad.html" class="linkhome" >
+Home
+</a></nav>
+
+</body>
+</html>
+<!--|Start file|Index.html|-->
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="author" content="Some Author" />
+<meta name="generator" content="LaTeX lwarp package" />
+<meta name="description" content="A description." />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<title>Webpage Title — Index</title>
+<link rel="stylesheet" href="prism.css" type="text/css">
+<script src="prism.js" type="text/javascript"> </script>
+<link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
+
+
+
+<!-- https://groups.google.com/forum/#!topic/
+                                     mathjax-users/jUtewUcE2bY -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Register.StartupHook("TeX AMSmath Ready",function () {
+      var seteqsectionDefault = {name: "", num: 0};
+      var seteqsections = {}, seteqsection = seteqsectionDefault;
+      var TEX = MathJax.InputJax.TeX, PARSE = TEX.Parse;
+      var AMS = MathJax.Extension["TeX/AMSmath"];
+      TEX.Definitions.Add({
+      macros: {
+            seteqsection: "mySection",
+            seteqnumber: "mySetEqNumber"
+      }
+      });
+
+
+      PARSE.Augment({
+      mySection: function (name) {
+            seteqsection.num = AMS.number;
+            var n = this.GetArgument(name);
+            if (n === "") {
+                seteqsection = seteqsectionDefault;
+            } else {
+                if (!seteqsections["_"+n])
+                       seteqsections["_"+n] = {name:n, num:0};
+                seteqsection = seteqsections["_"+n];
+            }
+            AMS.number = seteqsection.num;
+      },
+      mySetEqNumber: function (name) {
+            var n = this.GetArgument(name);
+            if (!n || !n.match(/^ *[0-9]+ *$/))
+                n = "";
+            else
+                n = parseInt(n)-1;
+            <!-- $ syntax highlighting -->
+            if (n === "" || n < 1)
+                TEX.Error
+                ("Argument to "+name+" should be a positive integer");
+            AMS.number = n;
+      }
+      });
+      MathJax.Hub.Config({
+      TeX: {
+            equationNumbers: {
+                formatTag: function (n) {
+                       <!-- if not numeric, don't include the chapter -->
+                       if (!n.match(/^ *[0-9]+ *$/ ))
+                       <!-- $ syntax highlighting -->
+                          return "("+(n).replace(/^\./,"")+")" ;
+                       else
+                          return "("+(seteqsection.name+"."+n).replace(/^\./,"")+")" ;
+                },
+                formatID: function (n) {
+                       n = (seteqsection.name+'.'+n).replace
+                          (/[:"'<>&]/g,"").replace(/^\./,"");
+                       return 'mjx-eqn-' + n;
+                }
+            }
+      }
+      });
+});
+</script>
+
+
+<!-- http://docs.mathjax.org/en/latest/options/ThirdParty.html -->
+<script type="text/x-mathjax-config">
+  MathJax.Ajax.config.path["Contrib"] =
+      "https://cdn.mathjax.org/mathjax/contrib";
+</script>
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+      TeX: {
+            extensions: ["autoload-all.js"] ,
+            equationNumbers: {
+                autoNumber: "AMS"
+            }
+      }
+});
+</script>
+
+
+<!-- Alternative CDN provider: -->
+<script type="text/javascript" async
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML-full">
+</script>
+
+
+<!-- No longer supported after April 30, 2017: -->
+<!--
+<script
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
+</script>
+-->
+
+
+
+</head>
+<body>
+
+
+<a id="postGrad-autopage-21"></a>
+<nav class="topnavigation" ><a href="postGrad.html" class="linkhome" >
+Home
+</a></nav>
+
+<header>
+
+<p>
+<span
+    class="fbox"
+    style="display:inline-block ; border:1pt solid #000000; padding:3pt ; color:#000000"
+>LOGO</span>
+</p>
+
+</header>
+
+
+<div class="bodyandsidetoc" >
+<div class="sidetoccontainer" >
+
+
+<nav class="sidetoc" >
+
+
+<div class="sidetoctitle" >
+
+<p>
+<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+</p>
+
+<p>
+Contents
+</p>
+</div>
+
+
+<div class="sidetoccontents" >
+
+<p>
+<a href="postGrad.html" class="linkhome" >
+Home
+</a>
+</p>
+
+<p>
+<a href=" Example-chapter.html#autosec-8" class="tocchapter" >
+<span class="sectionnumber" >1</span>&#x2003;Example chapter
+</a>
+</p>
+
+
+<p>
+<a href=" Example-chapter.html#autosec-9" class="tocsection" >
+<span class="sectionnumber" >1.1</span>&#x2003;A section
+</a>
+</p>
+
+
+<p>
+<a href=" Some-math.html#autosec-15" class="tocsection" >
+<span class="sectionnumber" >1.2</span>&#x2003;Some math
+</a>
+</p>
+
+
+<p>
+<a href=" Real-Content.html#autosec-17" class="tocchapter" >
+<span class="sectionnumber" >2</span>&#x2003;Real Content
+</a>
+</p>
+
+
+<p>
+<a href=" Index.html#autosec-22" class="tocchapter" >
+Index
+</a>
+</p>
+
+
+</div>
+
+</nav>
+
+</div>
+
+
+<div class="bodycontainer" >
+
+
+<section class="textbody" >
+
+<h1>The Lwarp Tutorial</h1>
+
+<!--Nullify \ensuremath, footnotes for MathJax:-->
+
+\(\newcommand \ensuremath [1]{#1}\)
+
+\(\newcommand \footnote [2][]{\text {( Footnote #1 )}}\)
+
+\(\newcommand \footnotemark [1][]{\text {( Footnote #1 )}}\)
+
+<!--Additional customizations for MathJax:-->
+
+<p>
+<h3 id="autosec-22">Index</h3>
+<a id="postGrad-autopage-22"></a>
+
+
+<p>
+<b>S</b>
+</p>
+
+<p>
+<span class="indexitem" ><!----></span>Some text., <a href=" Example-chapter.html#LWRindex-1">A section</a>
+</p>
+
+</section>
+
+</div>
+
+</div>
+
+<footer>
+
+<p>
+Contact Information and Copyright
+</p>
+
+</footer>
+
+
+<nav class="botnavigation" ><a href="postGrad.html" class="linkhome" >
+Home
+</a></nav>
+
+</body>
+</html>
