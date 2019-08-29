@@ -182,62 +182,9 @@ mathjax,                    % Use MathJax to display math.
 
 \tableofcontents                % MUST BE BEFORE THE FIRST SECTION BREAK!
 \listoffigures
-\lstlistoflistings
-\chapter{Example chapter}
+\lstlistoflistings % THIS SEEMS TO WORK WITH THE BOOK CLASS
 
-\section{A section}
-
-This is some text which is indexed.\index{Some text.}
-
-\subsection{A subsection}
-
-See \cref{fig:withtext}.
-
-\begin{mdframed}[style=definition, frametitle={SENG475 Example Code Listing}]
-	All for the sake of glory city. We see that in \cref{ex:1} that mdframed makes 
-	environments look nice
-\end{mdframed}
-
-\begin{mdframed}[style=theorem, frametitle={SENG475 Example Code Listing}]
-	All for the sake of glory city. We see that in \cref{ex:1} that mdframed makes 
-	environments look nice
-\end{mdframed}
-
-\begin{mdframed}[style=important, frametitle={SENG475 Example Code Listing}]
-	All for the sake of glory city. We see that in \cref{ex:1} that mdframed makes 
-	environments look nice
-\end{mdframed}
-	
-\begin{figure}\begin{center}
-\fbox{\textcolor{blue!50!green}{Text in a figure.}}
-\caption{A figure with text\label{fig:withtext}}
-\end{center}\end{figure}
-
-\begin{lstlisting}[language=C++, caption={Cpp Testing}]
-#include <iostream>
-\end{lstlisting}
-
-% Note to self, refer to all go programs are go programs, golang is reserved for the code.
-\begin{lstlisting}[caption={Golang Program}]
-package main
-
-import (
-"fmt"
-"io/ioutil"
-)
-\end{lstlisting}
-
-
-Using references is \cite{book:2300108}
-\section{Some math}
-
-Inline math: $r = r_0 + vt - \frac{1}{2}at^2$
-followed by display math:
-\begin{equation}
-a^2 + b^2 = c^2
-\end{equation}
-
-
+\input{chapters/sample/main.tex}
 
 \chapter{Real Content}
 
@@ -255,13 +202,6 @@ import (
 )
 \end{lstlisting}
 
-\begin{warpprint}   % For print output ...
-\cleardoublepage    % ... a common method to place index entry into TOC.
-\phantomsection
-\addcontentsline{toc}{chapter}{\indexname}
-\end{warpprint}
-\ForceHTMLPage      % HTML index will be on its own page.
-\ForceHTMLTOC       % HTML index will have its own toc entry.
-\printindex
+\input{chapters/backMatter/main.tex}
 
 \end{document}
