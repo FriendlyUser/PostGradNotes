@@ -1038,6 +1038,17 @@ div.cellcolor {
     margin: -.5ex -.5em -.5ex -.5em ;
 }
 
+/* for lyluatex */
+span.lyluatex {
+    display: inline-block ;
+}
+
+div.lyluatex p span.lateximagesource img {
+    display: block ;
+    margin-top: 3ex ;
+    margin-bottom: 3ex ;
+}
+
 /* for bigdelim */
 .ldelim, .rdelim { font-size: 200% }
 
