@@ -179,35 +179,35 @@ Home
 
 
 <p>
-<a href=" Some-math.html#autosec-15" class="tocsection" >
+<a href=" Some-math.html#autosec-16" class="tocsection" >
 <span class="sectionnumber" >1.2</span>&#x2003;Some math
 </a>
 </p>
 
 
 <p>
-<a href=" Real-Content.html#autosec-17" class="tocchapter" >
+<a href=" Real-Content.html#autosec-18" class="tocchapter" >
 <span class="sectionnumber" >2</span>&#x2003;Real Content
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-23" class="tocchapter" >
+<a href=" Index.html#autosec-24" class="tocchapter" >
 Index
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-26" class="tocchapter" >
+<a href=" Index.html#autosec-27" class="tocchapter" >
 Glossary
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-28" class="tocchapter" >
+<a href=" Index.html#autosec-29" class="tocchapter" >
 Acronyms
 </a>
 </p>
@@ -381,6 +381,116 @@ import (
 "fmt"
 "io/ioutil"
 )
+</code>
+</pre>
+
+
+
+<div class="figurecaption" >
+</div>
+
+
+<div class="figurecaption" >
+
+<p>
+<a id="autoid-4"></a>
+</p>
+Listing&nbsp;1.3:&nbsp;”Python Script” </div>
+<pre><code class = "language-python">
+#!/usr/bin/env python
+### Adding prism style highlighting in docs
+import os
+# os.chdir('../')
+import sys
+print(os.getcwd())
+lwarpFiles = []
+dir_list = os.listdir()
+for full_file_name in dir_list:
+    base_nameTemp, extensionTemp = os.path.splitext(full_file_name)
+    if extensionTemp == '.html': # then .pdf file --&gt; convert to image!
+         lwarpFiles.append(full_file_name)
+
+
+import re
+directory = 'docs'
+if not os.path.exists(directory):
+    os.makedirs(directory)
+for outputFile in lwarpFiles:
+    try:
+         base_nameTemp, extensionTemp = os.path.splitext(outputFile)
+         finalOutputName = base_nameTemp + extensionTemp
+         htmlFile = open(outputFile ,'r',encoding='utf-8')
+         htmlSyntaxFile = open(directory + r'/' +finalOutputName,'w',encoding='utf-8')
+    except OSError:
+         print('Cannot open files, probably because they are being used. \n')
+         pass
+    # include prismCss and prismjs in the final html final, consider merging the existing css file with prism.css
+    prismCss = r'&lt;link rel="stylesheet" href="prism.css" type="text/css"&gt;'
+     prismJs       = r'&lt;script src="prism.js" type="text/javascript"&gt; &lt;/script&gt;'
+
+
+     # Replace the lwarp &lt;pre class="programlisting" &gt;
+     # with something that works for prism
+     lwarpCodeSyn = r'&lt;pre class="programlisting"&gt;'
+     lwarpCodeVerb = r'&lt;pre class="verbatim"&gt;'
+     matlab ="language-matlab"
+     latex = "language-latex"
+     python = "language-python"
+     cplusplus = "language-cpp"
+     json = "language-json"
+     bash = "language-bash"
+     yaml = "language-yaml"
+     golang = "language-go"
+     # Go through each even entry in replacements and then check if a replacement should happen
+     replacementTerms = ["Cpp", cplusplus, "Latex Code", latex, "Python Script", python,
+           "Bash Script", bash,"Matlab Script", matlab,"Yaml File",yaml,"JSON Output", json, "Golang", golang]
+     prismVerbCodeSyn = r'&lt;pre&gt;&lt;code class = "' + latex + r'"&gt;'
+     prismCodeSyn = r'&lt;pre&gt;&lt;code class = "' + cplusplus + r'"&gt;'
+
+
+     # Determines if the next pre tag should be changed
+     changeNextPre = False
+     #replacementLine = ""
+     for line in htmlFile:
+           # Include prism.js and prism.css after the title in the html document
+           newline = re.sub(r'&lt;/title&gt;',r'&lt;/title&gt;' + '\n' + prismCss + '\n' + prismJs, line)
+
+
+         # CHange if the next pre tag should be changed, if it is not true already.
+         if changeNextPre == False:
+             for i in range (0, int(len(replacementTerms)/2)):
+                # match only matches from the beginning of the string. Your code works fine if you do pct_re.search(line) instead. See https://stackoverflow.com/questions/17680631/python-regular-expression-not-matching
+                pattern = re.compile(replacementTerms[i*2])
+                changeNextPre = bool(re.search(pattern,newline))
+                #print(r'&lt;p&gt;'+replacementTerms[i*2])
+                if changeNextPre:
+                     #print("Match Found")
+                     replacementLine = r'&lt;pre&gt;&lt;code class = "' + replacementTerms[2*i+1] + r'"&gt;'
+                          #print(replacementTerms)
+                          break
+
+
+           ## get code syntax highlighting
+           if changeNextPre == False:
+                # Assume matlab is being used
+                newline = re.sub(lwarpCodeSyn, prismCodeSyn, newline)
+           else:
+                templine = re.subn(lwarpCodeSyn, replacementLine,newline)
+                newline = templine[0]
+                # if a match occurs reset changeNextPre to false
+                if templine[1] &gt; 0:
+                     changeNextPre = False
+           ## since a new code tag is introduced it must be closed
+           newline = re.sub(r'&lt;/pre&gt;',r'&lt;/code&gt;' + '\n' + r'&lt;/pre&gt;' + '\n', newline)
+         # account for new problem of &lt;pre class="verbatim" &gt;
+         #newline = re.sub( lwarpCodeVerb, prismVerbCodeSyn, newline)
+         htmlSyntaxFile.write(str(newline))
+         #print(newline)
+
+
+    htmlFile.close()
+   htmlSyntaxFile.close()
+print('Script is Done creating files')
 </code>
 </pre>
 

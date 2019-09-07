@@ -168,7 +168,7 @@ Some Author
 <div class="titledate" >
 
 <p>
-September 6, 2019
+September 7, 2019
 </p>
 </div>
 
@@ -191,7 +191,7 @@ September 6, 2019
 </p>
 
 <p>
-<span class="textsc" >September 6, 2019</span><br />
+<span class="textsc" >September 7, 2019</span><br />
 <b>Name:</b> &#x2003;&#x2003;David Li<br />
 <b>Student Number:</b> &#x2003;&#x2003;V00818631<br />
 <b>Email:</b> &#x2003;&#x2003;<a href="mailto:davidli012345@gmail.ca" target="_blank" >davidli012345@gmail.ca</a><br />
@@ -228,35 +228,35 @@ September 6, 2019
 
 
 <p>
-<a href=" Some-math.html#autosec-15" class="tocsection" >
+<a href=" Some-math.html#autosec-16" class="tocsection" >
 <span class="sectionnumber" >1.2</span>&#x2003;Some math
 </a>
 </p>
 
 
 <p>
-<a href=" Real-Content.html#autosec-17" class="tocchapter" >
+<a href=" Real-Content.html#autosec-18" class="tocchapter" >
 <span class="sectionnumber" >2</span>&#x2003;Real Content
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-23" class="tocchapter" >
+<a href=" Index.html#autosec-24" class="tocchapter" >
 Index
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-26" class="tocchapter" >
+<a href=" Index.html#autosec-27" class="tocchapter" >
 Glossary
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-28" class="tocchapter" >
+<a href=" Index.html#autosec-29" class="tocchapter" >
 Acronyms
 </a>
 </p>
@@ -296,14 +296,21 @@ Acronyms
 
 
 <p>
-<a href=" Real-Content.html#autoid-4" class="toclstlisting" >
+<a href=" Example-chapter.html#autoid-4" class="toclstlisting" >
+<span class="sectionnumber" >1.3</span>&#x2003;”Python Script”
+</a>
+</p>
+
+
+<p>
+<a href=" Real-Content.html#autoid-6" class="toclstlisting" >
 <span class="sectionnumber" >2.1</span>&#x2003;Cpp Testing
 </a>
 </p>
 
 
 <p>
-<a href=" Real-Content.html#autoid-5" class="toclstlisting" >
+<a href=" Real-Content.html#autoid-7" class="toclstlisting" >
 <span class="sectionnumber" >2.2</span>&#x2003;Golang Program
 </a>
 </p>
@@ -507,35 +514,35 @@ Home
 
 
 <p>
-<a href=" Some-math.html#autosec-15" class="tocsection" >
+<a href=" Some-math.html#autosec-16" class="tocsection" >
 <span class="sectionnumber" >1.2</span>&#x2003;Some math
 </a>
 </p>
 
 
 <p>
-<a href=" Real-Content.html#autosec-17" class="tocchapter" >
+<a href=" Real-Content.html#autosec-18" class="tocchapter" >
 <span class="sectionnumber" >2</span>&#x2003;Real Content
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-23" class="tocchapter" >
+<a href=" Index.html#autosec-24" class="tocchapter" >
 Index
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-26" class="tocchapter" >
+<a href=" Index.html#autosec-27" class="tocchapter" >
 Glossary
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-28" class="tocchapter" >
+<a href=" Index.html#autosec-29" class="tocchapter" >
 Acronyms
 </a>
 </p>
@@ -717,6 +724,116 @@ import (
 <div class="figurecaption" >
 </div>
 
+
+<div class="figurecaption" >
+
+<p>
+<a id="autoid-4"></a>
+</p>
+Listing&nbsp;1.3:&nbsp;”Python Script” </div>
+<pre><code class = "language-python">
+#!/usr/bin/env python
+### Adding prism style highlighting in docs
+import os
+# os.chdir('../')
+import sys
+print(os.getcwd())
+lwarpFiles = []
+dir_list = os.listdir()
+for full_file_name in dir_list:
+    base_nameTemp, extensionTemp = os.path.splitext(full_file_name)
+    if extensionTemp == '.html': # then .pdf file --&gt; convert to image!
+         lwarpFiles.append(full_file_name)
+
+
+import re
+directory = 'docs'
+if not os.path.exists(directory):
+    os.makedirs(directory)
+for outputFile in lwarpFiles:
+    try:
+         base_nameTemp, extensionTemp = os.path.splitext(outputFile)
+         finalOutputName = base_nameTemp + extensionTemp
+         htmlFile = open(outputFile ,'r',encoding='utf-8')
+         htmlSyntaxFile = open(directory + r'/' +finalOutputName,'w',encoding='utf-8')
+    except OSError:
+         print('Cannot open files, probably because they are being used. \n')
+         pass
+    # include prismCss and prismjs in the final html final, consider merging the existing css file with prism.css
+    prismCss = r'&lt;link rel="stylesheet" href="prism.css" type="text/css"&gt;'
+     prismJs       = r'&lt;script src="prism.js" type="text/javascript"&gt; &lt;/script&gt;'
+
+
+     # Replace the lwarp &lt;pre class="programlisting" &gt;
+     # with something that works for prism
+     lwarpCodeSyn = r'&lt;pre class="programlisting"&gt;'
+     lwarpCodeVerb = r'&lt;pre class="verbatim"&gt;'
+     matlab ="language-matlab"
+     latex = "language-latex"
+     python = "language-python"
+     cplusplus = "language-cpp"
+     json = "language-json"
+     bash = "language-bash"
+     yaml = "language-yaml"
+     golang = "language-go"
+     # Go through each even entry in replacements and then check if a replacement should happen
+     replacementTerms = ["Cpp", cplusplus, "Latex Code", latex, "Python Script", python,
+           "Bash Script", bash,"Matlab Script", matlab,"Yaml File",yaml,"JSON Output", json, "Golang", golang]
+     prismVerbCodeSyn = r'&lt;pre&gt;&lt;code class = "' + latex + r'"&gt;'
+     prismCodeSyn = r'&lt;pre&gt;&lt;code class = "' + cplusplus + r'"&gt;'
+
+
+     # Determines if the next pre tag should be changed
+     changeNextPre = False
+     #replacementLine = ""
+     for line in htmlFile:
+           # Include prism.js and prism.css after the title in the html document
+           newline = re.sub(r'&lt;/title&gt;',r'&lt;/title&gt;' + '\n' + prismCss + '\n' + prismJs, line)
+
+
+         # CHange if the next pre tag should be changed, if it is not true already.
+         if changeNextPre == False:
+             for i in range (0, int(len(replacementTerms)/2)):
+                # match only matches from the beginning of the string. Your code works fine if you do pct_re.search(line) instead. See https://stackoverflow.com/questions/17680631/python-regular-expression-not-matching
+                pattern = re.compile(replacementTerms[i*2])
+                changeNextPre = bool(re.search(pattern,newline))
+                #print(r'&lt;p&gt;'+replacementTerms[i*2])
+                if changeNextPre:
+                     #print("Match Found")
+                     replacementLine = r'&lt;pre&gt;&lt;code class = "' + replacementTerms[2*i+1] + r'"&gt;'
+                          #print(replacementTerms)
+                          break
+
+
+           ## get code syntax highlighting
+           if changeNextPre == False:
+                # Assume matlab is being used
+                newline = re.sub(lwarpCodeSyn, prismCodeSyn, newline)
+           else:
+                templine = re.subn(lwarpCodeSyn, replacementLine,newline)
+                newline = templine[0]
+                # if a match occurs reset changeNextPre to false
+                if templine[1] &gt; 0:
+                     changeNextPre = False
+           ## since a new code tag is introduced it must be closed
+           newline = re.sub(r'&lt;/pre&gt;',r'&lt;/code&gt;' + '\n' + r'&lt;/pre&gt;' + '\n', newline)
+         # account for new problem of &lt;pre class="verbatim" &gt;
+         #newline = re.sub( lwarpCodeVerb, prismVerbCodeSyn, newline)
+         htmlSyntaxFile.write(str(newline))
+         #print(newline)
+
+
+    htmlFile.close()
+   htmlSyntaxFile.close()
+print('Script is Done creating files')
+</code>
+</pre>
+
+
+
+<div class="figurecaption" >
+</div>
+
 <p>
 Using references is [1]
 </p>
@@ -866,7 +983,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-
 <body>
 
 
-<a id="postGrad-autopage-14"></a>
+<a id="postGrad-autopage-15"></a>
 <nav class="topnavigation" ><a href="index.html" class="linkhome" >
 Home
 </a></nav>
@@ -925,35 +1042,35 @@ Home
 
 
 <p>
-<a href=" Some-math.html#autosec-15" class="tocsection" >
+<a href=" Some-math.html#autosec-16" class="tocsection" >
 <span class="sectionnumber" >1.2</span>&#x2003;Some math
 </a>
 </p>
 
 
 <p>
-<a href=" Real-Content.html#autosec-17" class="tocchapter" >
+<a href=" Real-Content.html#autosec-18" class="tocchapter" >
 <span class="sectionnumber" >2</span>&#x2003;Real Content
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-23" class="tocchapter" >
+<a href=" Index.html#autosec-24" class="tocchapter" >
 Index
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-26" class="tocchapter" >
+<a href=" Index.html#autosec-27" class="tocchapter" >
 Glossary
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-28" class="tocchapter" >
+<a href=" Index.html#autosec-29" class="tocchapter" >
 Acronyms
 </a>
 </p>
@@ -984,8 +1101,8 @@ Acronyms
 <!--Additional customizations for MathJax:-->
 
 <p>
-<h4 id="autosec-15"><span class="sectionnumber" >1.2&#x2003;</span>Some math</h4>
-<a id="postGrad-autopage-15"></a>
+<h4 id="autosec-16"><span class="sectionnumber" >1.2&#x2003;</span>Some math</h4>
+<a id="postGrad-autopage-16"></a>
 
 
 <p>
@@ -1153,7 +1270,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-
 <body>
 
 
-<a id="postGrad-autopage-16"></a>
+<a id="postGrad-autopage-17"></a>
 <nav class="topnavigation" ><a href="index.html" class="linkhome" >
 Home
 </a></nav>
@@ -1212,35 +1329,35 @@ Home
 
 
 <p>
-<a href=" Some-math.html#autosec-15" class="tocsection" >
+<a href=" Some-math.html#autosec-16" class="tocsection" >
 <span class="sectionnumber" >1.2</span>&#x2003;Some math
 </a>
 </p>
 
 
 <p>
-<a href=" Real-Content.html#autosec-17" class="tocchapter" >
+<a href=" Real-Content.html#autosec-18" class="tocchapter" >
 <span class="sectionnumber" >2</span>&#x2003;Real Content
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-23" class="tocchapter" >
+<a href=" Index.html#autosec-24" class="tocchapter" >
 Index
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-26" class="tocchapter" >
+<a href=" Index.html#autosec-27" class="tocchapter" >
 Glossary
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-28" class="tocchapter" >
+<a href=" Index.html#autosec-29" class="tocchapter" >
 Acronyms
 </a>
 </p>
@@ -1271,13 +1388,11 @@ Acronyms
 <!--Additional customizations for MathJax:-->
 
 <p>
-<h3 id="autosec-17"><span class="sectionnumber" >2&#x2003;</span>Real Content</h3>
-<a id="postGrad-autopage-17"></a>
+<h3 id="autosec-18"><span class="sectionnumber" >2&#x2003;</span>Real Content</h3>
+<a id="postGrad-autopage-18"></a>
 
 
-<p>
-<b>Todo List 2019/8/4</b>
-</p>
+<figure id="autoid-5" class="table ">
 <table>
 
 <tr>
@@ -1378,9 +1493,19 @@ add dash auth to dashboard
 
 
 <div class="figurecaption" >
+<p>
+Table 2.1:&nbsp;<b>Todo List 2019/8/5</b>
+</p>
+
+</div>
+
+</figure>
+
+
+<div class="figurecaption" >
 
 <p>
-<a id="autoid-4"></a>
+<a id="autoid-6"></a>
 </p>
 Listing&nbsp;2.1:&nbsp;Cpp Testing </div>
 <pre><code class = "language-cpp">
@@ -1397,7 +1522,7 @@ Listing&nbsp;2.1:&nbsp;Cpp Testing </div>
 <div class="figurecaption" >
 
 <p>
-<a id="autoid-5"></a>
+<a id="autoid-7"></a>
 </p>
 Listing&nbsp;2.2:&nbsp;Golang Program </div>
 <pre><code class = "language-go">
@@ -1559,7 +1684,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-
 <body>
 
 
-<a id="postGrad-autopage-22"></a>
+<a id="postGrad-autopage-23"></a>
 <nav class="topnavigation" ><a href="index.html" class="linkhome" >
 Home
 </a></nav>
@@ -1618,35 +1743,35 @@ Home
 
 
 <p>
-<a href=" Some-math.html#autosec-15" class="tocsection" >
+<a href=" Some-math.html#autosec-16" class="tocsection" >
 <span class="sectionnumber" >1.2</span>&#x2003;Some math
 </a>
 </p>
 
 
 <p>
-<a href=" Real-Content.html#autosec-17" class="tocchapter" >
+<a href=" Real-Content.html#autosec-18" class="tocchapter" >
 <span class="sectionnumber" >2</span>&#x2003;Real Content
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-23" class="tocchapter" >
+<a href=" Index.html#autosec-24" class="tocchapter" >
 Index
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-26" class="tocchapter" >
+<a href=" Index.html#autosec-27" class="tocchapter" >
 Glossary
 </a>
 </p>
 
 
 <p>
-<a href=" Index.html#autosec-28" class="tocchapter" >
+<a href=" Index.html#autosec-29" class="tocchapter" >
 Acronyms
 </a>
 </p>
@@ -1677,8 +1802,8 @@ Acronyms
 <!--Additional customizations for MathJax:-->
 
 <p>
-<h3 id="autosec-23">Index</h3>
-<a id="postGrad-autopage-23"></a>
+<h3 id="autosec-24">Index</h3>
+<a id="postGrad-autopage-24"></a>
 
 
 <p>
@@ -1688,8 +1813,8 @@ Acronyms
 <p>
 <span class="indexitem" ><!----></span>Some text., <a href=" Example-chapter.html#LWRindex-1">A section</a>
 </p>
-<h3 id="autosec-24">Bibliography</h3>
-<a id="postGrad-autopage-24"></a>
+<h3 id="autosec-25">Bibliography</h3>
+<a id="postGrad-autopage-25"></a>
 
 
 <ul style="list-style-type:none">
@@ -1708,10 +1833,10 @@ Acronyms
 </p>
 </li>
 </ul>
-<h4 id="autosec-25"></h4>
-<a id="postGrad-autopage-25"></a>
-<h3 id="autosec-26">Glossary</h3>
+<h4 id="autosec-26"></h4>
 <a id="postGrad-autopage-26"></a>
+<h3 id="autosec-27">Glossary</h3>
+<a id="postGrad-autopage-27"></a>
 
 <p>
          <b>agent</b> agents are expected to operate autonomously, perceive their environment, persist over a prolonged time period, adapt to change, and create and pursue goals .
@@ -1772,10 +1897,10 @@ Acronyms
 <p>
          <b>Utility Agent</b> an agent that selects actions that it believes will maximize the expected utility of the outcome state .
          </p>
-<h4 id="autosec-27"></h4>
-<a id="postGrad-autopage-27"></a>
-<h3 id="autosec-28">Acronyms</h3>
+<h4 id="autosec-28"></h4>
 <a id="postGrad-autopage-28"></a>
+<h3 id="autosec-29">Acronyms</h3>
+<a id="postGrad-autopage-29"></a>
 
 <p>
             <b>ABI</b> application binary interface.
