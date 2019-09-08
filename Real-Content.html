@@ -193,21 +193,21 @@ Home
 
 
 <p>
-<a href="Index.html#autosec-24" class="tocchapter" >
+<a href="Index.html#autosec-25" class="tocchapter" >
 Index
 </a>
 </p>
 
 
 <p>
-<a href="Index.html#autosec-27" class="tocchapter" >
+<a href="Index.html#autosec-28" class="tocchapter" >
 Glossary
 </a>
 </p>
 
 
 <p>
-<a href="Index.html#autosec-29" class="tocchapter" >
+<a href="Index.html#autosec-30" class="tocchapter" >
 Acronyms
 </a>
 </p>
@@ -351,15 +351,101 @@ Table 2.1:&nbsp;<b>Todo List 2019/8/5</b>
 
 </figure>
 
+<div class="mdframed"
+style="
+background: #ECB2C6 ;
+border: 1pt solid #DF809F ;
+border-radius: 0pt ;
+box-shadow: 8pt 8pt 8pt #808080 ;
+">
+
+<div
+    class="mdframedtitle"
+    style="background: #F5D9E2 ;
+"
+>
+<p>
+<span class="textrm textbf textup textulc" >QPU Versus GPU: Some Common Characteristics</span>
+</p>
+</div>
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• It is very rare that a program will run entirely on a QPU. Usually, a program running on a CPU will issue QPU instructions, and later retrieve the results.
+</p>
+
+</li>
+<li>
+<p>
+• Some tasks are very well suited to the QPU, and others are not.
+</p>
+
+</li>
+<li>
+<p>
+• The QPU runs on a separate clock from the CPU, and usually has its own dedicated hardware interfaces to external devices (such as optical outputs).
+</p>
+
+</li>
+<li>
+<p>
+• A typical QPU has its own special RAM, which the CPU cannot efficiently access.
+</p>
+
+</li>
+<li>
+<p>
+• Here’s a list of pertinent facts about what it’s like to program a QPU: It is very rare that a program will run entirely on a QPU. Usually, a program running on a CPU will issue QPU instructions, and later retrieve the results. Some tasks are very well suited to the
+QPU, and others are not. The QPU runs on a separate clock from the CPU, and usually has its own dedicated hardware interfaces to external devices (such as optical outputs). A typical QPU has its own special RAM, which the CPU cannot efficiently access.
+</p>
+</li>
+</ul>
+
+</div>
+
 
 <div class="figurecaption" >
 
 <p>
 <a id="autoid-6"></a>
 </p>
-Listing&nbsp;2.1:&nbsp;Cpp Testing </div>
-<pre><code class = "language-cpp">
-#include &lt;iostream&gt;
+Listing&nbsp;2.1:&nbsp;Javascript Program: Quantum random spy hunter </div>
+<pre><code class = "language-javascript">
+Example 2-4. Quantum random spy hunter
+qc.reset(3);
+qc.discard();
+var a = qint.new(1, 'alice');
+var fiber = qint.new(1, 'fiber');
+var b = qint.new(1, 'bob');
+
+
+function random_bit(q) {
+    q.write(0);
+    q.had();
+    return q.read();
+}
+
+
+// Generate two random bits
+var send_had = random_bit(a);
+var send_val = random_bit(a);
+
+
+// Prepare Alice's qubit
+a.write(0);
+if (send_val) // Use a random bit to set the value
+    a.not();
+if (send_had) // Use a random bit to apply HAD or not
+    a.had();
+
+
+// Send the qubit!
+fiber.exchange(a);
+
+
+// Activate the spy
+var spy_is_present = true;
 </code>
 </pre>
 
@@ -374,7 +460,24 @@ Listing&nbsp;2.1:&nbsp;Cpp Testing </div>
 <p>
 <a id="autoid-7"></a>
 </p>
-Listing&nbsp;2.2:&nbsp;Golang Program </div>
+Listing&nbsp;2.2:&nbsp;Cpp Testing </div>
+<pre><code class = "language-cpp">
+#include &lt;iostream&gt;
+</code>
+</pre>
+
+
+
+<div class="figurecaption" >
+</div>
+
+
+<div class="figurecaption" >
+
+<p>
+<a id="autoid-8"></a>
+</p>
+Listing&nbsp;2.3:&nbsp;Golang Program </div>
 <pre><code class = "language-go">
 package main
 

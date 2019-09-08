@@ -1,0 +1,49 @@
+
+
+\begin{mdframed}[style=important, frametitle={QPU Versus GPU: Some Common Characteristics}]
+
+\begin{itemize}
+\item It is very rare that a program will run entirely on a QPU. Usually, a program running on a CPU will issue QPU instructions, and later retrieve the results.
+\item Some tasks are very well suited to the QPU, and others are not.
+\item The QPU runs on a separate clock from the CPU, and usually has its own dedicated hardware interfaces to external devices (such as optical outputs).
+\item A typical QPU has its own special RAM, which the CPU cannot efficiently access.
+\item Here's a list of pertinent facts about what it’s like to program a QPU:
+It is very rare that a program will run entirely on a QPU. Usually, a program running on a CPU will issue QPU instructions, and later retrieve the results.
+Some tasks are very well suited to the QPU, and others are not.
+The QPU runs on a separate clock from the CPU, and usually has its own dedicated hardware interfaces to external devices (such as optical outputs).
+A typical QPU has its own special RAM, which the CPU cannot efficiently access.
+\end{itemize}
+\end{mdframed}
+
+% Having java here, doesn't matter because the language gets mapped in the html anyway using prism
+\begin{lstlisting}[language=java, caption=Javascript Program: Quantum random spy hunter]
+Example 2-4. Quantum random spy hunter
+qc.reset(3);
+qc.discard();
+var a = qint.new(1, 'alice');
+var fiber = qint.new(1, 'fiber');
+var b = qint.new(1, 'bob');
+
+function random_bit(q) {
+    q.write(0);
+    q.had();
+    return q.read();
+}
+
+// Generate two random bits
+var send_had = random_bit(a);
+var send_val = random_bit(a);
+
+// Prepare Alice's qubit
+a.write(0);
+if (send_val)  // Use a random bit to set the value
+    a.not();
+if (send_had)  // Use a random bit to apply HAD or not
+    a.had();
+
+// Send the qubit!
+fiber.exchange(a);
+
+// Activate the spy
+var spy_is_present = true;
+\end{lstlisting}
