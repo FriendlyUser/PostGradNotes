@@ -8,8 +8,7 @@ jobs:
       - checkout
       - run: apt-get update && apt-get install poppler-utils -y
       - run: lwarpmk --help || true
-      - run: lualatex -synctex=1 postGrad.tex || lualatex -synctex=1 postGrad.tex || lualatex -synctex=1 postGrad.tex
-      - run: lwarpmk limages || true
+      - run: lualatex -synctex=1 postGrad.tex
       - run: lwarpmk printglossary
       - run: lwarpmk printindex
       - run: lwarpmk print
@@ -17,7 +16,7 @@ jobs:
       - run: bibtex postGrad_html
       - run: lwarpmk htmlglossary
       - run: lwarpmk htmlindex
-      - run: lwarpmk html1 && lwarpmk html1 && lwarpmk html1 && lwarpmk limages || true
+      - run: lwarpmk html1 && lwarpmk html1 && lwarpmk limages || true
       - run: lwarpmk htmlglossary
       - run: lwarpmk htmlindex
       - run: bibtex postGrad_html
