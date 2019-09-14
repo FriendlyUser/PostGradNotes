@@ -2,3 +2,21 @@
 	A good algorithm must have three features: correctness, maintainability, and
 effciency.
 \end{mdframed}
+
+There are five basic rules for calculating an algorithm’s Big O notation.
+
+\begin{enumerate}
+\item If an algorithm performs a certain sequence of steps f(N) times for a mathematical function f, then it takes O(f(N)) steps.
+\item  If an algorithm performs an operation that takes O(f(N)) steps and then
+performs a second operation that takes O(g(N)) steps for functions f and
+g, then the algorithm’s total performance is O(f(N) g(N)).
+\item  If an algorithm takes $O(f(N)+g(N))$ time and the function f(N) is greater
+than g(N) for large N, then the algorithm’s performance can be simplified
+to $O(f(N))$.
+\item  If an algorithm performs an operation that takes $O(f(N))$ steps, and for
+every step in that operation it performs another $O(g(N))$ steps, then the
+algorithm’s total performance is $O(f(N)\times g(N)$.
+\item  Ignore constant multiples. If C is a constant, $O(C \times f(N))$ is the same as
+$O(f(N))$, and $O(C \times f(N))$ is the same as O(f(N)).
+
+\end{enumerate}
