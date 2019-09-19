@@ -3,6 +3,15 @@
 effciency.
 \end{mdframed}
 
+\begin{mdframed}[style=important, frametitle={Data Structures}]
+The term data structure refers to the organization of data in a
+computer's memory, in order to retrieve it quickly for processing.
+It is a scheme for data organization to decouple the functional
+definition of a data structure from its implementation. A data
+structure is chosen based on the problem type and the
+operations performed on the data.
+\end{mdframed}
+
 There are five basic rules for calculating an algorithm’s Big O notation.
 
 \begin{enumerate}
@@ -18,5 +27,21 @@ every step in that operation it performs another $O(g(N))$ steps, then the
 algorithm’s total performance is $O(f(N)\times g(N)$.
 \item  Ignore constant multiples. If C is a constant, $O(C \times f(N))$ is the same as
 $O(f(N))$, and $O(C \times f(N))$ is the same as O(f(N)).
+
+Adapter, bridge, composite,
+decorator, facade, flyweight, private class data, and proxy are the
+Gang of Four (GoF) structural design patterns. 
+
+The adapter pattern comprises the target, adaptee, adapter, and
+client:
+\begin{itemize}
+\item Target is the interface that the client calls and invokes
+methods on the adapter and adaptee.
+\item The client wants the incompatible interface implemented
+by the adapter.
+\item The adapter translates the incompatible interface of the
+adaptee into an interface that the client wants.
+\end{itemize}
+\lstinputlisting[caption={Golang Adaptor Example}]{chapters/important/algorithms/adaptor.go}
 
 \end{enumerate}

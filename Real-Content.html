@@ -193,21 +193,21 @@ Home
 
 
 <p>
-<a href="Index.html#autosec-25" class="tocchapter" >
+<a href="Index.html#autosec-26" class="tocchapter" >
 Index
 </a>
 </p>
 
 
 <p>
-<a href="Index.html#autosec-28" class="tocchapter" >
+<a href="Index.html#autosec-29" class="tocchapter" >
 Glossary
 </a>
 </p>
 
 
 <p>
-<a href="Index.html#autosec-30" class="tocchapter" >
+<a href="Index.html#autosec-31" class="tocchapter" >
 Acronyms
 </a>
 </p>
@@ -494,6 +494,30 @@ A good algorithm must have three features: correctness, maintainability, and eff
 
 </div>
 
+<div class="mdframed"
+style="
+background: #ECB2C6 ;
+border: 1pt solid #DF809F ;
+border-radius: 0pt ;
+box-shadow: 8pt 8pt 8pt #808080 ;
+">
+
+<div
+    class="mdframedtitle"
+    style="background: #F5D9E2 ;
+"
+>
+<p>
+<span class="textrm textbf textup textulc" >Data Structures</span>
+</p>
+</div>
+<p>
+The term data structure refers to the organization of data in a computer’s memory, in order to retrieve it quickly for processing. It is a scheme for data organization to decouple the functional definition of a data structure from its implementation. A data structure is
+chosen based on the problem type and the operations performed on the data.
+</p>
+
+</div>
+
 <p>
 There are five basic rules for calculating an algorithm’s Big O notation.
 </p>
@@ -529,8 +553,88 @@ There are five basic rules for calculating an algorithm’s Big O notation.
 5. Ignore constant multiples. If C is a constant, \(O(C \times f(N))\) is the same as \(O(f(N))\), and \(O(C \times f(N))\) is the same as O(f(N)).
 </p>
 <p>
-
+Adapter, bridge, composite, decorator, facade, flyweight, private class data, and proxy are the Gang of Four (GoF) structural design patterns.
 </p>
+<p>
+The adapter pattern comprises the target, adaptee, adapter, and client:
+</p>
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• Target is the interface that the client calls and invokes methods on the adapter and adaptee.
+</p>
+
+</li>
+<li>
+<p>
+• The client wants the incompatible interface implemented by the adapter.
+</p>
+
+</li>
+<li>
+<p>
+• The adapter translates the incompatible interface of the adaptee into an interface that the client wants.
+</p>
+</li>
+</ul>
+
+<div class="figurecaption" >
+<p>
+<a id="autoid-8"></a>
+</p>
+Listing&nbsp;2.3:&nbsp;Golang Adaptor Example </div>
+<pre><code class = "language-go">
+//main package has examples shown
+// in Hands-On Data Structures and algorithms with Go book
+package main
+// importing fmt package
+import (
+"fmt"
+)
+// IProcess interface
+type IProcess interface {
+         process()
+}
+
+
+// Adapter struct
+type Adapter struct {
+         adaptee Adaptee
+}
+
+
+// Adapter class method process
+func (adapter Adapter) process() {
+         fmt.Println("Adapter process")
+         adapter.adaptee.convert()
+}
+
+
+// Adaptee Struct
+type Adaptee struct {
+         adapterType int
+}
+
+
+// Adaptee class method convert
+func (adaptee Adaptee) convert() {
+         fmt.Println("Adaptee convert method")
+}
+
+
+// main method
+func main() {
+         var processor IProcess = Adapter{}
+         processor.process()
+}
+</code>
+</pre>
+
+
+
+<div class="figurecaption" >
+</div>
 </li>
 </ul>
 
@@ -538,9 +642,9 @@ There are five basic rules for calculating an algorithm’s Big O notation.
 <div class="figurecaption" >
 
 <p>
-<a id="autoid-8"></a>
+<a id="autoid-9"></a>
 </p>
-Listing&nbsp;2.3:&nbsp;Golang Program </div>
+Listing&nbsp;2.4:&nbsp;Golang Program </div>
 <pre><code class = "language-go">
 package main
 
