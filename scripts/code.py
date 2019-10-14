@@ -41,9 +41,10 @@ for outputFile in lwarpFiles:
     yaml = "language-yaml"
     golang = "language-go"
     js = "language-javascript"
+    sql = "language-sql"
     # Go through each even entry in replacements and then check if a replacement should happen
     replacementTerms = ["Cpp", cplusplus, "Latex Code", latex, "Python Script", python, 
-        "Bash Script", bash,"Matlab Script", matlab,"Yaml File",yaml,"JSON Output", json, "Golang", golang, "Javascript Program", js]
+        "Bash Script", bash,"Matlab Script", matlab,"Yaml File",yaml,"JSON Output", json, "Golang", golang, "Javascript Program", js, "SQL Query", sql]
     prismVerbCodeSyn = r'<pre><code class = "' + latex + r'">'
     prismCodeSyn = r'<pre><code class = "' + cplusplus + r'">'
     
