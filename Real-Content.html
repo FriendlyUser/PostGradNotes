@@ -193,21 +193,28 @@ Home
 
 
 <p>
-<a href="Index.html#autosec-27" class="tocchapter" >
-Index
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-30" class="tocchapter" >
-Glossary
+<a href="SQL.html#autosec-24" class="tocsection" >
+<span class="sectionnumber" >2.1</span>&#x2003;SQL
 </a>
 </p>
 
 
 <p>
 <a href="Index.html#autosec-32" class="tocchapter" >
+Index
+</a>
+</p>
+
+
+<p>
+<a href="Index.html#autosec-35" class="tocchapter" >
+Glossary
+</a>
+</p>
+
+
+<p>
+<a href="Index.html#autosec-37" class="tocchapter" >
 Acronyms
 </a>
 </p>
@@ -470,350 +477,40 @@ Listing&nbsp;2.2:&nbsp;Cpp Testing </div>
 
 <div class="figurecaption" >
 </div>
-
-<div class="mdframed"
-style="
-background: #FFFFB2 ;
-border: 1pt solid #FFFF80 ;
-border-radius: 0pt ;
-box-shadow: 8pt 8pt 8pt #808080 ;
-">
-
-<div
-    class="mdframedtitle"
-    style="background: #FFFFD9 ;
-"
->
 <p>
-<span class="textrm textbf textup textulc" >Algorithm Features</span>
-</p>
-</div>
-<p>
-A good algorithm must have three features: correctness, maintainability, and effciency.
-</p>
+<span class="paragraph" id="autosec-22">Thoughts</span>
+<a id="postGrad-autopage-22"></a>
 
-</div>
-
-<div class="mdframed"
-style="
-background: #ECB2C6 ;
-border: 1pt solid #DF809F ;
-border-radius: 0pt ;
-box-shadow: 8pt 8pt 8pt #808080 ;
-">
-
-<div
-    class="mdframedtitle"
-    style="background: #F5D9E2 ;
-"
->
-<p>
-<span class="textrm textbf textup textulc" >Data Structures</span>
-</p>
-</div>
-<p>
-The term data structure refers to the organization of data in a computer’s memory, in order to retrieve it quickly for processing. It is a scheme for data organization to decouple the functional definition of a data structure from its implementation. A data structure is
-chosen based on the problem type and the operations performed on the data.
-</p>
-
-</div>
-
-<p>
-There are five basic rules for calculating an algorithm’s Big O notation.
-</p>
-
-<ul style="list-style-type:none">
-
-<li>
-<p>
-1. If an algorithm performs a certain sequence of steps f(N) times for a mathematical function f, then it takes O(f(N)) steps.
-</p>
-
-</li>
-<li>
-<p>
-2. If an algorithm performs an operation that takes O(f(N)) steps and then performs a second operation that takes O(g(N)) steps for functions f and g, then the algorithm’s total performance is O(f(N) g(N)).
-</p>
-
-</li>
-<li>
-<p>
-3. If an algorithm takes \(O(f(N)+g(N))\) time and the function f(N) is greater than g(N) for large N, then the algorithm’s performance can be simplified to \(O(f(N))\).
-</p>
-
-</li>
-<li>
-<p>
-4. If an algorithm performs an operation that takes \(O(f(N))\) steps, and for every step in that operation it performs another \(O(g(N))\) steps, then the algorithm’s total performance is \(O(f(N)\times g(N)\).
-</p>
-
-</li>
-<li>
-<p>
-5. Ignore constant multiples. If C is a constant, \(O(C \times f(N))\) is the same as \(O(f(N))\), and \(O(C \times f(N))\) is the same as O(f(N)).
-</p>
-</li>
-</ul>
-
-<p>
-Adapter, bridge, composite, decorator, facade, flyweight, private class data, and proxy are the Gang of Four (GoF) structural design patterns.
 </p>
 
 <p>
-The adapter pattern comprises the target, adaptee, adapter, and client:
+Setting on felgo cloud builds was a pain, but somehow I managed to do it.
 </p>
-<ul style="list-style-type:none">
-
-<li>
-<p>
-• Target is the interface that the client calls and invokes methods on the adapter and adaptee.
-</p>
-
-</li>
-<li>
-<p>
-• The client wants the incompatible interface implemented by the adapter.
-</p>
-
-</li>
-<li>
-<p>
-• The adapter translates the incompatible interface of the adaptee into an interface that the client wants.
-</p>
-</li>
-</ul>
-
-
-<div class="figurecaption" >
 
 <p>
-<a id="autoid-8"></a>
+Need to tag that particular release, the problem was a mix of license code, the way numbering works for felgo among other things.
 </p>
-Listing&nbsp;2.3:&nbsp;Golang Adaptor Example </div>
-<pre><code class = "language-go">
-//main package has examples shown
-// in Hands-On Data Structures and algorithms with Go book
-package main
-// importing fmt package
-import (
-"fmt"
-)
-// IProcess interface
-type IProcess interface {
-         process()
-}
-
-
-// Adapter struct
-type Adapter struct {
-         adaptee Adaptee
-}
-
-
-// Adapter class method process
-func (adapter Adapter) process() {
-         fmt.Println("Adapter process")
-         adapter.adaptee.convert()
-}
-
-
-// Adaptee Struct
-type Adaptee struct {
-         adapterType int
-}
-
-
-// Adaptee class method convert
-func (adaptee Adaptee) convert() {
-         fmt.Println("Adaptee convert method")
-}
-
-
-// main method
-func main() {
-         var processor IProcess = Adapter{}
-         processor.process()
-}
-</code>
-</pre>
-
-
-
-<div class="figurecaption" >
-</div>
 
 <p>
-<b>Bridge</b> Bridge decouples the implementation from the abstraction. The abstract base class can be subclassed to provide different implementations and allow implementation details to be modified easily. The interface, which is a bridge, helps in making the
-functionality of concrete classes independent from the interface implementer classes. The bridge patterns allow the implementation details to change at runtime.
+The issue was plugins I did not need, but were added in.
 </p>
-
-
-<div class="figurecaption" >
 
 <p>
-<a id="autoid-9"></a>
+Looking into admob for google suggests I need around 2k view/downloads to make money,
 </p>
-Listing&nbsp;2.4:&nbsp;Golang Adaptor Example </div>
-<pre><code class = "language-go">
-// main package has examples shown
-// in Hands-On Data Structures and algorithms with Go book
-package main
-// importing fmt package
-import (
-         "fmt"
-)
-
-
-// IDrawShape interface
-type IDrawShape interface {
-         drawShape(x[5] float32,y[5] float32)
-}
-
-
-// DrawShape struct
-type DrawShape struct{}
-
-
-// DrawShape struct has method draw Shape with float x and y coordinates
-func (drawShape DrawShape) drawShape(x[5] float32, y[5] float32) {
-         fmt.Println("Drawing Shape")
-}
-// IContour interace
-type IContour interface {
-         drawContour(x[5] float32, y[5] float32)
-         resizeByFactor(factor int)
-}
-// DrawContour struct
-type DrawContour struct {
-         x[5] float32
-         y[5] float32
-         shape DrawShape
-         factor int
-}
-
-
-//DrawContour method drawContour given the coordinates
-func (contour DrawContour) drawContour(x[5] float32,y[5] float32) {
-         fmt.Println("Drawing Contour")
-         contour.shape.drawShape(contour.x, contour.y)
-}
-
-
-//DrawContour method resizeByFactor given factor
-func (contour DrawContour) resizeByFactor(factor int) {
-         contour.factor = factor
-}
-
-
-// main method
-func main() {
-         var x = [5]float32{1,2,3,4,5}
-         var y = [5]float32{1,2,3,4,5}
-         var contour IContour = DrawContour{x,y,DrawShape{},2}
-         contour.drawContour(x,y)
-         contour.resizeByFactor(2)
-}
-</code>
-</pre>
-
-
-
-<div class="figurecaption" >
-</div>
-
-<div class="mdframed"
-style="
-background: #ECB2C6 ;
-border: 1pt solid #DF809F ;
-border-radius: 0pt ;
-box-shadow: 8pt 8pt 8pt #808080 ;
-">
-
-<div
-    class="mdframedtitle"
-    style="background: #F5D9E2 ;
-"
->
-<p>
-<span class="textrm textbf textup textulc" >Composite</span>
-</p>
-</div>
-<p>
-A composite is a group of similar objects in a single object. Objects are stored in a tree form to persist the whole hierarchy. The composite pattern is used to change a hierarchical collection of objects.
-</p>
-
-</div>
 
 <p>
-The composite pattern comprises the component interface, component class, composite, and client:
+Will shove it in hopefully for something to happen.
 </p>
-<ul style="list-style-type:none">
-
-<li>
-<p>
-• The component interface defines the default behavior of all objects and behaviors for accessing the components of the composite.
-</p>
-
-</li>
-<li>
-<p>
-• The composite and component classes implement the component interface.
-</p>
-
-</li>
-<li>
-<p>
-• The client interacts with the component interface to invoke methods in the composite.
-</p>
-</li>
-</ul>
-
-<div class="mdframed"
-style="
-background: #ECB2C6 ;
-border: 1pt solid #DF809F ;
-border-radius: 0pt ;
-box-shadow: 8pt 8pt 8pt #808080 ;
-">
-
-<div
-     class="mdframedtitle"
-     style="background: #F5D9E2 ;
-"
->
-<p>
-<span class="textrm textbf textup textulc" >Decorator</span>
-</p>
-</div>
-<p>
-In a scenario where class responsibilities are removed or added, the decorator pattern is applied. The decorator pattern helps with subclassing when modifying functionality, instead of static inheritance. An object can have multiple decorators and runtime decorators. The
-single responsibility principle can be achieved using a decorator.
-</p>
-
-</div>
-
-
-<div class="figurecaption" >
 
 <p>
-<a id="autoid-10"></a>
+<b>Magneta Music Generation</b> Some of the beats generated were acceptable, could make sound effects from randomized shorter effects.
 </p>
-Listing&nbsp;2.5:&nbsp;Golang Program </div>
-<pre><code class = "language-go">
-package main
 
+<p>
+Probably just trial and error as for images, swipe them off the internet, because I still need animations for now.
+</p>
 
-import (
-         "fmt"
-         "io/ioutil"
-)
-</code>
-</pre>
-
-
-
-<div class="figurecaption" >
-</div>
 </section>
 
 </div>
