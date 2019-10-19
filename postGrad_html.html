@@ -242,8 +242,15 @@ October 19, 2019
 
 
 <p>
-<a href="SQL.html#autosec-24" class="tocsection" >
+<a href="Real-Content.html#autosec-21" class="tocsection" >
 <span class="sectionnumber" >2.1</span>&#x2003;SQL
+</a>
+</p>
+
+
+<p>
+<a href="Real-Content.html#autosec-24" class="tocsubsection" >
+<span class="sectionnumber" >2.1.1</span>&#x2003;Publishing Dart Packages With Docker
 </a>
 </p>
 
@@ -318,41 +325,41 @@ Acronyms
 
 <p>
 <a href="Real-Content.html#autoid-7" class="toclstlisting" >
-<span class="sectionnumber" >2.2</span>&#x2003;Cpp Testing
+<span class="sectionnumber" >2.2</span>&#x2003;SQL Query for length
 </a>
 </p>
 
 
 <p>
-<a href="SQL.html#autoid-8" class="toclstlisting" >
-<span class="sectionnumber" >2.3</span>&#x2003;SQL Query for length
+<a href="Real-Content.html#autoid-8" class="toclstlisting" >
+<span class="sectionnumber" >2.3</span>&#x2003;SQL Query for addresses
 </a>
 </p>
 
 
 <p>
-<a href="SQL.html#autoid-9" class="toclstlisting" >
-<span class="sectionnumber" >2.4</span>&#x2003;SQL Query for addresses
+<a href="Real-Content.html#autoid-9" class="toclstlisting" >
+<span class="sectionnumber" >2.4</span>&#x2003;Cpp Testing
 </a>
 </p>
 
 
 <p>
-<a href="SQL.html#autoid-10" class="toclstlisting" >
+<a href="Real-Content.html#autoid-10" class="toclstlisting" >
 <span class="sectionnumber" >2.5</span>&#x2003;Golang Adaptor Example
 </a>
 </p>
 
 
 <p>
-<a href="SQL.html#autoid-11" class="toclstlisting" >
+<a href="Real-Content.html#autoid-11" class="toclstlisting" >
 <span class="sectionnumber" >2.6</span>&#x2003;Golang Adaptor Example
 </a>
 </p>
 
 
 <p>
-<a href="SQL.html#autoid-12" class="toclstlisting" >
+<a href="Real-Content.html#autoid-12" class="toclstlisting" >
 <span class="sectionnumber" >2.7</span>&#x2003;Golang Program
 </a>
 </p>
@@ -570,7 +577,7 @@ Home
 
 
 <p>
-<a href="SQL.html#autosec-24" class="tocsection" >
+<a href="Real-Content.html#autosec-21" class="tocsection" >
 <span class="sectionnumber" >2.1</span>&#x2003;SQL
 </a>
 </p>
@@ -1107,7 +1114,7 @@ Home
 
 
 <p>
-<a href="SQL.html#autosec-24" class="tocsection" >
+<a href="Real-Content.html#autosec-21" class="tocsection" >
 <span class="sectionnumber" >2.1</span>&#x2003;SQL
 </a>
 </p>
@@ -1401,7 +1408,7 @@ Home
 
 
 <p>
-<a href="SQL.html#autosec-24" class="tocsection" >
+<a href="Real-Content.html#autosec-21" class="tocsection" >
 <span class="sectionnumber" >2.1</span>&#x2003;SQL
 </a>
 </p>
@@ -1669,13 +1676,90 @@ var spy_is_present = true;
 <div class="figurecaption" >
 </div>
 
+<p>
+<b>Magneta Music Generation</b> Some of the beats generated were acceptable, could make sound effects from randomized shorter effects.
+</p>
+
+<p>
+Probably just trial and error as for images, swipe them off the internet, because I still need animations for now.
+</p>
+<h4 id="autosec-21"><span class="sectionnumber" >2.1&#x2003;</span>SQL</h4>
+<a id="postGrad-autopage-21"></a>
+
+
+<p>
+Query
+</p>
+
 
 <div class="figurecaption" >
 
 <p>
 <a id="autoid-7"></a>
 </p>
-Listing&nbsp;2.2:&nbsp;Cpp Testing </div>
+Listing&nbsp;2.2:&nbsp;SQL Query for length </div>
+<pre><code class = "language-sql">
+SELECT first_name, length(first_name) as first_length, last_name, length(last_name) as last_length, length(first_name)+length(last_name) as total_length FROM users WHERE length(first_name)+length(last_name) &gt;30;
+</code>
+</pre>
+
+
+
+<div class="figurecaption" >
+</div>
+
+
+<div class="figurecaption" >
+
+<p>
+<a id="autoid-8"></a>
+</p>
+Listing&nbsp;2.3:&nbsp;SQL Query for addresses </div>
+<pre><code class = "language-sql">
+SELECT DISTINCT ON (a.place_id)
+          a.full_json #&gt;&gt; '{5,short_name}' AS state
+         , a.full_json #&gt;&gt; '{7,long_name}' AS postal_code
+         , a.full_json #&gt;&gt; '{3,short_name}' AS city
+         FROM addresses_autocomplete a
+         JOIN regions r ON r.short_name = a.full_json #&gt;&gt; '{5,short_name}'
+         WHERE a.formatted = $1
+         AND   json_array_length(a.full_json) &gt;7
+         AND   r.country_id = 1
+</code>
+</pre>
+
+
+
+<div class="figurecaption" >
+</div>
+<h5 id="autosec-24"><span class="sectionnumber" >2.1.1&#x2003;</span>Publishing Dart Packages With Docker</h5>
+<a id="postGrad-autopage-24"></a>
+
+
+<p>
+In order to publish a package in dart you need to authenticate with a web browser. This is easily done if dart is installed locally, however if you are using dart in docker this becomes a bit more confusing. After authentication with google, copy the response url and curl it
+within the docker container.
+</p>
+
+<p>
+‘pub publish’
+</p>
+
+<p>
+Go to url in web browser, copy url directed at ‘localhost‘ and curl inside docker container.
+</p>
+
+<p>
+I believe pub publish spins out a http listener at a localhost port which is why using curl to hit it works in dart.
+</p>
+
+
+<div class="figurecaption" >
+
+<p>
+<a id="autoid-9"></a>
+</p>
+Listing&nbsp;2.4:&nbsp;Cpp Testing </div>
 <pre><code class = "language-cpp">
 #include &lt;iostream&gt;
 </code>
@@ -1686,8 +1770,8 @@ Listing&nbsp;2.2:&nbsp;Cpp Testing </div>
 <div class="figurecaption" >
 </div>
 <p>
-<span class="paragraph" id="autosec-22">Thoughts</span>
-<a id="postGrad-autopage-22"></a>
+<span class="paragraph" id="autosec-26">Thoughts</span>
+<a id="postGrad-autopage-26"></a>
 
 </p>
 
@@ -1710,333 +1794,6 @@ Looking into admob for google suggests I need around 2k view/downloads to make m
 <p>
 Will shove it in hopefully for something to happen.
 </p>
-
-<p>
-<b>Magneta Music Generation</b> Some of the beats generated were acceptable, could make sound effects from randomized shorter effects.
-</p>
-
-<p>
-Probably just trial and error as for images, swipe them off the internet, because I still need animations for now.
-</p>
-
-</section>
-
-</div>
-
-</div>
-
-<footer>
-
-<p>
-Contact Information and Copyright
-</p>
-
-</footer>
-
-
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
-Home
-</a></nav>
-
-</body>
-</html>
-<!--|Start file|SQL.html|-->
-
-<!DOCTYPE html>
-<html lang="en-US">
-<head>
-<meta charset="UTF-8" />
-<meta name="author" content="Some Author" />
-<meta name="generator" content="LaTeX lwarp package" />
-<meta name="description" content="A description." />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<!--[if lt IE 9]>
-<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
-<title>Webpage Title — SQL</title>
-<link rel="stylesheet" href="prism.css" type="text/css">
-<script src="prism.js" type="text/javascript"> </script>
-<link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
-
-
-
-<!-- https://groups.google.com/forum/#!topic/
-                                     mathjax-users/jUtewUcE2bY -->
-<script type="text/x-mathjax-config">
-MathJax.Hub.Register.StartupHook("TeX AMSmath Ready",function () {
-      var seteqsectionDefault = {name: "", num: 0};
-      var seteqsections = {}, seteqsection = seteqsectionDefault;
-      var TEX = MathJax.InputJax.TeX, PARSE = TEX.Parse;
-      var AMS = MathJax.Extension["TeX/AMSmath"];
-      TEX.Definitions.Add({
-      macros: {
-            seteqsection: "mySection",
-            seteqnumber: "mySetEqNumber"
-      }
-      });
-
-
-      PARSE.Augment({
-      mySection: function (name) {
-            seteqsection.num = AMS.number;
-            var n = this.GetArgument(name);
-            if (n === "") {
-                seteqsection = seteqsectionDefault;
-            } else {
-                if (!seteqsections["_"+n])
-                       seteqsections["_"+n] = {name:n, num:0};
-                seteqsection = seteqsections["_"+n];
-            }
-            AMS.number = seteqsection.num;
-      },
-      mySetEqNumber: function (name) {
-            var n = this.GetArgument(name);
-            if (!n || !n.match(/^ *[0-9]+ *$/))
-                n = "";
-            else
-                n = parseInt(n)-1;
-            <!-- $ syntax highlighting -->
-            if (n === "" || n < 1)
-                TEX.Error
-                ("Argument to "+name+" should be a positive integer");
-            AMS.number = n;
-      }
-      });
-      MathJax.Hub.Config({
-      TeX: {
-            equationNumbers: {
-                formatTag: function (n) {
-                       <!-- if not numeric, don't include the chapter -->
-                       if (!n.match(/^ *[0-9]+ *$/ ))
-                       <!-- $ syntax highlighting -->
-                          return "("+(n).replace(/^\./,"")+")" ;
-                       else
-                          return "("+(seteqsection.name+"."+n).replace(/^\./,"")+")" ;
-                },
-                formatID: function (n) {
-                       n = (seteqsection.name+'.'+n).replace
-                          (/[:"'<>&]/g,"").replace(/^\./,"");
-                       return 'mjx-eqn-' + n;
-                }
-            }
-      }
-      });
-});
-</script>
-
-
-<!-- http://docs.mathjax.org/en/latest/options/ThirdParty.html -->
-<script type="text/x-mathjax-config">
-  MathJax.Ajax.config.path["Contrib"] =
-      "https://cdn.mathjax.org/mathjax/contrib";
-</script>
-
-
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-      TeX: {
-            extensions: ["autoload-all.js"] ,
-            equationNumbers: {
-                autoNumber: "AMS"
-            }
-      }
-});
-</script>
-
-
-<!-- Alternative CDN provider: -->
-<script type="text/javascript" async
-src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML-full">
-</script>
-
-
-<!-- No longer supported after April 30, 2017: -->
-<!--
-<script
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
-</script>
--->
-
-
-
-</head>
-<body>
-
-
-<a id="postGrad-autopage-23"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
-Home
-</a></nav>
-
-<header>
-
-<p>
-<span
-    class="fbox"
-    style="display:inline-block ; border:1pt solid #000000; padding:3pt ; color:#000000"
->LOGO</span>
-</p>
-
-</header>
-
-
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
-
-
-<nav class="sidetoc" >
-
-
-<div class="sidetoctitle" >
-
-<p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
-</p>
-
-<p>
-Contents
-</p>
-</div>
-
-
-<div class="sidetoccontents" >
-
-<p>
-<a href="index.html" class="linkhome" >
-Home
-</a>
-</p>
-
-<p>
-<a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter
-</a>
-</p>
-
-
-<p>
-<a href="Example-chapter.html#autosec-9" class="tocsection" >
-<span class="sectionnumber" >1.1</span>&#x2003;A section
-</a>
-</p>
-
-
-<p>
-<a href="Some-math.html#autosec-16" class="tocsection" >
-<span class="sectionnumber" >1.2</span>&#x2003;Some math
-</a>
-</p>
-
-
-<p>
-<a href="Real-Content.html#autosec-18" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;Real Content
-</a>
-</p>
-
-
-<p>
-<a href="SQL.html#autosec-24" class="tocsection" >
-<span class="sectionnumber" >2.1</span>&#x2003;SQL
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-32" class="tocchapter" >
-Index
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-35" class="tocchapter" >
-Glossary
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-37" class="tocchapter" >
-Acronyms
-</a>
-</p>
-
-
-</div>
-
-</nav>
-
-</div>
-
-
-<div class="bodycontainer" >
-
-
-<section class="textbody" >
-
-<h1>The Lwarp Tutorial</h1>
-
-<!--Nullify \ensuremath, footnotes for MathJax:-->
-
-\(\newcommand \ensuremath [1]{#1}\)
-
-\(\newcommand \footnote [2][]{\text {( Footnote #1 )}}\)
-
-\(\newcommand \footnotemark [1][]{\text {( Footnote #1 )}}\)
-
-<!--Additional customizations for MathJax:-->
-
-<p>
-<h4 id="autosec-24"><span class="sectionnumber" >2.1&#x2003;</span>SQL</h4>
-<a id="postGrad-autopage-24"></a>
-
-
-<p>
-Query
-</p>
-
-
-<div class="figurecaption" >
-
-<p>
-<a id="autoid-8"></a>
-</p>
-Listing&nbsp;2.3:&nbsp;SQL Query for length </div>
-<pre><code class = "language-sql">
-SELECT first_name, length(first_name) as first_length, last_name, length(last_name) as last_length, length(first_name)+length(last_name) as total_length FROM users WHERE length(first_name)+length(last_name) &gt;30;
-</code>
-</pre>
-
-
-
-<div class="figurecaption" >
-</div>
-
-
-<div class="figurecaption" >
-
-<p>
-<a id="autoid-9"></a>
-</p>
-Listing&nbsp;2.4:&nbsp;SQL Query for addresses </div>
-<pre><code class = "language-sql">
-SELECT DISTINCT ON (a.place_id)
-           a.full_json #&gt;&gt; '{5,short_name}' AS state
-         , a.full_json #&gt;&gt; '{7,long_name}' AS postal_code
-         , a.full_json #&gt;&gt; '{3,short_name}' AS city
-         FROM addresses_autocomplete a
-         JOIN regions r ON r.short_name = a.full_json #&gt;&gt; '{5,short_name}'
-         WHERE a.formatted = $1
-         AND    json_array_length(a.full_json) &gt;7
-         AND    r.country_id = 1
-</code>
-</pre>
-
-
-
-<div class="figurecaption" >
-</div>
 
 <div class="mdframed"
 style="
@@ -2598,7 +2355,7 @@ Home
 
 
 <p>
-<a href="SQL.html#autosec-24" class="tocsection" >
+<a href="Real-Content.html#autosec-21" class="tocsection" >
 <span class="sectionnumber" >2.1</span>&#x2003;SQL
 </a>
 </p>
