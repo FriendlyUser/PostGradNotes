@@ -1,0 +1,35 @@
+
+\textbf{Magneta Music Generation} Some of the beats generated were acceptable, could make sound effects from randomized shorter effects.
+
+Probably just trial and error as for images, swipe them off the internet, because I still need animations for now.
+
+
+\section{SQL}
+
+Query
+\begin{lstlisting}[caption={SQL Query for length}]
+SELECT first_name, length(first_name) as first_length, last_name, length(last_name) as last_length, length(first_name)+length(last_name) as total_length FROM users WHERE length(first_name)+length(last_name) > 30;
+\end{lstlisting}
+
+\begin{lstlisting}[caption={SQL Query for addresses}]
+SELECT DISTINCT ON (a.place_id)
+            a.full_json #>> '{5,short_name}' AS state
+          , a.full_json #>> '{7,long_name}'  AS postal_code
+          , a.full_json #>> '{3,short_name}' AS city
+          FROM   addresses_autocomplete a
+          JOIN   regions r ON r.short_name = a.full_json #>> '{5,short_name}'
+          WHERE  a.formatted = $1
+          AND    json_array_length(a.full_json) > 7
+          AND    r.country_id = 1
+\end{lstlisting}
+
+\subsection{Publishing Dart Packages With Docker}
+
+In order to publish a package in dart you need to authenticate with a web browser. This is easily done if dart is installed locally, however if you are using dart in docker this becomes a bit more confusing.
+After authentication with google, copy the response url and curl it within the docker container.
+
+`pub publish'
+
+Go to url in web browser, copy url directed at `localhost` and curl inside docker container.
+
+I believe pub publish spins out a http listener at a localhost port which is why using curl to hit it works in dart.

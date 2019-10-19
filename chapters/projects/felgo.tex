@@ -11,27 +11,3 @@ The issue was plugins I did not need, but were added in.
 Looking into admob for google suggests I need around 2k view/downloads to make money,
 
 Will shove it in hopefully for something to happen.
-
-\textbf{Magneta Music Generation} Some of the beats generated were acceptable, could make sound effects from randomized shorter effects.
-
-Probably just trial and error as for images, swipe them off the internet, because I still need animations for now.
-
-
-\section{SQL}
-
-Query
-\begin{lstlisting}[caption={SQL Query for length}]
-SELECT first_name, length(first_name) as first_length, last_name, length(last_name) as last_length, length(first_name)+length(last_name) as total_length FROM users WHERE length(first_name)+length(last_name) > 30;
-\end{lstlisting}
-
-\begin{lstlisting}[caption={SQL Query for addresses}]
-SELECT DISTINCT ON (a.place_id)
-            a.full_json #>> '{5,short_name}' AS state
-          , a.full_json #>> '{7,long_name}'  AS postal_code
-          , a.full_json #>> '{3,short_name}' AS city
-          FROM   addresses_autocomplete a
-          JOIN   regions r ON r.short_name = a.full_json #>> '{5,short_name}'
-          WHERE  a.formatted = $1
-          AND    json_array_length(a.full_json) > 7
-          AND    r.country_id = 1
-\end{lstlisting}
