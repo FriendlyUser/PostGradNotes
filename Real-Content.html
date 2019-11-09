@@ -103,7 +103,7 @@ MathJax.Hub.Config({
 
 <!-- Alternative CDN provider: -->
 <script type="text/javascript" async
-src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML-full">
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS_HTML-full">
 </script>
 
 
@@ -200,21 +200,21 @@ Home
 
 
 <p>
-<a href="Index.html#autosec-32" class="tocchapter" >
+<a href="Index.html#autosec-34" class="tocchapter" >
 Index
 </a>
 </p>
 
 
 <p>
-<a href="Index.html#autosec-35" class="tocchapter" >
+<a href="Index.html#autosec-37" class="tocchapter" >
 Glossary
 </a>
 </p>
 
 
 <p>
-<a href="Index.html#autosec-37" class="tocchapter" >
+<a href="Index.html#autosec-39" class="tocchapter" >
 Acronyms
 </a>
 </p>
@@ -538,13 +538,94 @@ Go to url in web browser, copy url directed at ‘localhost‘ and curl inside d
 I believe pub publish spins out a http listener at a localhost port which is why using curl to hit it works in dart.
 </p>
 
+<p>
+Learned that ‘::1‘ means localhost for ip 6, and express has a useful function called req.ip to get client ip, but fails if you are using a proxy.
+</p>
+
 
 <div class="figurecaption" >
 
 <p>
 <a id="autoid-9"></a>
 </p>
-Listing&nbsp;2.4:&nbsp;Cpp Testing </div>
+Listing&nbsp;2.4:&nbsp;Javascript Program get ip address </div>
+<pre><code class = "language-javascript">
+var ip = req.headers['x-forwarded-for'] ||
+    req.connection.remoteAddress ||
+    req.socket.remoteAddress ||
+    (req.connection.socket ? req.connection.socket.remoteAddress : null);
+</code>
+</pre>
+
+
+
+<div class="figurecaption" >
+</div>
+
+
+<div class="figurecaption" >
+
+<p>
+<a id="autoid-10"></a>
+</p>
+Listing&nbsp;2.5:&nbsp;Javascript Program HTTP server </div>
+<pre><code class = "language-javascript">
+var http = require("http"),
+   url = require("url"),
+   path = require("path"),
+   fs = require("fs"),
+   port = process.argv[2] || 8888;
+
+
+http.createServer(function(request, response) {
+
+
+ var uri = url.parse(request.url).pathname
+   , filename = path.join(process.cwd(), uri);
+
+
+ fs.exists(filename, function(exists) {
+   if(!exists) {
+       response.writeHead(404, {"Content-Type": "text/plain"});
+       response.write("404 Not Found\n");
+       response.end();
+       return;
+   }
+
+
+   if (fs.statSync(filename).isDirectory()) filename += '/index.html';
+
+
+   fs.readFile(filename, "binary", function(err, file) {
+       if(err) {
+           response.writeHead(500, {"Content-Type": "text/plain"});
+           response.write(err + "\n");
+           response.end();
+           return;
+       }
+
+
+       response.writeHead(200);
+       response.write(file, "binary");
+       response.end();
+   });
+  });
+}).listen(parseInt(port, 10));
+</code>
+</pre>
+
+
+
+<div class="figurecaption" >
+</div>
+
+
+<div class="figurecaption" >
+
+<p>
+<a id="autoid-11"></a>
+</p>
+Listing&nbsp;2.6:&nbsp;Cpp Testing </div>
 <pre><code class = "language-cpp">
 #include &lt;iostream&gt;
 </code>
@@ -555,8 +636,8 @@ Listing&nbsp;2.4:&nbsp;Cpp Testing </div>
 <div class="figurecaption" >
 </div>
 <p>
-<span class="paragraph" id="autosec-26">Thoughts</span>
-<a id="postGrad-autopage-26"></a>
+<span class="paragraph" id="autosec-28">Thoughts</span>
+<a id="postGrad-autopage-28"></a>
 
 </p>
 
@@ -696,9 +777,9 @@ The adapter pattern comprises the target, adaptee, adapter, and client:
 <div class="figurecaption" >
 
 <p>
-<a id="autoid-10"></a>
+<a id="autoid-12"></a>
 </p>
-Listing&nbsp;2.5:&nbsp;Golang Adaptor Example </div>
+Listing&nbsp;2.7:&nbsp;Golang Adaptor Example </div>
 <pre><code class = "language-go">
 //main package has examples shown
 // in Hands-On Data Structures and algorithms with Go book
@@ -760,9 +841,9 @@ functionality of concrete classes independent from the interface implementer cla
 <div class="figurecaption" >
 
 <p>
-<a id="autoid-11"></a>
+<a id="autoid-13"></a>
 </p>
-Listing&nbsp;2.6:&nbsp;Golang Adaptor Example </div>
+Listing&nbsp;2.8:&nbsp;Golang Adaptor Example </div>
 <pre><code class = "language-go">
 // main package has examples shown
 // in Hands-On Data Structures and algorithms with Go book
@@ -905,9 +986,9 @@ single responsibility principle can be achieved using a decorator.
 <div class="figurecaption" >
 
 <p>
-<a id="autoid-12"></a>
+<a id="autoid-14"></a>
 </p>
-Listing&nbsp;2.7:&nbsp;Golang Program </div>
+Listing&nbsp;2.9:&nbsp;Golang Program </div>
 <pre><code class = "language-go">
 package main
 

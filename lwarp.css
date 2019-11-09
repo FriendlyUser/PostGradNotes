@@ -78,6 +78,12 @@ span.texteb { font-weight: bolder; }
 
 span.textlg { font-weight: lighter; }
 
+span.textup, div.textup {
+    font-style: normal;
+    font-variant: normal;
+    font-variant-numeric: normal ;
+}
+
 span.textsc, div.textsc {
     font-variant: small-caps;
     font-variant-numeric: oldstyle-nums ;
@@ -89,12 +95,6 @@ span.textulc, div.textulc {
 }
 
 span.textsl, div.textsl { font-style: oblique; }
-
-span.textup, div.textup {
-    font-style: normal;
-    font-variant: normal;
-    font-variant-numeric: normal ;
-}
 
 span.textrm, div.textrm {
     font-family: "DejaVu Serif", "Bitstream Vera Serif",
@@ -414,7 +414,7 @@ div.marginblock, div.marginparblock {
 
 div.marginblock div.minipage,
 div.marginparblock div.minipage {
-    display: block ;
+    display: inline-block ;
     margin: 0pt auto 0pt auto ;
 }
 
