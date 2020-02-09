@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="author" content="Some Author" />
-<meta name="generator" content="LaTeX lwarp package" />
+<meta name="generator" content="LaTeX Lwarp package" />
 <meta name="description" content="A description." />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!--[if lt IE 9]>
@@ -122,8 +122,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-
 
 <a id="postGrad-autopage-17"></a>
 <nav class="topnavigation" ><a href="index.html" class="linkhome" >
-Home
-</a></nav>
+Home</a></nav>
 
 <header>
 
@@ -160,63 +159,36 @@ Contents
 
 <p>
 <a href="index.html" class="linkhome" >
-Home
-</a>
+Home</a>
 </p>
 
 <p>
-<a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter
-</a>
-</p>
-
-
-<p>
-<a href="Example-chapter.html#autosec-9" class="tocsection" >
-<span class="sectionnumber" >1.1</span>&#x2003;A section
-</a>
+<a href="index.html#autosec-8" class="tocchapter" >
+<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
 </p>
 
 
 <p>
-<a href="Some-math.html#autosec-16" class="tocsection" >
-<span class="sectionnumber" >1.2</span>&#x2003;Some math
-</a>
+<a href="index.html#autosec-9" class="tocsection" >
+<span class="sectionnumber" >1.1</span>&#x2003;A section</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-18" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;Real Content
-</a>
+<a href="index.html#autosec-16" class="tocsection" >
+<span class="sectionnumber" >1.2</span>&#x2003;Some math</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-21" class="tocsection" >
-<span class="sectionnumber" >2.1</span>&#x2003;SQL
-</a>
+<a href="index.html#autosec-18" class="tocchapter" >
+<span class="sectionnumber" >2</span>&#x2003;Real Content</a>
 </p>
 
 
 <p>
-<a href="Index.html#autosec-34" class="tocchapter" >
-Index
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-37" class="tocchapter" >
-Glossary
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-39" class="tocchapter" >
-Acronyms
-</a>
+<a href="index.html#autosec-21" class="tocsection" >
+<span class="sectionnumber" >2.1</span>&#x2003;SQL</a>
 </p>
 
 
@@ -234,7 +206,10 @@ Acronyms
 
 <h1>The Lwarp Tutorial</h1>
 
-<!--Nullify \ensuremath, footnotes for MathJax:-->
+<!--MathJax customizations:-->
+
+
+<div class="hidden" >
 
 \(\newcommand \ensuremath [1]{#1}\)
 
@@ -242,7 +217,25 @@ Acronyms
 
 \(\newcommand \footnotemark [1][]{\text {( Footnote #1 )}}\)
 
-<!--Additional customizations for MathJax:-->
+\(\newcommand {\LWRframebox }[2][]{\fbox {#2}} \newcommand {\framebox }[1][]{\LWRframebox } \)
+
+\(\newcommand {\setlength }[2]{}\)
+
+\(\newcommand {\addtolength }[2]{}\)
+
+\(\newcommand {\setcounter }[2]{}\)
+
+\(\newcommand {\addtocounter }[2]{}\)
+
+\(\newcommand {\cline }[1]{}\)
+
+\(\newcommand {\directlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\luatexdirectlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\intertext }[1]{\\ \text {#1}\notag \\}\)
+
+</div>
 
 <p>
 <h3 id="autosec-18"><span class="sectionnumber" >2&#x2003;</span>Real Content</h3>
@@ -390,11 +383,13 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 • It is very rare that a program will run entirely on a QPU. Usually, a program running on a CPU will issue QPU instructions, and later retrieve the results.
 </p>
 
+
 </li>
 <li>
 <p>
 • Some tasks are very well suited to the QPU, and others are not.
 </p>
+
 
 </li>
 <li>
@@ -402,11 +397,13 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 • The QPU runs on a separate clock from the CPU, and usually has its own dedicated hardware interfaces to external devices (such as optical outputs).
 </p>
 
+
 </li>
 <li>
 <p>
 • A typical QPU has its own special RAM, which the CPU cannot efficiently access.
 </p>
+
 
 </li>
 <li>
@@ -579,44 +576,44 @@ var ip = req.headers['x-forwarded-for'] ||
 Listing&nbsp;2.5:&nbsp;Javascript Program HTTP server </div>
 <pre><code class = "language-javascript">
 var http = require("http"),
-   url = require("url"),
-   path = require("path"),
-   fs = require("fs"),
-   port = process.argv[2] || 8888;
+      url = require("url"),
+      path = require("path"),
+      fs = require("fs"),
+      port = process.argv[2] || 8888;
 
 
 http.createServer(function(request, response) {
 
 
  var uri = url.parse(request.url).pathname
-   , filename = path.join(process.cwd(), uri);
+      , filename = path.join(process.cwd(), uri);
 
 
  fs.exists(filename, function(exists) {
-   if(!exists) {
-       response.writeHead(404, {"Content-Type": "text/plain"});
-       response.write("404 Not Found\n");
-       response.end();
-       return;
-   }
+      if(!exists) {
+          response.writeHead(404, {"Content-Type": "text/plain"});
+          response.write("404 Not Found\n");
+          response.end();
+          return;
+      }
 
 
-   if (fs.statSync(filename).isDirectory()) filename += '/index.html';
+      if (fs.statSync(filename).isDirectory()) filename += '/index.html';
 
 
-   fs.readFile(filename, "binary", function(err, file) {
-       if(err) {
-           response.writeHead(500, {"Content-Type": "text/plain"});
-           response.write(err + "\n");
-           response.end();
-           return;
-       }
+      fs.readFile(filename, "binary", function(err, file) {
+          if(err) {
+              response.writeHead(500, {"Content-Type": "text/plain"});
+              response.write(err + "\n");
+              response.end();
+              return;
+          }
 
 
-       response.writeHead(200);
-       response.write(file, "binary");
-       response.end();
-   });
+          response.writeHead(200);
+          response.write(file, "binary");
+          response.end();
+      });
   });
 }).listen(parseInt(port, 10));
 </code>
@@ -638,11 +635,13 @@ The situation with .NET in 2019 is that there are three forked .NET platforms co
 • .NET Core: for cross-platform and new apps.
 </p>
 
+
 </li>
 <li>
 <p>
 • .NET Framework: for legacy apps.
 </p>
+
 
 </li>
 <li>
@@ -696,6 +695,10 @@ Looking into admob for google suggests I need around 2k view/downloads to make m
 
 <p>
 Will shove it in hopefully for something to happen.
+</p>
+
+<p>
+Kinda lazy with the felgo games.
 </p>
 
 <div class="mdframed"
@@ -796,11 +799,13 @@ The adapter pattern comprises the target, adaptee, adapter, and client:
 • Target is the interface that the client calls and invokes methods on the adapter and adaptee.
 </p>
 
+
 </li>
 <li>
 <p>
 • The client wants the incompatible interface implemented by the adapter.
 </p>
+
 
 </li>
 <li>
@@ -981,11 +986,13 @@ The composite pattern comprises the component interface, component class, compos
 • The component interface defines the default behavior of all objects and behaviors for accessing the components of the composite.
 </p>
 
+
 </li>
 <li>
 <p>
 • The composite and component classes implement the component interface.
 </p>
+
 
 </li>
 <li>
@@ -1004,8 +1011,8 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 ">
 
 <div
-     class="mdframedtitle"
-     style="background: #F5D9E2 ;
+    class="mdframedtitle"
+    style="background: #F5D9E2 ;
 "
 >
 <p>
@@ -1041,6 +1048,10 @@ import (
 
 <div class="figurecaption" >
 </div>
+<h4 id="autosec-32"></h4>
+<a id="postGrad-autopage-32"></a>
+
+
 </section>
 
 </div>
@@ -1057,8 +1068,7 @@ Contact Information and Copyright
 
 
 <nav class="botnavigation" ><a href="index.html" class="linkhome" >
-Home
-</a></nav>
+Home</a></nav>
 
 </body>
 </html>

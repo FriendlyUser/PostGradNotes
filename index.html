@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="author" content="Some Author" />
-<meta name="generator" content="LaTeX lwarp package" />
+<meta name="generator" content="LaTeX Lwarp package" />
 <meta name="description" content="A description." />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!--[if lt IE 9]>
@@ -17,7 +17,7 @@
 
 
 <!-- https://groups.google.com/forum/#!topic/
-                                     mathjax-users/jUtewUcE2bY -->
+                                      mathjax-users/jUtewUcE2bY -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Register.StartupHook("TeX AMSmath Ready",function () {
       var seteqsectionDefault = {name: "", num: 0};
@@ -136,7 +136,10 @@ Name and <span
 
 <section class="textbody" >
 
-<!--Nullify \ensuremath, footnotes for MathJax:-->
+<!--MathJax customizations:-->
+
+
+<div class="hidden" >
 
 \(\newcommand \ensuremath [1]{#1}\)
 
@@ -144,7 +147,25 @@ Name and <span
 
 \(\newcommand \footnotemark [1][]{\text {( Footnote #1 )}}\)
 
-<!--Additional customizations for MathJax:-->
+\(\newcommand {\LWRframebox }[2][]{\fbox {#2}} \newcommand {\framebox }[1][]{\LWRframebox } \)
+
+\(\newcommand {\setlength }[2]{}\)
+
+\(\newcommand {\addtolength }[2]{}\)
+
+\(\newcommand {\setcounter }[2]{}\)
+
+\(\newcommand {\addtocounter }[2]{}\)
+
+\(\newcommand {\cline }[1]{}\)
+
+\(\newcommand {\directlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\luatexdirectlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\intertext }[1]{\\ \text {#1}\notag \\}\)
+
+</div>
 
 <a id="postGrad-autopage-1"></a>
 <div class="titlepage" >
@@ -168,7 +189,7 @@ Some Author
 <div class="titledate" >
 
 <p>
-December 8, 2019
+February 9, 2020
 </p>
 </div>
 
@@ -191,7 +212,7 @@ December 8, 2019
 </p>
 
 <p>
-<span class="textsc" >December 8, 2019</span><br />
+<span class="textsc" >February 9, 2020</span><br />
 <b>Name:</b> &#x2003;&#x2003;David Li<br />
 <b>Student Number:</b> &#x2003;&#x2003;V00818631<br />
 <b>Email:</b> &#x2003;&#x2003;<a href="mailto:davidli012345@gmail.ca" target="_blank" >davidli012345@gmail.ca</a><br />
@@ -207,72 +228,44 @@ December 8, 2019
 <nav class="toc" >
 
 <p>
-<a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter
-</a>
+<a href="index.html#autosec-8" class="tocchapter" >
+<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
 </p>
 
 
 <p>
-<a href="Example-chapter.html#autosec-9" class="tocsection" >
-<span class="sectionnumber" >1.1</span>&#x2003;A section
-</a>
+<a href="index.html#autosec-9" class="tocsection" >
+<span class="sectionnumber" >1.1</span>&#x2003;A section</a>
 </p>
 
 
 <p>
-<a href="Example-chapter.html#autosec-10" class="tocsubsection" >
-<span class="sectionnumber" >1.1.1</span>&#x2003;A subsection
-</a>
+<a href="index.html#autosec-10" class="tocsubsection" >
+<span class="sectionnumber" >1.1.1</span>&#x2003;A subsection</a>
 </p>
 
 
 <p>
-<a href="Some-math.html#autosec-16" class="tocsection" >
-<span class="sectionnumber" >1.2</span>&#x2003;Some math
-</a>
+<a href="index.html#autosec-16" class="tocsection" >
+<span class="sectionnumber" >1.2</span>&#x2003;Some math</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-18" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;Real Content
-</a>
+<a href="index.html#autosec-18" class="tocchapter" >
+<span class="sectionnumber" >2</span>&#x2003;Real Content</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-21" class="tocsection" >
-<span class="sectionnumber" >2.1</span>&#x2003;SQL
-</a>
+<a href="index.html#autosec-21" class="tocsection" >
+<span class="sectionnumber" >2.1</span>&#x2003;SQL</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-24" class="tocsubsection" >
-<span class="sectionnumber" >2.1.1</span>&#x2003;Publishing Dart Packages With Docker
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-34" class="tocchapter" >
-Index
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-37" class="tocchapter" >
-Glossary
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-39" class="tocchapter" >
-Acronyms
-</a>
+<a href="index.html#autosec-24" class="tocsubsection" >
+<span class="sectionnumber" >2.1.1</span>&#x2003;Publishing Dart Packages With Docker</a>
 </p>
 </nav>
 <h3 id="autosec-5">List of Figures</h3>
@@ -283,9 +276,8 @@ Acronyms
 <nav class="lof" >
 
 <p>
-<a href="Example-chapter.html#autoid-1" class="tocfigure" >
-<span class="sectionnumber" >1.1</span>&#x2003;A figure with text
-</a>
+<a href="index.html#autoid-1" class="tocfigure" >
+<span class="sectionnumber" >1.1</span>&#x2003;A figure with text</a>
 </p>
 </nav>
 <h3 id="autosec-6">Listings</h3>
@@ -296,86 +288,74 @@ Acronyms
 <nav class="lol" >
 
 <p>
-<a href="Example-chapter.html#autoid-2" class="toclstlisting" >
-<span class="sectionnumber" >1.1</span>&#x2003;Cpp Testing
-</a>
+<a href="index.html#autoid-2" class="toclstlisting" >
+<span class="sectionnumber" >1.1</span>&#x2003;Cpp Testing </a>
 </p>
 
 
 <p>
-<a href="Example-chapter.html#autoid-3" class="toclstlisting" >
-<span class="sectionnumber" >1.2</span>&#x2003;Golang Program
-</a>
+<a href="index.html#autoid-3" class="toclstlisting" >
+<span class="sectionnumber" >1.2</span>&#x2003;Golang Program </a>
 </p>
 
 
 <p>
-<a href="Example-chapter.html#autoid-4" class="toclstlisting" >
-<span class="sectionnumber" >1.3</span>&#x2003;Python Script
-</a>
+<a href="index.html#autoid-4" class="toclstlisting" >
+<span class="sectionnumber" >1.3</span>&#x2003;Python Script </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-6" class="toclstlisting" >
-<span class="sectionnumber" >2.1</span>&#x2003;Javascript Program: Quantum random spy hunter
-</a>
+<a href="index.html#autoid-6" class="toclstlisting" >
+<span class="sectionnumber" >2.1</span>&#x2003;Javascript Program: Quantum random spy hunter </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-7" class="toclstlisting" >
-<span class="sectionnumber" >2.2</span>&#x2003;SQL Query for length
-</a>
+<a href="index.html#autoid-7" class="toclstlisting" >
+<span class="sectionnumber" >2.2</span>&#x2003;SQL Query for length </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-8" class="toclstlisting" >
-<span class="sectionnumber" >2.3</span>&#x2003;SQL Query for addresses
-</a>
+<a href="index.html#autoid-8" class="toclstlisting" >
+<span class="sectionnumber" >2.3</span>&#x2003;SQL Query for addresses </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-9" class="toclstlisting" >
-<span class="sectionnumber" >2.4</span>&#x2003;Javascript Program get ip address
-</a>
+<a href="index.html#autoid-9" class="toclstlisting" >
+<span class="sectionnumber" >2.4</span>&#x2003;Javascript Program get ip address </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-10" class="toclstlisting" >
-<span class="sectionnumber" >2.5</span>&#x2003;Javascript Program HTTP server
-</a>
+<a href="index.html#autoid-10" class="toclstlisting" >
+<span class="sectionnumber" >2.5</span>&#x2003;Javascript Program HTTP server </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-11" class="toclstlisting" >
-<span class="sectionnumber" >2.6</span>&#x2003;Cpp Testing
-</a>
+<a href="index.html#autoid-11" class="toclstlisting" >
+<span class="sectionnumber" >2.6</span>&#x2003;Cpp Testing </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-12" class="toclstlisting" >
-<span class="sectionnumber" >2.7</span>&#x2003;Golang Adaptor Example
-</a>
+<a href="index.html#autoid-12" class="toclstlisting" >
+<span class="sectionnumber" >2.7</span>&#x2003;Golang Adaptor Example </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-13" class="toclstlisting" >
-<span class="sectionnumber" >2.8</span>&#x2003;Golang Adaptor Example
-</a>
+<a href="index.html#autoid-13" class="toclstlisting" >
+<span class="sectionnumber" >2.8</span>&#x2003;Golang Adaptor Example </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-14" class="toclstlisting" >
-<span class="sectionnumber" >2.9</span>&#x2003;Golang Program
-</a>
+<a href="index.html#autoid-14" class="toclstlisting" >
+<span class="sectionnumber" >2.9</span>&#x2003;Golang Program </a>
 </p>
 </nav>
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="author" content="Some Author" />
-<meta name="generator" content="LaTeX lwarp package" />
+<meta name="generator" content="LaTeX Lwarp package" />
 <meta name="description" content="A description." />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!--[if lt IE 9]>
@@ -17,7 +17,7 @@
 
 
 <!-- https://groups.google.com/forum/#!topic/
-                                     mathjax-users/jUtewUcE2bY -->
+                                      mathjax-users/jUtewUcE2bY -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Register.StartupHook("TeX AMSmath Ready",function () {
       var seteqsectionDefault = {name: "", num: 0};
@@ -136,7 +136,10 @@ Name and <span
 
 <section class="textbody" >
 
-<!--Nullify \ensuremath, footnotes for MathJax:-->
+<!--MathJax customizations:-->
+
+
+<div class="hidden" >
 
 \(\newcommand \ensuremath [1]{#1}\)
 
@@ -144,7 +147,25 @@ Name and <span
 
 \(\newcommand \footnotemark [1][]{\text {( Footnote #1 )}}\)
 
-<!--Additional customizations for MathJax:-->
+\(\newcommand {\LWRframebox }[2][]{\fbox {#2}} \newcommand {\framebox }[1][]{\LWRframebox } \)
+
+\(\newcommand {\setlength }[2]{}\)
+
+\(\newcommand {\addtolength }[2]{}\)
+
+\(\newcommand {\setcounter }[2]{}\)
+
+\(\newcommand {\addtocounter }[2]{}\)
+
+\(\newcommand {\cline }[1]{}\)
+
+\(\newcommand {\directlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\luatexdirectlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\intertext }[1]{\\ \text {#1}\notag \\}\)
+
+</div>
 
 <a id="postGrad-autopage-1"></a>
 <div class="titlepage" >
@@ -168,7 +189,7 @@ Some Author
 <div class="titledate" >
 
 <p>
-December 8, 2019
+February 9, 2020
 </p>
 </div>
 
@@ -191,7 +212,7 @@ December 8, 2019
 </p>
 
 <p>
-<span class="textsc" >December 8, 2019</span><br />
+<span class="textsc" >February 9, 2020</span><br />
 <b>Name:</b> &#x2003;&#x2003;David Li<br />
 <b>Student Number:</b> &#x2003;&#x2003;V00818631<br />
 <b>Email:</b> &#x2003;&#x2003;<a href="mailto:davidli012345@gmail.ca" target="_blank" >davidli012345@gmail.ca</a><br />
@@ -207,72 +228,44 @@ December 8, 2019
 <nav class="toc" >
 
 <p>
-<a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter
-</a>
+<a href="index.html#autosec-8" class="tocchapter" >
+<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
 </p>
 
 
 <p>
-<a href="Example-chapter.html#autosec-9" class="tocsection" >
-<span class="sectionnumber" >1.1</span>&#x2003;A section
-</a>
+<a href="index.html#autosec-9" class="tocsection" >
+<span class="sectionnumber" >1.1</span>&#x2003;A section</a>
 </p>
 
 
 <p>
-<a href="Example-chapter.html#autosec-10" class="tocsubsection" >
-<span class="sectionnumber" >1.1.1</span>&#x2003;A subsection
-</a>
+<a href="index.html#autosec-10" class="tocsubsection" >
+<span class="sectionnumber" >1.1.1</span>&#x2003;A subsection</a>
 </p>
 
 
 <p>
-<a href="Some-math.html#autosec-16" class="tocsection" >
-<span class="sectionnumber" >1.2</span>&#x2003;Some math
-</a>
+<a href="index.html#autosec-16" class="tocsection" >
+<span class="sectionnumber" >1.2</span>&#x2003;Some math</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-18" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;Real Content
-</a>
+<a href="index.html#autosec-18" class="tocchapter" >
+<span class="sectionnumber" >2</span>&#x2003;Real Content</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-21" class="tocsection" >
-<span class="sectionnumber" >2.1</span>&#x2003;SQL
-</a>
+<a href="index.html#autosec-21" class="tocsection" >
+<span class="sectionnumber" >2.1</span>&#x2003;SQL</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-24" class="tocsubsection" >
-<span class="sectionnumber" >2.1.1</span>&#x2003;Publishing Dart Packages With Docker
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-34" class="tocchapter" >
-Index
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-37" class="tocchapter" >
-Glossary
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-39" class="tocchapter" >
-Acronyms
-</a>
+<a href="index.html#autosec-24" class="tocsubsection" >
+<span class="sectionnumber" >2.1.1</span>&#x2003;Publishing Dart Packages With Docker</a>
 </p>
 </nav>
 <h3 id="autosec-5">List of Figures</h3>
@@ -283,9 +276,8 @@ Acronyms
 <nav class="lof" >
 
 <p>
-<a href="Example-chapter.html#autoid-1" class="tocfigure" >
-<span class="sectionnumber" >1.1</span>&#x2003;A figure with text
-</a>
+<a href="index.html#autoid-1" class="tocfigure" >
+<span class="sectionnumber" >1.1</span>&#x2003;A figure with text</a>
 </p>
 </nav>
 <h3 id="autosec-6">Listings</h3>
@@ -296,86 +288,74 @@ Acronyms
 <nav class="lol" >
 
 <p>
-<a href="Example-chapter.html#autoid-2" class="toclstlisting" >
-<span class="sectionnumber" >1.1</span>&#x2003;Cpp Testing
-</a>
+<a href="index.html#autoid-2" class="toclstlisting" >
+<span class="sectionnumber" >1.1</span>&#x2003;Cpp Testing </a>
 </p>
 
 
 <p>
-<a href="Example-chapter.html#autoid-3" class="toclstlisting" >
-<span class="sectionnumber" >1.2</span>&#x2003;Golang Program
-</a>
+<a href="index.html#autoid-3" class="toclstlisting" >
+<span class="sectionnumber" >1.2</span>&#x2003;Golang Program </a>
 </p>
 
 
 <p>
-<a href="Example-chapter.html#autoid-4" class="toclstlisting" >
-<span class="sectionnumber" >1.3</span>&#x2003;Python Script
-</a>
+<a href="index.html#autoid-4" class="toclstlisting" >
+<span class="sectionnumber" >1.3</span>&#x2003;Python Script </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-6" class="toclstlisting" >
-<span class="sectionnumber" >2.1</span>&#x2003;Javascript Program: Quantum random spy hunter
-</a>
+<a href="index.html#autoid-6" class="toclstlisting" >
+<span class="sectionnumber" >2.1</span>&#x2003;Javascript Program: Quantum random spy hunter </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-7" class="toclstlisting" >
-<span class="sectionnumber" >2.2</span>&#x2003;SQL Query for length
-</a>
+<a href="index.html#autoid-7" class="toclstlisting" >
+<span class="sectionnumber" >2.2</span>&#x2003;SQL Query for length </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-8" class="toclstlisting" >
-<span class="sectionnumber" >2.3</span>&#x2003;SQL Query for addresses
-</a>
+<a href="index.html#autoid-8" class="toclstlisting" >
+<span class="sectionnumber" >2.3</span>&#x2003;SQL Query for addresses </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-9" class="toclstlisting" >
-<span class="sectionnumber" >2.4</span>&#x2003;Javascript Program get ip address
-</a>
+<a href="index.html#autoid-9" class="toclstlisting" >
+<span class="sectionnumber" >2.4</span>&#x2003;Javascript Program get ip address </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-10" class="toclstlisting" >
-<span class="sectionnumber" >2.5</span>&#x2003;Javascript Program HTTP server
-</a>
+<a href="index.html#autoid-10" class="toclstlisting" >
+<span class="sectionnumber" >2.5</span>&#x2003;Javascript Program HTTP server </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-11" class="toclstlisting" >
-<span class="sectionnumber" >2.6</span>&#x2003;Cpp Testing
-</a>
+<a href="index.html#autoid-11" class="toclstlisting" >
+<span class="sectionnumber" >2.6</span>&#x2003;Cpp Testing </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-12" class="toclstlisting" >
-<span class="sectionnumber" >2.7</span>&#x2003;Golang Adaptor Example
-</a>
+<a href="index.html#autoid-12" class="toclstlisting" >
+<span class="sectionnumber" >2.7</span>&#x2003;Golang Adaptor Example </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-13" class="toclstlisting" >
-<span class="sectionnumber" >2.8</span>&#x2003;Golang Adaptor Example
-</a>
+<a href="index.html#autoid-13" class="toclstlisting" >
+<span class="sectionnumber" >2.8</span>&#x2003;Golang Adaptor Example </a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autoid-14" class="toclstlisting" >
-<span class="sectionnumber" >2.9</span>&#x2003;Golang Program
-</a>
+<a href="index.html#autoid-14" class="toclstlisting" >
+<span class="sectionnumber" >2.9</span>&#x2003;Golang Program </a>
 </p>
 </nav>
 
@@ -402,7 +382,7 @@ Contact Information and Copyright
 <head>
 <meta charset="UTF-8" />
 <meta name="author" content="Some Author" />
-<meta name="generator" content="LaTeX lwarp package" />
+<meta name="generator" content="LaTeX Lwarp package" />
 <meta name="description" content="A description." />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!--[if lt IE 9]>
@@ -520,8 +500,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-
 
 <a id="postGrad-autopage-7"></a>
 <nav class="topnavigation" ><a href="index.html" class="linkhome" >
-Home
-</a></nav>
+Home</a></nav>
 
 <header>
 
@@ -558,63 +537,36 @@ Contents
 
 <p>
 <a href="index.html" class="linkhome" >
-Home
-</a>
+Home</a>
 </p>
 
 <p>
-<a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter
-</a>
-</p>
-
-
-<p>
-<a href="Example-chapter.html#autosec-9" class="tocsection" >
-<span class="sectionnumber" >1.1</span>&#x2003;A section
-</a>
+<a href="index.html#autosec-8" class="tocchapter" >
+<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
 </p>
 
 
 <p>
-<a href="Some-math.html#autosec-16" class="tocsection" >
-<span class="sectionnumber" >1.2</span>&#x2003;Some math
-</a>
+<a href="index.html#autosec-9" class="tocsection" >
+<span class="sectionnumber" >1.1</span>&#x2003;A section</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-18" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;Real Content
-</a>
+<a href="index.html#autosec-16" class="tocsection" >
+<span class="sectionnumber" >1.2</span>&#x2003;Some math</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-21" class="tocsection" >
-<span class="sectionnumber" >2.1</span>&#x2003;SQL
-</a>
+<a href="index.html#autosec-18" class="tocchapter" >
+<span class="sectionnumber" >2</span>&#x2003;Real Content</a>
 </p>
 
 
 <p>
-<a href="Index.html#autosec-34" class="tocchapter" >
-Index
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-37" class="tocchapter" >
-Glossary
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-39" class="tocchapter" >
-Acronyms
-</a>
+<a href="index.html#autosec-21" class="tocsection" >
+<span class="sectionnumber" >2.1</span>&#x2003;SQL</a>
 </p>
 
 
@@ -632,7 +584,10 @@ Acronyms
 
 <h1>The Lwarp Tutorial</h1>
 
-<!--Nullify \ensuremath, footnotes for MathJax:-->
+<!--MathJax customizations:-->
+
+
+<div class="hidden" >
 
 \(\newcommand \ensuremath [1]{#1}\)
 
@@ -640,7 +595,25 @@ Acronyms
 
 \(\newcommand \footnotemark [1][]{\text {( Footnote #1 )}}\)
 
-<!--Additional customizations for MathJax:-->
+\(\newcommand {\LWRframebox }[2][]{\fbox {#2}} \newcommand {\framebox }[1][]{\LWRframebox } \)
+
+\(\newcommand {\setlength }[2]{}\)
+
+\(\newcommand {\addtolength }[2]{}\)
+
+\(\newcommand {\setcounter }[2]{}\)
+
+\(\newcommand {\addtocounter }[2]{}\)
+
+\(\newcommand {\cline }[1]{}\)
+
+\(\newcommand {\directlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\luatexdirectlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\intertext }[1]{\\ \text {#1}\notag \\}\)
+
+</div>
 
 <p>
 <h3 id="autosec-8"><span class="sectionnumber" >1&#x2003;</span>Example chapter</h3>
@@ -657,7 +630,7 @@ This is some text which is indexed.<a id="LWRindex-1"></a>
 
 
 <p>
-See fig. <a href="Example-chapter.html#fig:withtext">1.1</a>.
+See ??.
 </p>
 
 <div class="mdframed"
@@ -669,8 +642,8 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 ">
 
 <div
-     class="mdframedtitle"
-     style="background: #FFD9D9 ;
+    class="mdframedtitle"
+    style="background: #FFD9D9 ;
 "
 >
 <p>
@@ -692,8 +665,8 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 ">
 
 <div
-     class="mdframedtitle"
-     style="background: #FFFFD9 ;
+    class="mdframedtitle"
+    style="background: #FFFFD9 ;
 "
 >
 <p>
@@ -715,8 +688,8 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 ">
 
 <div
-     class="mdframedtitle"
-     style="background: #F5D9E2 ;
+    class="mdframedtitle"
+    style="background: #F5D9E2 ;
 "
 >
 <p>
@@ -811,26 +784,26 @@ print(os.getcwd())
 lwarpFiles = []
 dir_list = os.listdir()
 for full_file_name in dir_list:
-    base_nameTemp, extensionTemp = os.path.splitext(full_file_name)
-    if extensionTemp == '.html': # then .pdf file --&gt; convert to image!
+   base_nameTemp, extensionTemp = os.path.splitext(full_file_name)
+   if extensionTemp == '.html': # then .pdf file --&gt; convert to image!
          lwarpFiles.append(full_file_name)
 
 
 import re
 directory = 'docs'
 if not os.path.exists(directory):
-    os.makedirs(directory)
+   os.makedirs(directory)
 for outputFile in lwarpFiles:
-    try:
+   try:
          base_nameTemp, extensionTemp = os.path.splitext(outputFile)
          finalOutputName = base_nameTemp + extensionTemp
          htmlFile = open(outputFile ,'r',encoding='utf-8')
          htmlSyntaxFile = open(directory + r'/' +finalOutputName,'w',encoding='utf-8')
-    except OSError:
+   except OSError:
          print('Cannot open files, probably because they are being used. \n')
          pass
-    # include prismCss and prismjs in the final html final, consider merging the existing css file with prism.css
-    prismCss = r'&lt;link rel="stylesheet" href="prism.css" type="text/css"&gt;'
+   # include prismCss and prismjs in the final html final, consider merging the existing css file with prism.css
+   prismCss = r'&lt;link rel="stylesheet" href="prism.css" type="text/css"&gt;'
      prismJs       = r'&lt;script src="prism.js" type="text/javascript"&gt; &lt;/script&gt;'
 
 
@@ -873,8 +846,8 @@ for outputFile in lwarpFiles:
                 if changeNextPre:
                      #print("Match Found")
                      replacementLine = r'&lt;pre&gt;&lt;code class = "' + replacementTerms[2*i+1] + r'"&gt;'
-                          #print(replacementTerms)
-                          break
+                         #print(replacementTerms)
+                         break
 
 
            ## get code syntax highlighting
@@ -895,7 +868,7 @@ for outputFile in lwarpFiles:
          #print(newline)
 
 
-    htmlFile.close()
+   htmlFile.close()
    htmlSyntaxFile.close()
 print('Script is Done creating files')
 </code>
@@ -907,7 +880,7 @@ print('Script is Done creating files')
 </div>
 
 <p>
-Using references is [1]
+Using references is [book:2300108]
 </p>
 
 
@@ -927,8 +900,7 @@ Contact Information and Copyright
 
 
 <nav class="botnavigation" ><a href="index.html" class="linkhome" >
-Home
-</a></nav>
+Home</a></nav>
 
 </body>
 </html>
@@ -939,7 +911,7 @@ Home
 <head>
 <meta charset="UTF-8" />
 <meta name="author" content="Some Author" />
-<meta name="generator" content="LaTeX lwarp package" />
+<meta name="generator" content="LaTeX Lwarp package" />
 <meta name="description" content="A description." />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!--[if lt IE 9]>
@@ -1057,8 +1029,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-
 
 <a id="postGrad-autopage-15"></a>
 <nav class="topnavigation" ><a href="index.html" class="linkhome" >
-Home
-</a></nav>
+Home</a></nav>
 
 <header>
 
@@ -1095,63 +1066,36 @@ Contents
 
 <p>
 <a href="index.html" class="linkhome" >
-Home
-</a>
+Home</a>
 </p>
 
 <p>
-<a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter
-</a>
-</p>
-
-
-<p>
-<a href="Example-chapter.html#autosec-9" class="tocsection" >
-<span class="sectionnumber" >1.1</span>&#x2003;A section
-</a>
+<a href="index.html#autosec-8" class="tocchapter" >
+<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
 </p>
 
 
 <p>
-<a href="Some-math.html#autosec-16" class="tocsection" >
-<span class="sectionnumber" >1.2</span>&#x2003;Some math
-</a>
+<a href="index.html#autosec-9" class="tocsection" >
+<span class="sectionnumber" >1.1</span>&#x2003;A section</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-18" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;Real Content
-</a>
+<a href="index.html#autosec-16" class="tocsection" >
+<span class="sectionnumber" >1.2</span>&#x2003;Some math</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-21" class="tocsection" >
-<span class="sectionnumber" >2.1</span>&#x2003;SQL
-</a>
+<a href="index.html#autosec-18" class="tocchapter" >
+<span class="sectionnumber" >2</span>&#x2003;Real Content</a>
 </p>
 
 
 <p>
-<a href="Index.html#autosec-34" class="tocchapter" >
-Index
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-37" class="tocchapter" >
-Glossary
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-39" class="tocchapter" >
-Acronyms
-</a>
+<a href="index.html#autosec-21" class="tocsection" >
+<span class="sectionnumber" >2.1</span>&#x2003;SQL</a>
 </p>
 
 
@@ -1169,7 +1113,10 @@ Acronyms
 
 <h1>The Lwarp Tutorial</h1>
 
-<!--Nullify \ensuremath, footnotes for MathJax:-->
+<!--MathJax customizations:-->
+
+
+<div class="hidden" >
 
 \(\newcommand \ensuremath [1]{#1}\)
 
@@ -1177,7 +1124,25 @@ Acronyms
 
 \(\newcommand \footnotemark [1][]{\text {( Footnote #1 )}}\)
 
-<!--Additional customizations for MathJax:-->
+\(\newcommand {\LWRframebox }[2][]{\fbox {#2}} \newcommand {\framebox }[1][]{\LWRframebox } \)
+
+\(\newcommand {\setlength }[2]{}\)
+
+\(\newcommand {\addtolength }[2]{}\)
+
+\(\newcommand {\setcounter }[2]{}\)
+
+\(\newcommand {\addtocounter }[2]{}\)
+
+\(\newcommand {\cline }[1]{}\)
+
+\(\newcommand {\directlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\luatexdirectlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\intertext }[1]{\\ \text {#1}\notag \\}\)
+
+</div>
 
 <p>
 <h4 id="autosec-16"><span class="sectionnumber" >1.2&#x2003;</span>Some math</h4>
@@ -1194,7 +1159,7 @@ Inline math: \(r = r_0 + vt - \frac {1}{2}at^2\) followed by display math:
 <!--
 
 
-                                                                                    a2 + b2 = c2   (1.1)
+                                                                                                 a2 + b2 = c2   (1.1)
 
 
 -->
@@ -1221,8 +1186,7 @@ Contact Information and Copyright
 
 
 <nav class="botnavigation" ><a href="index.html" class="linkhome" >
-Home
-</a></nav>
+Home</a></nav>
 
 </body>
 </html>
@@ -1233,7 +1197,7 @@ Home
 <head>
 <meta charset="UTF-8" />
 <meta name="author" content="Some Author" />
-<meta name="generator" content="LaTeX lwarp package" />
+<meta name="generator" content="LaTeX Lwarp package" />
 <meta name="description" content="A description." />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!--[if lt IE 9]>
@@ -1351,8 +1315,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-
 
 <a id="postGrad-autopage-17"></a>
 <nav class="topnavigation" ><a href="index.html" class="linkhome" >
-Home
-</a></nav>
+Home</a></nav>
 
 <header>
 
@@ -1389,63 +1352,36 @@ Contents
 
 <p>
 <a href="index.html" class="linkhome" >
-Home
-</a>
+Home</a>
 </p>
 
 <p>
-<a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter
-</a>
-</p>
-
-
-<p>
-<a href="Example-chapter.html#autosec-9" class="tocsection" >
-<span class="sectionnumber" >1.1</span>&#x2003;A section
-</a>
+<a href="index.html#autosec-8" class="tocchapter" >
+<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
 </p>
 
 
 <p>
-<a href="Some-math.html#autosec-16" class="tocsection" >
-<span class="sectionnumber" >1.2</span>&#x2003;Some math
-</a>
+<a href="index.html#autosec-9" class="tocsection" >
+<span class="sectionnumber" >1.1</span>&#x2003;A section</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-18" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;Real Content
-</a>
+<a href="index.html#autosec-16" class="tocsection" >
+<span class="sectionnumber" >1.2</span>&#x2003;Some math</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-21" class="tocsection" >
-<span class="sectionnumber" >2.1</span>&#x2003;SQL
-</a>
+<a href="index.html#autosec-18" class="tocchapter" >
+<span class="sectionnumber" >2</span>&#x2003;Real Content</a>
 </p>
 
 
 <p>
-<a href="Index.html#autosec-34" class="tocchapter" >
-Index
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-37" class="tocchapter" >
-Glossary
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-39" class="tocchapter" >
-Acronyms
-</a>
+<a href="index.html#autosec-21" class="tocsection" >
+<span class="sectionnumber" >2.1</span>&#x2003;SQL</a>
 </p>
 
 
@@ -1463,7 +1399,10 @@ Acronyms
 
 <h1>The Lwarp Tutorial</h1>
 
-<!--Nullify \ensuremath, footnotes for MathJax:-->
+<!--MathJax customizations:-->
+
+
+<div class="hidden" >
 
 \(\newcommand \ensuremath [1]{#1}\)
 
@@ -1471,7 +1410,25 @@ Acronyms
 
 \(\newcommand \footnotemark [1][]{\text {( Footnote #1 )}}\)
 
-<!--Additional customizations for MathJax:-->
+\(\newcommand {\LWRframebox }[2][]{\fbox {#2}} \newcommand {\framebox }[1][]{\LWRframebox } \)
+
+\(\newcommand {\setlength }[2]{}\)
+
+\(\newcommand {\addtolength }[2]{}\)
+
+\(\newcommand {\setcounter }[2]{}\)
+
+\(\newcommand {\addtocounter }[2]{}\)
+
+\(\newcommand {\cline }[1]{}\)
+
+\(\newcommand {\directlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\luatexdirectlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\intertext }[1]{\\ \text {#1}\notag \\}\)
+
+</div>
 
 <p>
 <h3 id="autosec-18"><span class="sectionnumber" >2&#x2003;</span>Real Content</h3>
@@ -1619,11 +1576,13 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 • It is very rare that a program will run entirely on a QPU. Usually, a program running on a CPU will issue QPU instructions, and later retrieve the results.
 </p>
 
+
 </li>
 <li>
 <p>
 • Some tasks are very well suited to the QPU, and others are not.
 </p>
+
 
 </li>
 <li>
@@ -1631,11 +1590,13 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 • The QPU runs on a separate clock from the CPU, and usually has its own dedicated hardware interfaces to external devices (such as optical outputs).
 </p>
 
+
 </li>
 <li>
 <p>
 • A typical QPU has its own special RAM, which the CPU cannot efficiently access.
 </p>
+
 
 </li>
 <li>
@@ -1808,44 +1769,44 @@ var ip = req.headers['x-forwarded-for'] ||
 Listing&nbsp;2.5:&nbsp;Javascript Program HTTP server </div>
 <pre><code class = "language-javascript">
 var http = require("http"),
-   url = require("url"),
-   path = require("path"),
-   fs = require("fs"),
-   port = process.argv[2] || 8888;
+      url = require("url"),
+      path = require("path"),
+      fs = require("fs"),
+      port = process.argv[2] || 8888;
 
 
 http.createServer(function(request, response) {
 
 
  var uri = url.parse(request.url).pathname
-   , filename = path.join(process.cwd(), uri);
+      , filename = path.join(process.cwd(), uri);
 
 
  fs.exists(filename, function(exists) {
-   if(!exists) {
-       response.writeHead(404, {"Content-Type": "text/plain"});
-       response.write("404 Not Found\n");
-       response.end();
-       return;
-   }
+      if(!exists) {
+          response.writeHead(404, {"Content-Type": "text/plain"});
+          response.write("404 Not Found\n");
+          response.end();
+          return;
+      }
 
 
-   if (fs.statSync(filename).isDirectory()) filename += '/index.html';
+      if (fs.statSync(filename).isDirectory()) filename += '/index.html';
 
 
-   fs.readFile(filename, "binary", function(err, file) {
-       if(err) {
-           response.writeHead(500, {"Content-Type": "text/plain"});
-           response.write(err + "\n");
-           response.end();
-           return;
-       }
+      fs.readFile(filename, "binary", function(err, file) {
+          if(err) {
+              response.writeHead(500, {"Content-Type": "text/plain"});
+              response.write(err + "\n");
+              response.end();
+              return;
+          }
 
 
-       response.writeHead(200);
-       response.write(file, "binary");
-       response.end();
-   });
+          response.writeHead(200);
+          response.write(file, "binary");
+          response.end();
+      });
   });
 }).listen(parseInt(port, 10));
 </code>
@@ -1867,11 +1828,13 @@ The situation with .NET in 2019 is that there are three forked .NET platforms co
 • .NET Core: for cross-platform and new apps.
 </p>
 
+
 </li>
 <li>
 <p>
 • .NET Framework: for legacy apps.
 </p>
+
 
 </li>
 <li>
@@ -1925,6 +1888,10 @@ Looking into admob for google suggests I need around 2k view/downloads to make m
 
 <p>
 Will shove it in hopefully for something to happen.
+</p>
+
+<p>
+Kinda lazy with the felgo games.
 </p>
 
 <div class="mdframed"
@@ -2025,11 +1992,13 @@ The adapter pattern comprises the target, adaptee, adapter, and client:
 • Target is the interface that the client calls and invokes methods on the adapter and adaptee.
 </p>
 
+
 </li>
 <li>
 <p>
 • The client wants the incompatible interface implemented by the adapter.
 </p>
+
 
 </li>
 <li>
@@ -2210,11 +2179,13 @@ The composite pattern comprises the component interface, component class, compos
 • The component interface defines the default behavior of all objects and behaviors for accessing the components of the composite.
 </p>
 
+
 </li>
 <li>
 <p>
 • The composite and component classes implement the component interface.
 </p>
+
 
 </li>
 <li>
@@ -2233,8 +2204,8 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 ">
 
 <div
-     class="mdframedtitle"
-     style="background: #F5D9E2 ;
+    class="mdframedtitle"
+    style="background: #F5D9E2 ;
 "
 >
 <p>
@@ -2270,6 +2241,10 @@ import (
 
 <div class="figurecaption" >
 </div>
+<h4 id="autosec-32"></h4>
+<a id="postGrad-autopage-32"></a>
+
+
 </section>
 
 </div>
@@ -2286,25 +2261,24 @@ Contact Information and Copyright
 
 
 <nav class="botnavigation" ><a href="index.html" class="linkhome" >
-Home
-</a></nav>
+Home</a></nav>
 
 </body>
 </html>
-<!--|Start file|Index.html|-->
+<!--|Start file|Glossary.html|-->
 
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
 <meta charset="UTF-8" />
 <meta name="author" content="Some Author" />
-<meta name="generator" content="LaTeX lwarp package" />
+<meta name="generator" content="LaTeX Lwarp package" />
 <meta name="description" content="A description." />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!--[if lt IE 9]>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
-<title>Webpage Title — Index</title>
+<title>Webpage Title — Glossary</title>
 <link rel="stylesheet" href="prism.css" type="text/css">
 <script src="prism.js" type="text/javascript"> </script>
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
@@ -2416,8 +2390,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-
 
 <a id="postGrad-autopage-33"></a>
 <nav class="topnavigation" ><a href="index.html" class="linkhome" >
-Home
-</a></nav>
+Home</a></nav>
 
 <header>
 
@@ -2454,63 +2427,36 @@ Contents
 
 <p>
 <a href="index.html" class="linkhome" >
-Home
-</a>
+Home</a>
 </p>
 
 <p>
-<a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter
-</a>
-</p>
-
-
-<p>
-<a href="Example-chapter.html#autosec-9" class="tocsection" >
-<span class="sectionnumber" >1.1</span>&#x2003;A section
-</a>
+<a href="index.html#autosec-8" class="tocchapter" >
+<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
 </p>
 
 
 <p>
-<a href="Some-math.html#autosec-16" class="tocsection" >
-<span class="sectionnumber" >1.2</span>&#x2003;Some math
-</a>
+<a href="index.html#autosec-9" class="tocsection" >
+<span class="sectionnumber" >1.1</span>&#x2003;A section</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-18" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;Real Content
-</a>
+<a href="index.html#autosec-16" class="tocsection" >
+<span class="sectionnumber" >1.2</span>&#x2003;Some math</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-21" class="tocsection" >
-<span class="sectionnumber" >2.1</span>&#x2003;SQL
-</a>
+<a href="index.html#autosec-18" class="tocchapter" >
+<span class="sectionnumber" >2</span>&#x2003;Real Content</a>
 </p>
 
 
 <p>
-<a href="Index.html#autosec-34" class="tocchapter" >
-Index
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-37" class="tocchapter" >
-Glossary
-</a>
-</p>
-
-
-<p>
-<a href="Index.html#autosec-39" class="tocchapter" >
-Acronyms
-</a>
+<a href="index.html#autosec-21" class="tocsection" >
+<span class="sectionnumber" >2.1</span>&#x2003;SQL</a>
 </p>
 
 
@@ -2528,7 +2474,10 @@ Acronyms
 
 <h1>The Lwarp Tutorial</h1>
 
-<!--Nullify \ensuremath, footnotes for MathJax:-->
+<!--MathJax customizations:-->
+
+
+<div class="hidden" >
 
 \(\newcommand \ensuremath [1]{#1}\)
 
@@ -2536,118 +2485,74 @@ Acronyms
 
 \(\newcommand \footnotemark [1][]{\text {( Footnote #1 )}}\)
 
-<!--Additional customizations for MathJax:-->
+\(\newcommand {\LWRframebox }[2][]{\fbox {#2}} \newcommand {\framebox }[1][]{\LWRframebox } \)
+
+\(\newcommand {\setlength }[2]{}\)
+
+\(\newcommand {\addtolength }[2]{}\)
+
+\(\newcommand {\setcounter }[2]{}\)
+
+\(\newcommand {\addtocounter }[2]{}\)
+
+\(\newcommand {\cline }[1]{}\)
+
+\(\newcommand {\directlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\luatexdirectlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\intertext }[1]{\\ \text {#1}\notag \\}\)
+
+</div>
 
 <p>
-<h3 id="autosec-34">Index</h3>
+<h3 id="autosec-34">Glossary</h3>
 <a id="postGrad-autopage-34"></a>
 
+<p>
+           <b>Adapter</b> The adapter pattern provides a wrapper with an interface required by the Application Programming Interface (API) client to link incompatible types and act as a translator between the two types. The adapter uses the interface of a class to be
+           a class with another compatible interface. When requirements change, there are scenarios where class functionality needs to be changed because of incompatible interfaces. .
+           </p>
+<p>
+           <b>API</b> An Application Programming Interface (API) is a particular set of rules and specifications that a software program can follow to access and make use of the services and resources provided by another particular software program that implements
+           that API.
+           </p>
 
 <p>
-<b>S</b>
-</p>
+           <b>Bridge</b> Bridge decouples the implementation from the abstraction. The abstract base class can be subclassed to provide different implementations and allow implementation details to be modified easily. .
+           </p>
 
 <p>
-<span class="indexitem" ><!----></span>Some text., <a href="Example-chapter.html#LWRindex-1">A section</a>
-</p>
-<h3 id="autosec-35">Bibliography</h3>
+           <b>Debt To Equity</b> The debt-to-equity (D/E) ratio indicates how much debt a company is using to finance its assets relative to the value of shareholders’ equity. .
+           </p>
+<p>
+           <b>Dependency Injection</b> Dependency injection means that, rather than being instantiated (”newed up”) within a class, each class’s dependencies will be injected in from the outside. .
+           </p>
+<p>
+           <b>Dynamic libraries</b> libraries that are linked at run time .
+           </p>
+
+<p>
+           <b>GAN</b> A GAN is a deep neural network architecture made up of two networks, a generator network and a discriminator network. Through multiple cycles of generation and discrimination, both networks train each other, while simultaneously trying to
+           outwit each other..
+           </p>
+<p>
+           <b>git</b> the most popular version control system used for tracking changes in source code and coordinating work on those files among multiple people .
+           </p>
+
+<p>
+           <b>IoC</b> In software engineering, inversion of control (IoC) is a programming principle. IoC inverts the flow control as compared to traditional control flow. In IoC, custom-written portions of a computer program receive the flow of control from a generic
+           framework. A software architecture with this design inverts control as compared to traditional procedural programming: in traditional programming, the custom code that expresses the purpose of the program calls into reusable libraries to take care of generic
+           tasks, but with inversion of control, it is the framework that calls into the custom, or task-specific, code..
+           </p>
+
+<p>
+           <b>Static libraries</b> libraries that are linked at compile time .
+           </p>
+<h4 id="autosec-35"></h4>
 <a id="postGrad-autopage-35"></a>
-
-
-<ul style="list-style-type:none">
-
-<li>
-<p>
-[1] Valentina Porcu. <em>Python for Data Mining Quick Syntax Reference</em>. 1st&nbsp;ed. Apress, 2019. <span class="textsc" >isbn</span>: 1484241126, 978-1484241127. <span class="textsc" >url</span>: <span class="verbatim"
->http://gen.lib.rus.ec/book/index.php?md5=719FA57E15A5FAAE9996594FF491F0E1</span>.
-</p>
-
-</li>
-<li>
-<p>
-[2] Igor Livshin. <em>Artificial Neural Networks with Java - Tools for Building Neural Network Applications</em>. Apress, 2019. <span class="textsc" >isbn</span>: 9781484244203. <span class="textsc" >url</span>: <span class="verbatim"
->http://gen.lib.rus.ec/book/index.php?md5=1a97921ae2ebdb2acbce0ef06e29667d</span>.
-</p>
-
-</li>
-<li>
-<p>
-[3] Mercedes Gimeno-Segovia Eric R. Johnston Nic Harrigan. <em>Programming Quantum Computers: Essential Algorithms and Code Samples</em>. 1st&nbsp;ed. O’Reilly Media, 2019. <span class="textsc" >isbn</span>: 1492039683, 978-1492039686. <span
-class="textsc" >url</span>: <span class="verbatim" >http://gen.lib.rus.ec/book/index.php?md5=71fa12e84983bfe4b6b39c80879077a4</span>.
-</p>
-
-</li>
-<li>
-<p>
-[4] Mercedes Gimeno-Segovia Eric R. Johnston Nic Harrigan. <em>Programming Quantum Computers: Essential Algorithms and Code Samples</em>. <span class="verbatim" >https://oreilly-qc.github.io/</span>. 2019.
-</p>
-
-</li>
-<li>
-<p>
-[5] Bhagvan Kommadi. <em>Learn data structures and algorithms with Golang : level up your Go programming skills to develop faster and more efficient code</em>. Birmingham, UK: Packt Publishing, 2019. <span class="textsc" >isbn</span>: 1789618509.
-</p>
-
-</li>
-<li>
-<p>
-[6] Andrea Lonza. <em>Reinforcement Learning Algorithms with Python: Learn, understand, and develop smart algorithms for addressing AI challenges</em>. Packt Publishing, 2019. <span class="textsc" >isbn</span>: 1789131111, 978-1789131116. <span
-class="textsc" >url</span>: <span class="verbatim" >http://gen.lib.rus.ec/book/index.php?md5=7836251eda95c9704e26ffece0819082</span>.
-</p>
-
-</li>
-<li>
-<p>
-[7] ryanflorence. <em>Node.JS static file web server</em>. <span class="verbatim" >https://gist.github.com/ryanflorence/701407/</span>. 2019.
-</p>
-</li>
-</ul>
-<h4 id="autosec-36"></h4>
+<h3 id="autosec-36">Acronyms</h3>
 <a id="postGrad-autopage-36"></a>
-<h3 id="autosec-37">Glossary</h3>
-<a id="postGrad-autopage-37"></a>
-
-<p>
-         <b>Adapter</b> The adapter pattern provides a wrapper with an interface required by the Application Programming Interface (API) client to link incompatible types and act as a translator between the two types. The adapter uses the interface of a class to be
-         a class with another compatible interface. When requirements change, there are scenarios where class functionality needs to be changed because of incompatible interfaces. .
-         </p>
-<p>
-         <b>API</b> An Application Programming Interface (API) is a particular set of rules and specifications that a software program can follow to access and make use of the services and resources provided by another particular software program that implements
-         that API.
-         </p>
-
-<p>
-         <b>Bridge</b> Bridge decouples the implementation from the abstraction. The abstract base class can be subclassed to provide different implementations and allow implementation details to be modified easily. .
-         </p>
-
-<p>
-         <b>Dependency Injection</b> Dependency injection means that, rather than being instantiated (”newed up”) within a class, each class’s dependencies will be injected in from the outside. .
-         </p>
-<p>
-         <b>Dynamic libraries</b> libraries that are linked at run time .
-         </p>
-
-<p>
-         <b>GAN</b> A GAN is a deep neural network architecture made up of two networks, a generator network and a discriminator network. Through multiple cycles of generation and discrimination, both networks train each other, while simultaneously trying to
-         outwit each other..
-         </p>
-<p>
-         <b>git</b> the most popular version control system used for tracking changes in source code and coordinating work on those files among multiple people .
-         </p>
-
-<p>
-         <b>IoC</b> In software engineering, inversion of control (IoC) is a programming principle. IoC inverts the flow control as compared to traditional control flow. In IoC, custom-written portions of a computer program receive the flow of control from a generic
-         framework. A software architecture with this design inverts control as compared to traditional procedural programming: in traditional programming, the custom code that expresses the purpose of the program calls into reusable libraries to take care of generic
-         tasks, but with inversion of control, it is the framework that calls into the custom, or task-specific, code..
-         </p>
-
-<p>
-         <b>Static libraries</b> libraries that are linked at compile time .
-         </p>
-<h4 id="autosec-38"></h4>
-<a id="postGrad-autopage-38"></a>
-<h3 id="autosec-39">Acronyms</h3>
-<a id="postGrad-autopage-39"></a>
 
 <p>
             <b>ABI</b> application binary interface.
@@ -2673,8 +2578,7 @@ Contact Information and Copyright
 
 
 <nav class="botnavigation" ><a href="index.html" class="linkhome" >
-Home
-</a></nav>
+Home</a></nav>
 
 </body>
 </html>

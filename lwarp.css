@@ -1,6 +1,6 @@
 /*
-  CSS stylesheet for the LaTeX lwarp package
-  Copyright 2016-2019 Brian Dunn — BD Tech Concepts LLC
+  CSS stylesheet for the LaTeX Lwarp package
+  Copyright 2016-2020 Brian Dunn — BD Tech Concepts LLC
 */
 
 /* a fix for older browsers: */
@@ -948,7 +948,7 @@ table {
     line-height: 1.3 ;
     }
 
-tr.hline td {border-top: 1px solid #808080 ; margin-top: 0ex ;
+table > tbody > tr.hline > td {border-top: 1px solid #808080 ; margin-top: 0ex ;
     margin-bottom: 0ex ; } /* for \hline */
 
 tr.tbrule td {border-top: 1px solid black ; margin-top: 0ex ;
