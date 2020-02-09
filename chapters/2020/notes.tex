@@ -1,0 +1,29 @@
+\begin{noteblock}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
+
+aliquet libero quis lectus elementum fermentum.
+\end{noteblock}
+
+In Flutter, a full compile
+generally takes less than 30 seconds, and incremental compiles take less than a second
+thanks to hot reloading. 
+
+At a high level, Flutter is a reactive, declarative, and composable view-layer library,
+much like ReactJS on the web (but more like React mixed with the browser, because
+Flutter is a complete rendering engine as well)
+
+
+\section{Setting up Rasa on GCP}
+
+Before running all commands switch to root user, ensure you have the latest version of pip
+make a bare bones server in gcp micro works fine us-west-1, debian-10-buster
+
+\begin{lstlisting}[language=C++, caption={Bash Script}]
+sudo su
+sudo apt install python3-pip
+sudo -H pip3 install --upgrade pip
+pip install rasa
+rasa init
+\end{lstlisting}
+
+Make a repo called rasa bot
