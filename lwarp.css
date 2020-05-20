@@ -74,10 +74,6 @@ span.textit, div.textit { font-style: italic; }
 
 span.textmd, div.textmd { font-weight: normal; }
 
-span.texteb { font-weight: bolder; }
-
-span.textlg { font-weight: lighter; }
-
 span.textup, div.textup {
     font-style: normal;
     font-variant: normal;
@@ -104,6 +100,50 @@ span.textrm, div.textrm {
 span.textsf, div.textsf {
      font-family: "DejaVu Sans", "Bitstream Vera Sans",
         Geneva, Verdana, sans-serif ;
+}
+
+/* nfssext-cfr lining figures */
+span.textln, div.textln {
+    font-variant-numeric: lining-nums ;
+}
+
+/* nfssext-cfr proportional figures */
+span.textp, div.textp {
+    font-variant-numeric: proportional-nums ;
+}
+
+/* nfssext-cfr tabular figures */
+span.textt, div.textt {
+    font-variant-numeric: tabular-nums ;
+}
+
+/* nfssext-cfr font weights */
+span.textdb, div.textdb {
+    font-weight: 500 ;
+}
+
+span.textsb, div.textsb {
+    font-weight: 600 ;
+}
+
+span.texteb, div.texteb {
+    font-weight: 800 ;
+}
+
+span.textub, div.textub {
+    font-weight: 900 ;
+}
+
+span.textlg, div.textlg {
+    font-weight: 300 ;
+}
+
+span.textel, div.textel {
+    font-weight: 200 ;
+}
+
+span.textul, div.textul {
+    font-weight: 100 ;
 }
 
 span.textcircled { border: 1px solid black ; border-radius: 1ex ; }
@@ -146,16 +186,16 @@ div.diagboxW {
 .supsubscript sub {
     position: relative;
     display: block;
-    font-size: .5em;
+    font-size: .7em;
     line-height: 1;
 }
 
 .supsubscript sup {
-    top: .5em;
+    top: .3em;
 }
 
 .supsubscript sub {
-    top: .5em;
+    top: .3em;
 }
 
 div.attribution p {
@@ -617,6 +657,7 @@ div.wpminipage { border: 1px solid green ; margin: .5ex ; padding: .5ex ;}
 .minipage, .fminipage, .fcolorminipage {
     /* display: inline-block ; */
         /* Mini pages which follow each other will be tiled. */
+    text-align:left;
     margin: .25em .25em .25em .25em;
     padding: .25em .25em .25em .25em;
     display: inline-flex;
@@ -1088,6 +1129,26 @@ span.verbatim {
         "Courier New", monospace;
 }
 
+div.titlehead
+{
+    text-align: left ;
+    font-style: normal ;
+    font-weight: normal ;
+    font-style: normal ;
+    font-size: .8em ;
+    margin: 1ex 0em 1ex 0em ;
+}
+
+div.subject
+{
+    text-align: center ;
+    font-style: normal ;
+    font-weight: bold ;
+    font-style: normal ;
+    font-size: .8em ;
+    margin: 1ex 0em 1ex 0em ;
+}
+
 div.published
 {
     text-align: center ;
@@ -1178,6 +1239,7 @@ footer {
     text-align:left ;
 }
 
+/* for \LinkHome, \LinkPrevious, and \LinkNext: */
 a.linkhome { font-weight:bold ; font-size: 1em ;}
 
 div.lateximagesource { padding: 0px ; margin: 0px ; display: none; }
@@ -1397,6 +1459,9 @@ div.notesicon {
 
 div.notescontents { font-style: italic }
 
+/* nolbreaks package: */
+span.nolbreaks { white-space: nowrap ; }
+
 /*
 For CSS LaTeX and related logos:
 Based on spacing demonstrated by the metafont package.
@@ -1492,6 +1557,7 @@ span.sidetocthetitle { display: none }
         box-shadow: none ;
     }
     span.sidetocthetitle { display: inline }
+    nav.topnavigation { display:block }
     nav.botnavigation { display:block }
     div.bodycontainer { width: 100% }
     .marginpar {

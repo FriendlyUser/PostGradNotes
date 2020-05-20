@@ -16,104 +16,257 @@
 
 
 
-<!-- https://groups.google.com/forum/#!topic/
-                                      mathjax-users/jUtewUcE2bY -->
-<script type="text/x-mathjax-config">
-MathJax.Hub.Register.StartupHook("TeX AMSmath Ready",function () {
-      var seteqsectionDefault = {name: "", num: 0};
-      var seteqsections = {}, seteqsection = seteqsectionDefault;
-      var TEX = MathJax.InputJax.TeX, PARSE = TEX.Parse;
-      var AMS = MathJax.Extension["TeX/AMSmath"];
-      TEX.Definitions.Add({
-      macros: {
-            seteqsection: "mySection",
-            seteqnumber: "mySetEqNumber"
-      }
-      });
+<script>
+// Lwarp MathJax emulation code
+// Based on code by Davide P. Cervone.
+// Original code: https://github.com/mathjax/MathJax/issues/2313
+// Modified by Brian Dunn to adjust equation numbering, add subequations,
+// and add starred macros.
+// Equation numbering: https://github.com/mathjax/MathJax/issues/2427
+// Starred macros: https://github.com/mathjax/MathJax/issues/2428
+//
+// LaTeX can use \seteqnumber{subequations?}{section}{number} before each equation.
+// subequations? is 0 usually, 1 if inside subequations.
+// section is a string printed as-is, or empty.
+// number is auto-incremented by MathJax between equations.
+//
+MathJax = {
+     subequations: "0",
+     section: "",
+     loader: {
+         load: ['[tex]/tagFormat']
+     },
+     startup: {
+         ready() {
+              //
+              //       These would be replaced by import commands if you wanted to make
+              //       a proper extension.
+              //
+              const Configuration = MathJax._.input.tex.Configuration.Configuration;
+              const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
+              const Macro = MathJax._.input.tex.Symbol.Macro;
+              const TexError = MathJax._.input.tex.TexError.default;
+              const ParseUtil = MathJax._.input.tex.ParseUtil.default;
+              const expandable = MathJax._.util.Options.expandable;
 
 
-      PARSE.Augment({
-      mySection: function (name) {
-            seteqsection.num = AMS.number;
-            var n = this.GetArgument(name);
-            if (n === "") {
-                seteqsection = seteqsectionDefault;
-            } else {
-                if (!seteqsections["_"+n])
-                       seteqsections["_"+n] = {name:n, num:0};
-                seteqsection = seteqsections["_"+n];
-            }
-            AMS.number = seteqsection.num;
-      },
-      mySetEqNumber: function (name) {
-            var n = this.GetArgument(name);
-            if (!n || !n.match(/^ *[0-9]+ *$/))
-                n = "";
-            else
-                n = parseInt(n)-1;
-            <!-- $ syntax highlighting -->
-            if (n === "" || n < 1)
-                TEX.Error
-                ("Argument to "+name+" should be a positive integer");
-            AMS.number = n;
-      }
-      });
-      MathJax.Hub.Config({
-      TeX: {
-            equationNumbers: {
-                formatTag: function (n) {
-                       <!-- if not numeric, don't include the chapter -->
-                       if (!n.match(/^ *[0-9]+ *$/ ))
-                       <!-- $ syntax highlighting -->
-                          return "("+(n).replace(/^\./,"")+")" ;
-                       else
-                          return "("+(seteqsection.name+"."+n).replace(/^\./,"")+")" ;
-                },
-                formatID: function (n) {
-                       n = (seteqsection.name+'.'+n).replace
-                          (/[:"'<>&]/g,"").replace(/^\./,"");
-                       return 'mjx-eqn-' + n;
-                }
-            }
-      }
-      });
-});
+              //
+              //       These are the names of the command maps:
+              //
+              const SETEQNUMBERMAP = 'seteqnumberCoreMap' ;
+
+
+              //
+              //       These functions implement the macros:
+              //
+              const seteqnumberFunction = (parser, name) => {
+                   //       Get the macro parameters
+                   const star = parser.GetStar();                                 // true if there is a *
+                   const optBrackets = parser.GetBrackets(name);                  // contents of optional brackets
+                   const newsubequations = parser.GetArgument(name);                 // the subequations argument
+                   const neweqsection = parser.GetArgument(name);                 // the eq section argument
+                   const neweqnumber = parser.GetArgument(name);                  // the eq number argument
+                   MathJax.config.subequations=newsubequations ;                  // a string with boolean meaning
+                   MathJax.config.section=neweqsection ;                          // a string with numeric meaning
+                   parser.tags.counter = parser.tags.allCounter = neweqnumber ;
+              };
+
+
+              //
+              //       This is the configuration for the seteqnumberFunctionConfig TeX extension.
+              //
+              const seteqnumberFunctionConfig = Configuration.create('seteqnumberCore', {
+                   //
+                   // Initialize the extension by creating the command map,
+                   // then append the command map to the given configuration as a macro handler.
+                   //
+                   init(config) {
+                        const map = new CommandMap(SETEQNUMBERMAP,{},{});
+                        config.append(
+                            Configuration.create(
+                                      'seteqnumberDefs',
+                                      {handler: {macro: [SETEQNUMBERMAP]}}
+                            )
+                        );
+                   },
+
+
+                   //
+                   //       Add options (from the
+                   //       seteqnumberCore configuration object in the document's
+                   //       option list, if any).
+                   //
+                   config(config, jax) {
+                        const map = jax.parseOptions.handlers.retrieve(SETEQNUMBERMAP);
+                        const options = jax.parseOptions.options.seteqnumberCore;
+                        for (const cs of Object.keys(options)) {
+                            map.add(cs, new Macro(cs, seteqnumberFunction, options[cs]));
+                        }
+                   },
+
+
+                   options: {
+                        seteqnumberCore: expandable({})
+                   }
+              }
+              );
+
+
+              const IFSTARMAP = 'ifstarMap';
+
+
+              //
+              //       This function implements an ifstar macro.
+              //
+              const IfstarFunction = (parser, name, resultstar, resultnostar) => {
+                   //
+                   //       Get the macro parameters
+                   //
+                   const star = parser.GetStar();                       // true if there is a *
+                   //
+                   //       Construct the replacement string for the macro
+                   //
+                   const macro = [(star ? resultstar : resultnostar)].join('');
+                   //
+                   //       Insert the replacement string into the TeX string, and check
+                   //       that there haven't been too many maxro substitutions (prevents
+                   //       infinite loops).
+                   //
+                   parser.string = ParseUtil.addArgs(parser, macro, parser.string.slice(parser.i));
+                   parser.i = 0;
+                   if (++parser.macroCount > parser.configuration.options.maxMacros) {
+                        throw new TexError('MaxMacroSub1',
+                                                   'MathJax maximum macro substitution count exceeded; ' +
+                                                   'is there a recursive macro call?');
+                   }
+              };
+
+
+              //
+              //       This is the configuration for the IfstarConfiguration TeX extension.
+              //
+              const IfstarConfiguration = Configuration.create('Ifstar', {
+                   //
+                   //       Initialize the extension by creating the command map for the
+                   //       macros defined by \DeclareIfstar, and add the
+                   //       \DeclareIfstar macro itself.         Then append the
+                   //       command map to the given configuration as a macro handler
+                   //
+                   init(config) {
+                        const map = new CommandMap(IFSTARMAP, {
+                            DeclareIfstar: ['Declare_Ifstar']
+                        }, {
+                            //
+                            //       Implements \DeclareIfstar control sequence.
+                            //
+                            Declare_Ifstar(parser, name) {
+                                 //
+                                 //    Get the control sequence to define and the starred and
+                                 //    non-starred macros to use.
+                                 //
+                                 let cs = ParseUtil.trimSpaces(parser.GetArgument(name));
+                                 const resultstar = parser.GetArgument(name);
+                                 const resultnostar = parser.GetArgument(name);
+                                 //
+                                 //    Check that the control sequence name is valid
+                                 //
+                                 if (cs.charAt(0) === '\\') cs = cs.substr(1);
+                                 if (!cs.match(/^(.|[a-z]+)$/i)) {         //$ syntax highlighting
+                                      throw new TexError(
+                                           'IllegalControlSequenceName',
+                                           'Illegal control sequence name for %1',
+                                           name
+                                      );
+                                 }
+                                 //
+                                 //    Look up the command map and add the new macro to it using
+                                 //    IfstarFunction as the function and passing it the
+                                 //    given starred and non-starred macros.
+                                 //
+                                 const map = parser.configuration.handlers.retrieve(IFSTARMAP);
+                                 map.add(cs, new Macro(cs, IfstarFunction, [resultstar, resultnostar]));
+                            }
+                        });
+                        config.append(
+                            Configuration.create('IfstarDefs', {handler: {macro: [IFSTARMAP]}})
+                        );
+                   },
+
+
+                   //
+                   //       Add any user-defined starred/non-starred macros (from the
+                   //       Ifstar configuration object in the document's
+                   //       option list), if any.
+                   //
+                   config(config, jax) {
+                        const map = jax.parseOptions.handlers.retrieve(IFSTARMAP);
+                        const starmacros = jax.parseOptions.options.Ifstar;
+                        for (const cs of Object.keys(starmacros)) {
+                            map.add(cs, new Macro(cs, IfstarFunction, starmacros[cs]));
+                        }
+                   },
+
+
+                   //
+                   //       Indicate that Ifstar is a valid option, and can have
+                   //       any number of definitions.         The format is
+                   //
+                   //                 name: [starred, non-starred]
+                   //
+                   //       where 'name' is the macro name, and starred and non-starred are the
+                   //       macros to use for the \name macro.          You can include
+                   //       pre-defined macros here, which will be available without
+                   //       further configuration.
+                   //
+                   options: {
+                        Ifstar: expandable({})
+                   }
+              });
+
+
+              MathJax.startup.defaultReady();
+
+
+              // For forward references:
+              MathJax.startup.input[0].preFilters.add(({math}) => {
+                   if (math.inputData.recompile){
+                            MathJax.config.subequations = math.inputData.recompile.subequations;
+                            MathJax.config.section = math.inputData.recompile.section;
+                   }
+              });
+              MathJax.startup.input[0].postFilters.add(({math}) => {
+                   if (math.inputData.recompile){
+                            math.inputData.recompile.subequations = MathJax.config.subequations;
+                            math.inputData.recompile.section = MathJax.config.section;
+                   }
+              });
+         }        // ready
+     },            // startup
+
+
+     tex: {
+         packages: {'[+]': ['seteqnumberCore', 'tagFormat', 'Ifstar']},
+         seteqnumberCore: {
+              seteqnumber: []                 // a user-defined macro
+         },
+         tags: "ams",
+                   tagFormat: {
+                            number: function (n) {
+                                      if(MathJax.config.subequations==0)
+                                           return(MathJax.config.section + n);
+                                      else
+                                           return(MathJax.config.section + String.fromCharCode(96+n));
+                            },
+                   },
+     }
+}
 </script>
 
 
-<!-- http://docs.mathjax.org/en/latest/options/ThirdParty.html -->
-<script type="text/x-mathjax-config">
-  MathJax.Ajax.config.path["Contrib"] =
-      "https://cdn.mathjax.org/mathjax/contrib";
-</script>
-
-
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-      TeX: {
-            extensions: ["autoload-all.js"] ,
-            equationNumbers: {
-                autoNumber: "AMS"
-            }
-      }
-});
-</script>
-
-
-<!-- Alternative CDN provider: -->
-<script type="text/javascript" async
-src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS_HTML-full">
-</script>
-
-
-<!-- No longer supported after April 30, 2017: -->
-<!--
 <script
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
-</script>
--->
-
-
+         id="MathJax-script"
+         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+></script>
 
 </head>
 <body>
@@ -136,16 +289,22 @@ Name and <span
 
 <section class="textbody" >
 
+<a id="postGrad-autofile-0"></a>
+
 <!--MathJax customizations:-->
 
 
 <div class="hidden" >
 
+\(\newcommand{\footnotename}{footnote}\)
+
+\(\def \LWRfootnote {1}\)
+
+\(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
 \(\newcommand \ensuremath [1]{#1}\)
-
-\(\newcommand \footnote [2][]{\text {( Footnote #1 )}}\)
-
-\(\newcommand \footnotemark [1][]{\text {( Footnote #1 )}}\)
 
 \(\newcommand {\LWRframebox }[2][]{\fbox {#2}} \newcommand {\framebox }[1][]{\LWRframebox } \)
 
@@ -163,7 +322,7 @@ Name and <span
 
 \(\newcommand {\luatexdirectlua }[1]{\text {(directlua)}}\)
 
-\(\newcommand {\intertext }[1]{\\ \text {#1}\notag \\}\)
+\(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
 
 </div>
 
@@ -189,7 +348,7 @@ Some Author
 <div class="titledate" >
 
 <p>
-February 9, 2020
+May 20, 2020
 </p>
 </div>
 
@@ -212,7 +371,7 @@ February 9, 2020
 </p>
 
 <p>
-<span class="textsc" >February 9, 2020</span><br />
+<span class="textsc" >May 20, 2020</span><br />
 <b>Name:</b> &#x2003;&#x2003;David Li<br />
 <b>Student Number:</b> &#x2003;&#x2003;V00818631<br />
 <b>Email:</b> &#x2003;&#x2003;<a href="mailto:davidli012345@gmail.ca" target="_blank" >davidli012345@gmail.ca</a><br />
@@ -364,14 +523,6 @@ February 9, 2020
 </div>
 
 </div>
-
-<footer>
-
-<p>
-Contact Information and Copyright
-</p>
-
-</footer>
 
 </body>
 </html>
