@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# Run in root
 ### Adding prism style highlighting in docs
 import os
 # os.chdir('../')
