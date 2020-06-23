@@ -10,7 +10,7 @@
 <!--[if lt IE 9]>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
-<title>Webpage Title — Example chapter</title>
+<title>Webpage Title — Index</title>
 <link rel="stylesheet" href="prism.css" type="text/css">
 <script src="prism.js" type="text/javascript"> </script>
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
@@ -158,7 +158,7 @@ MathJax = {
 <body>
 
 
-<a id="postGrad-autopage-7"></a>
+<a id="postGrad-autopage-33"></a>
 <nav class="topnavigation" ><a href="index.html" class="linkhome" >
 Home</a></nav>
 
@@ -298,272 +298,153 @@ Acronyms</a>
 </div>
 
 <p>
-<h3 id="autosec-8"><span class="sectionnumber" >1&#x2003;</span>Example chapter</h3>
-<a id="postGrad-autopage-8"></a>
-<a id="postGrad-autofile-1"></a>
-<h4 id="autosec-9"><span class="sectionnumber" >1.1&#x2003;</span>A section</h4>
-<a id="postGrad-autopage-9"></a>
-
+<h3 id="autosec-34">Index</h3>
+<a id="postGrad-autopage-34"></a>
+<a id="postGrad-autofile-4"></a>
 
 <p>
-This is some text which is indexed.<a id="LWRindex-1"></a>
-</p>
-<h5 id="autosec-10"><span class="sectionnumber" >1.1.1&#x2003;</span>A subsection</h5>
-<a id="postGrad-autopage-10"></a>
-
-
-<p>
-See fig. <a href="Example-chapter.html#fig:withtext">1.1</a>.
+<b>S</b>
 </p>
 
-<div class="mdframed"
-style="
-background: #FFB2B2 ;
-border: 1pt solid #FF8080 ;
-border-radius: 0pt ;
-box-shadow: 8pt 8pt 8pt #808080 ;
-">
-
-<div
-    class="mdframedtitle"
-    style="background: #FFD9D9 ;
-"
->
 <p>
-<span class="textrm textbf textup textulc" >SENG475 Example Code Listing</span>
+<span class="indexitem" ><!----></span>Some text., <a href="Example-chapter.html#LWRindex-1">A section</a>
 </p>
-</div>
+<h3 id="autosec-35">Bibliography</h3>
+<a id="postGrad-autopage-35"></a>
+
+
+<ul style="list-style-type:none">
+
+
+<li>
 <p>
-All for the sake of glory city. We see that in ?? that mdframed makes environments look nice
-</p>
-
-</div>
-
-<div class="mdframed"
-style="
-background: #FFFFB2 ;
-border: 1pt solid #FFFF80 ;
-border-radius: 0pt ;
-box-shadow: 8pt 8pt 8pt #808080 ;
-">
-
-<div
-    class="mdframedtitle"
-    style="background: #FFFFD9 ;
-"
->
-<p>
-<span class="textrm textbf textup textulc" >SENG475 Example Code Listing</span>
-</p>
-</div>
-<p>
-All for the sake of glory city. We see that in ?? that mdframed makes environments look nice
-</p>
-
-</div>
-
-<div class="mdframed"
-style="
-background: #ECB2C6 ;
-border: 1pt solid #DF809F ;
-border-radius: 0pt ;
-box-shadow: 8pt 8pt 8pt #808080 ;
-">
-
-<div
-    class="mdframedtitle"
-    style="background: #F5D9E2 ;
-"
->
-<p>
-<span class="textrm textbf textup textulc" >SENG475 Example Code Listing</span>
-</p>
-</div>
-<p>
-All for the sake of glory city. We see that in ?? that mdframed makes environments look nice
-</p>
-
-</div>
-
-<figure id="autoid-1" class="figure ">
-<div class="center" >
-
-<p>
-<span
-    class="fbox"
-    style="display:inline-block ; border:1pt solid #000000; padding:3pt ; color:#000000"
-><span
-    class="textcolor"
-    style="color:#008080"
->Text in a figure.</span></span>
-</p>
-
-<div class="figurecaption" >
-<p>
-Figure 1.1:&nbsp;A figure with text<a id="fig:withtext"></a>
-</p>
-</div>
-
-</div>
-
-</figure>
-
-<a id="autoid-2"></a>
-
-
-<div class="figurecaption" >
-
-<p>
-Listing&nbsp;1.1:&nbsp;Cpp Testing
-</p>
-</div>
-#include  &lt;iostream&gt;
-<pre><code class = "language-cpp">
-</code>
-</pre>
-
-
-
-<a id="autoid-3"></a>
-
-
-<div class="figurecaption" >
-
-<p>
-Listing&nbsp;1.2:&nbsp;Golang Program
-</p>
-</div>
-<pre><code class = "language-go">
-package  main
-
-
-import (
-"fmt"
-"io/ioutil"
-)
-</code>
-</pre>
-
-
-
-<a id="autoid-4"></a>
-
-
-<div class="figurecaption" >
-
-<p>
-Listing&nbsp;1.3:&nbsp;Python Script
-</p>
-</div>
-<pre><code class = "language-python">
-#!/usr/bin/env   python
-# Run in root
-### Adding prism style highlighting in docs
-import os
-# os.chdir('../')
-import sys
-print(os.getcwd())
-lwarpFiles = []
-dir_list = os.listdir()
-for full_file_name in dir_list:
-   base_nameTemp, extensionTemp = os.path.splitext(full_file_name)
-   if extensionTemp == '.html': # then .pdf file --&gt; convert to image!
-          lwarpFiles.append(full_file_name)
-
-
-import re
-directory = 'docs'
-if not os.path.exists(directory):
-   os.makedirs(directory)
-for outputFile in lwarpFiles:
-   try:
-          base_nameTemp, extensionTemp = os.path.splitext(outputFile)
-          finalOutputName = base_nameTemp + extensionTemp
-          htmlFile = open(outputFile ,'r',encoding='utf-8')
-          htmlSyntaxFile = open(directory + r'/'␣+finalOutputName,'w',encoding='utf-8')
-   except OSError:
-          print('Cannot␣open␣files,␣probably␣because␣they␣are␣being␣used.␣\n')
-          pass
-   # include prismCss and prismjs in the final html final, consider merging the existing css file with prism.css
-   prismCss = r'&lt;link rel="stylesheet" href="prism.css" type="text/css"&gt;'
-␣␣␣␣prismJs␣␣=␣r'&lt;script src="prism.js" type="text/javascript"&gt; &lt;/script&gt;'
-
-
-␣␣␣␣#␣Replace␣the␣lwarp␣&lt;pre␣class="programlisting"␣&gt;
-␣␣␣␣#␣with␣something␣that␣works␣for␣prism
-␣␣␣␣lwarpCodeSyn␣=␣r'&lt;pre class="programlisting"&gt;'
-␣␣␣␣lwarpCodeVerb␣=␣r'&lt;pre class="verbatim"&gt;'
-␣␣␣␣matlab␣="language-matlab"
-␣␣␣␣latex␣=␣"language-latex"
-␣␣␣␣python␣=␣"language-python"
-␣␣␣␣cplusplus␣=␣"language-cpp"
-␣␣␣␣json␣=␣"language-json"
-␣␣␣␣bash␣=␣"language-bash"
-␣␣␣␣yaml␣=␣"language-yaml"
-␣␣␣␣golang␣=␣"language-go"
-␣␣␣␣js␣=␣"language-javascript"
-␣␣␣␣sql␣=␣"language-sql"
-␣␣␣␣#␣Go␣through␣each␣even␣entry␣in␣replacements␣and␣then␣check␣if␣a␣replacement␣should␣happen
-␣␣␣␣replacementTerms␣=␣["Cpp",␣cplusplus,␣"Latex␣Code",␣latex,␣"Python␣Script",␣python,
-␣␣␣␣␣␣␣␣"Bash␣Script",␣bash,"Matlab␣Script",␣matlab,"Yaml␣File",yaml,"JSON␣Output",␣json,␣"Golang",␣golang,␣"Javascript␣Program",␣js,␣"SQL␣Query",␣sql]
-␣␣␣␣prismVerbCodeSyn␣=␣r'&lt;pre&gt;&lt;code class = "'␣+␣latex␣+␣r'"&gt;'
-␣␣␣␣prismCodeSyn␣=␣r'&lt;pre&gt;&lt;code class = "'␣+␣cplusplus␣+␣r'"&gt;'
-
-
-␣␣␣␣#␣Determines␣if␣the␣next␣pre␣tag␣should␣be␣changed
-␣␣␣␣changeNextPre␣=␣False
-␣␣␣␣#replacementLine␣=␣""
-␣␣␣␣for␣line␣in␣htmlFile:
-␣␣␣␣␣␣␣␣#␣Include␣prism.js␣and␣prism.css␣after␣the␣title␣in␣the␣html␣document
-␣␣␣␣␣␣␣␣newline␣=␣re.sub(r'&lt;/title&gt;',r'&lt;/title&gt;'␣+␣'\n' + prismCss + '\n' + prismJs, line)
-
-
-          # CHange if the next pre tag should be changed, if it is not true already.
-          if changeNextPre == False:
-             for i in range (0, int(len(replacementTerms)/2)):
-                 # match only matches from the beginning of the string. Your code works fine if you do pct_re.search(line) instead. See https://stackoverflow.com/questions/17680631/python-regular-expression-not-matching
-                 pattern = re.compile(replacementTerms[i*2])
-                 changeNextPre = bool(re.search(pattern,newline))
-                 #print(r'&lt;p&gt;'+replacementTerms[i*2])
-                 if changeNextPre:
-                    #print("Match Found")
-                    replacementLine = r'&lt;pre&gt;&lt;code class = "'␣+␣replacementTerms[2*i+1]␣+␣r'"&gt;'
-␣␣␣␣␣␣␣␣␣␣␣␣␣␣␣␣␣␣␣␣#print(replacementTerms)
-␣␣␣␣␣␣␣␣␣␣␣␣␣␣␣␣␣␣␣␣break
-
-
-␣␣␣␣␣␣␣␣##␣get␣code␣syntax␣highlighting
-␣␣␣␣␣␣␣␣if␣changeNextPre␣==␣False:
-␣␣␣␣␣␣␣␣␣␣␣␣#␣Assume␣matlab␣is␣being␣used
-␣␣␣␣␣␣␣␣␣␣␣␣newline␣=␣re.sub(lwarpCodeSyn,␣prismCodeSyn,␣newline)
-␣␣␣␣␣␣␣␣else:
-␣␣␣␣␣␣␣␣␣␣␣␣templine␣=␣re.subn(lwarpCodeSyn,␣replacementLine,newline)
-␣␣␣␣␣␣␣␣␣␣␣␣newline␣=␣templine[0]
-␣␣␣␣␣␣␣␣␣␣␣␣#␣if␣a␣match␣occurs␣reset␣changeNextPre␣to␣false
-␣␣␣␣␣␣␣␣␣␣␣␣if␣templine[1]␣&gt;␣0:
-␣␣␣␣␣␣␣␣␣␣␣␣␣␣␣␣changeNextPre␣=␣False
-␣␣␣␣␣␣␣␣##␣since␣a␣new␣code␣tag␣is␣introduced␣it␣must␣be␣closed
-␣␣␣␣␣␣␣␣newline␣=␣re.sub(r'&lt;/pre&gt;',r'&lt;/code&gt;'␣+␣'\n' + r'&lt;/pre&gt;'␣+␣'\n', newline)
-          # account for new problem of &lt;pre class="verbatim" &gt;
-          #newline = re.sub( lwarpCodeVerb, prismVerbCodeSyn, newline)
-          htmlSyntaxFile.write(str(newline))
-          #print(newline)
-
-
-   htmlFile.close()
-   htmlSyntaxFile.close()
-print('Script␣is␣Done␣creating␣files')
-</code>
-</pre>
-
-
-
-<p>
-Using references is [<a href="Index-0.html#LWR-ht-cite.0@book:2300108">1</a>]
+[1] <a id="LWR-ht-cite.0@book:2300108"></a>Valentina Porcu. <em>Python for Data Mining Quick Syntax Reference</em>. 1st&nbsp;ed. Apress, 2019. <span class="textsc" >isbn</span>: 1484241126, 978-1484241127. <span class="textsc" >url</span>: <a
+href="http://gen.lib.rus.ec/book/index.php?md5=719FA57E15A5FAAE9996594FF491F0E1" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=719FA57E15A5FAAE9996594FF491F0E1</a>.
 </p>
 
 
-</section>
+</li>
+<li>
+<p>
+[2] <a id="LWR-ht-cite.0@book:2349913"></a>Igor Livshin. <em>Artificial Neural Networks with Java - Tools for Building Neural Network Applications</em>. Apress, 2019. <span class="textsc" >isbn</span>: 9781484244203. <span class="textsc" >url</span>: <a
+href="http://gen.lib.rus.ec/book/index.php?md5=1a97921ae2ebdb2acbce0ef06e29667d" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=1a97921ae2ebdb2acbce0ef06e29667d</a>.
+</p>
+
+
+</li>
+<li>
+<p>
+[3] <a id="LWR-ht-cite.0@book:2391166"></a>Mercedes Gimeno-Segovia Eric R. Johnston Nic Harrigan. <em>Programming Quantum Computers: Essential Algorithms and Code Samples</em>. 1st&nbsp;ed. O’Reilly Media, 2019. <span class="textsc" >isbn</span>:
+1492039683, 978-1492039686. <span class="textsc" >url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=71fa12e84983bfe4b6b39c80879077a4" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=71fa12e84983bfe4b6b39c80879077a4</a>.
+</p>
+
+
+</li>
+<li>
+<p>
+[4] <a id="LWR-ht-cite.0@github:2391166"></a>Mercedes Gimeno-Segovia Eric R. Johnston Nic Harrigan. <em>Programming Quantum Computers: Essential Algorithms and Code Samples</em>. <a href="https://oreilly-qc.github.io/" target="_blank"
+>https://oreilly-qc.github.io/</a>. 2019.
+</p>
+
+
+</li>
+<li>
+<p>
+[5] <a id="LWR-ht-cite.0@kommadi2019learn"></a>Bhagvan Kommadi. <em>Learn data structures and algorithms with Golang : level up your Go programming skills to develop faster and more efficient code</em>. Birmingham, UK: Packt Publishing, 2019. <span
+class="textsc" >isbn</span>: 1789618509.
+</p>
+
+
+</li>
+<li>
+<p>
+[6] <a id="LWR-ht-cite.0@book:2433880"></a>Andrea Lonza. <em>Reinforcement Learning Algorithms with Python: Learn, understand, and develop smart algorithms for addressing AI challenges</em>. Packt Publishing, 2019. <span class="textsc" >isbn</span>:
+1789131111, 978-1789131116. <span class="textsc" >url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=7836251eda95c9704e26ffece0819082" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=7836251eda95c9704e26ffece0819082</a>.
+</p>
+
+
+</li>
+<li>
+<p>
+[7] <a id="LWR-ht-cite.0@github:701407"></a>ryanflorence. <em>Node.JS static file web server</em>. <a href="https://gist.github.com/ryanflorence/701407/" target="_blank" >https://gist.github.com/ryanflorence/701407/</a>. 2019.
+</p>
+
+
+</li>
+<li>
+<p>
+[8] <a id="LWR-ht-cite.0@book:2451102"></a>Dan Kottmann Tom Steele Chris Patten. <em>Black Hat Go</em>. 0. <span class="textsc" >isbn</span>: 9781593278656. <span class="textsc" >url</span>: <a
+href="http://gen.lib.rus.ec/book/index.php?md5=8a1b08171862b104b92c673b2161203f" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=8a1b08171862b104b92c673b2161203f</a>.
+</p>
+
+
+</li>
+<li>
+<p>
+[9] <a id="LWR-ht-cite.0@book:2406637"></a>Frank Zammetti. <em>Practical Flutter: Improve your Mobile Development with Google’s Latest Open-Source SDK</em>. 1st ed. Apress, 2019. <span class="textsc" >isbn</span>: 978-1-4842-4971-0;978-1-4842-4972-7.
+<span class="textsc" >url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=227f03b36ad6b1b4c6c1af4ca444c27d" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=227f03b36ad6b1b4c6c1af4ca444c27d</a>.
+</p>
+</li>
+</ul>
+<h4 id="autosec-36"></h4>
+<a id="postGrad-autopage-36"></a>
+<h3 id="autosec-37">Glossary</h3>
+<a id="postGrad-autopage-37"></a>
+
+<p>
+         <b>Adapter</b> The adapter pattern provides a wrapper with an interface required by the Application Programming Interface (API) client to link incompatible types and act as a translator between the two types. The adapter uses the interface of a class to
+         be a class with another compatible interface. When requirements change, there are scenarios where class functionality needs to be changed because of incompatible interfaces. .
+         </p>
+<p>
+         <b>API</b> An Application Programming Interface (API) is a particular set of rules and specifications that a software program can follow to access and make use of the services and resources provided by another particular software program that implements
+         that API.
+         </p>
+
+<p>
+         <b>Bridge</b> Bridge decouples the implementation from the abstraction. The abstract base class can be subclassed to provide different implementations and allow implementation details to be modified easily. .
+         </p>
+
+<p>
+         <b>Debt To Equity</b> The debt-to-equity (D/E) ratio indicates how much debt a company is using to finance its assets relative to the value of shareholders’ equity. .
+         </p>
+<p>
+         <b>Dependency Injection</b> Dependency injection means that, rather than being instantiated ("newed up") within a class, each class’s dependencies will be injected in from the outside. .
+         </p>
+<p>
+         <b>Dynamic libraries</b> libraries that are linked at run time .
+         </p>
+
+<p>
+         <b>GAN</b> A GAN is a deep neural network architecture made up of two networks, a generator network and a discriminator network. Through multiple cycles of generation and discrimination, both networks train each other, while simultaneously trying to
+         outwit each other..
+         </p>
+<p>
+         <b>git</b> the most popular version control system used for tracking changes in source code and coordinating work on those files among multiple people .
+         </p>
+
+<p>
+         <b>IoC</b> In software engineering, inversion of control (IoC) is a programming principle. IoC inverts the flow control as compared to traditional control flow. In IoC, custom-written portions of a computer program receive the flow of control from a generic
+         framework. A software architecture with this design inverts control as compared to traditional procedural programming: in traditional programming, the custom code that expresses the purpose of the program calls into reusable libraries to take care of generic
+         tasks, but with inversion of control, it is the framework that calls into the custom, or task-specific, code..
+         </p>
+
+<p>
+         <b>Static libraries</b> libraries that are linked at compile time .
+         </p>
+<h4 id="autosec-38"></h4>
+<a id="postGrad-autopage-38"></a>
+<h3 id="autosec-39">Acronyms</h3>
+<a id="postGrad-autopage-39"></a>
+
+<p>
+            <b>ABI</b> application binary interface.
+            </p>
+
+<p>
+            <b>QPU</b> Quantum Processing Unit.
+            </p>
+
+<a id="postGrad-autofile-last"></a> </section>
 
 </div>
 
