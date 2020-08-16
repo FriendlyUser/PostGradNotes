@@ -1621,7 +1621,7 @@ import json
 
 
 with open("exercises/en/gadgets.json") as f:
-   TRAINING_DATA = json.loads(f.read())
+      TRAINING_DATA = json.loads(f.read())
 
 
 nlp = spacy.blank("en")
@@ -1636,24 +1636,94 @@ nlp.begin_training()
 
 # Loop for 10 iterations
 for itn in range(10):
-   # Shuffle the training data
-   random.shuffle(TRAINING_DATA)
-   losses = {}
+      # Shuffle the training data
+      random.shuffle(TRAINING_DATA)
+      losses = {}
 
 
-   # Batch the examples and iterate over them
-   for batch in spacy.util.minibatch(TRAINING_DATA, size=2):
+      # Batch the examples and iterate over them
+      for batch in spacy.util.minibatch(TRAINING_DATA, size=2):
           texts = [text for text, entities in batch]
           annotations = [entities for text, entities in batch]
 
 
           # Update the model
-      nlp.update(texts, annotations, losses=losses)
-   print(losses)
+         nlp.update(texts, annotations, losses=losses)
+      print(losses)
 </code>
 </pre>
 
 
+
+<p>
+<b>The Problems with Immutability</b> Unfortunately, immutability is counter to how computers actually work. A machine has a limited amount of memory.
+</p>
+
+<p>
+The fallacies are these:
+</p>
+
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• The network is reliable.
+</p>
+
+
+</li>
+<li>
+<p>
+• Latency is zero.
+</p>
+
+
+</li>
+<li>
+<p>
+• Bandwidth is infinite.
+</p>
+
+
+</li>
+<li>
+<p>
+• The network is secure.
+</p>
+
+
+</li>
+<li>
+<p>
+• Topology doesn’t change.
+</p>
+
+
+</li>
+<li>
+<p>
+• There is one administrator.
+</p>
+
+
+</li>
+<li>
+<p>
+• Transport cost is zero.
+</p>
+
+
+</li>
+<li>
+<p>
+• The network is homogeneous.
+</p>
+</li>
+</ul>
+
+<p>
+Didn’t feel like reading the rest.
+</p>
 
 </section>
 
