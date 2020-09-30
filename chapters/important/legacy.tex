@@ -36,15 +36,15 @@ Deploys the app to surge without any prompts
 printenv command -- Print all or part of environment
 \end{quote}
 
-% \begin{verbatim}
-% sed -e '/pattern="MVG"/s/(^.*$)/<!--\1-->/' policy.xml > policy_test.xml
-% <policy domain="coder" rights="none" pattern="MVG" />
-% <!--  <policy domain="coder" rights="none" pattern="MVG" />-->
-% \end{verbatim}
+\begin{verbatim}
+sed -e '/pattern="MVG"/s/(^.*$)/<!--\1-->/' policy.xml > policy_test.xml
+<policy domain="coder" rights="none" pattern="MVG" />
+<!--  <policy domain="coder" rights="none" pattern="MVG" />-->
+\end{verbatim}
 
-% \begin{verbatim}
-% sed -i -e 's/rights="none" pattern="PDF"/rights="read|write" pattern="PDF"/g' policy_test.xml
-% \end{verbatim}
+\begin{verbatim}
+sed -i -e 's/rights="none" pattern="PDF"/rights="read|write" pattern="PDF"/g' policy_test.xml
+\end{verbatim}
 
 \subsection{Windows}\label{windows}
 
@@ -56,7 +56,7 @@ refreshenv
 where ping Taskkill is a built-in windows command that, well, kills a
 task! the /im flag stands for "imagename", and it lets you pass in the
 image name of the process to be terminated which is node.exe in this
-case​. The /F flag is optional and forces termination of the process.
+case. The /F flag is optional and forces termination of the process.
 
 
 \subsection{Gitlab}\label{gitlab}
