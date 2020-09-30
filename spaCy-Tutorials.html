@@ -208,13 +208,13 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-9" class="tocsection" >
-<span class="sectionnumber" >1.1</span>&#x2003;A section</a>
+A section</a>
 </p>
 
 
 <p>
 <a href="Some-math.html#autosec-16" class="tocsection" >
-<span class="sectionnumber" >1.2</span>&#x2003;Some math</a>
+Some math</a>
 </p>
 
 
@@ -226,7 +226,7 @@ Home</a>
 
 <p>
 <a href="2020.html#autosec-19" class="tocsection" >
-<span class="sectionnumber" >1.3</span>&#x2003;Setting up Rasa on GCP</a>
+Setting up Rasa on GCP</a>
 </p>
 
 
@@ -238,13 +238,13 @@ Home</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-23" class="tocsection" >
-<span class="sectionnumber" >2.1</span>&#x2003;Spacy Code Tutorials</a>
+Spacy Code Tutorials</a>
 </p>
 
 
 <p>
 <a href="GCP-Finance-course.html#autosec-71" class="tocsection" >
-<span class="sectionnumber" >2.2</span>&#x2003;GCP Finance course</a>
+GCP Finance course</a>
 </p>
 
 
@@ -256,24 +256,42 @@ Home</a>
 
 <p>
 <a href="Real-Content.html#autosec-76" class="tocsection" >
-<span class="sectionnumber" >3.1</span>&#x2003;SQL</a>
+SQL</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-89" class="tocchapter" >
+<a href="Code-Commands.html#autosec-85" class="tocsection" >
+Code Commands</a>
+</p>
+
+
+<p>
+<a href="Commands.html#autosec-117" class="tocsection" >
+Commands</a>
+</p>
+
+
+<p>
+<a href="Scripts-Tools.html#autosec-120" class="tocsection" >
+Scripts and Tools</a>
+</p>
+
+
+<p>
+<a href="Index-0.html#autosec-164" class="tocchapter" >
 Index</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-92" class="tocchapter" >
+<a href="Index-0.html#autosec-167" class="tocchapter" >
 Glossary</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-94" class="tocchapter" >
+<a href="Index-0.html#autosec-169" class="tocchapter" >
 Acronyms</a>
 </p>
 
@@ -325,13 +343,27 @@ Acronyms</a>
 
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
 
+\(\newcommand {\toprule }[1][]{\hline }\)
+
+\(\let \midrule \toprule \)
+
+\(\let \bottomrule \toprule \)
+
+\(\newcommand {\cmidrule }[2][]{}\)
+
+\(\newcommand {\morecmidrules }{}\)
+
+\(\newcommand {\specialrule }[3]{\hline }\)
+
+\(\newcommand {\addlinespace }[1][]{}\)
+
 </div>
 
 <p>
 <h3 id="autosec-22"><span class="sectionnumber" >2&#x2003;</span>spaCy Tutorials</h3>
 <a id="postGrad-autopage-22"></a>
 <a id="postGrad-autofile-4"></a>
-<h4 id="autosec-23"><span class="sectionnumber" >2.1&#x2003;</span>Spacy Code Tutorials</h4>
+<h4 id="autosec-23">Spacy Code Tutorials</h4>
 <a id="postGrad-autopage-23"></a>
 
 
@@ -368,7 +400,7 @@ print(doc.text)
 
 <h4 id="autosec-25">Finding words, phrases, names and concepts</h4>
 <a id="postGrad-autopage-25"></a>
-<h5 id="autosec-26"><span class="sectionnumber" >2.1.1&#x2003;</span>Document, spans and tokens</h5>
+<h5 id="autosec-26">Document, spans and tokens</h5>
 <a id="postGrad-autopage-26"></a>
 
 
@@ -434,7 +466,7 @@ print(tree_kangaroos_and_narwhals.text)
 </code>
 </pre>
 
-<h5 id="autosec-29"><span class="sectionnumber" >2.1.2&#x2003;</span>Lexical attributes</h5>
+<h5 id="autosec-29">Lexical attributes</h5>
 <a id="postGrad-autopage-29"></a>
 
 
@@ -474,7 +506,7 @@ for token in doc:
 </code>
 </pre>
 
-<h5 id="autosec-31"><span class="sectionnumber" >2.1.3&#x2003;</span>Loading Models</h5>
+<h5 id="autosec-31">Loading Models</h5>
 <a id="postGrad-autopage-31"></a>
 
 
@@ -507,7 +539,7 @@ print(doc.text)
 </code>
 </pre>
 
-<h5 id="autosec-33"><span class="sectionnumber" >2.1.4&#x2003;</span>Linguistic Annotations</h5>
+<h5 id="autosec-33">Linguistic Annotations</h5>
 <a id="postGrad-autopage-33"></a>
 <h6 id="autosec-34">Thoughts</h6>
 <a id="postGrad-autopage-34"></a>
@@ -582,7 +614,7 @@ for ent in doc.ents:
 </code>
 </pre>
 
-<h5 id="autosec-37"><span class="sectionnumber" >2.1.5&#x2003;</span>Named Entities</h5>
+<h5 id="autosec-37">Named Entities</h5>
 <a id="postGrad-autopage-37"></a>
 
 
@@ -624,7 +656,7 @@ print("Missing␣entity:", iphone_x.text)
 </code>
 </pre>
 
-<h5 id="autosec-39"><span class="sectionnumber" >2.1.6&#x2003;</span>Matcher</h5>
+<h5 id="autosec-39">Matcher</h5>
 <a id="postGrad-autopage-39"></a>
 
 
@@ -1495,7 +1527,7 @@ for ent in doc.ents:
 
 <h4 id="autosec-64">Chapter 4</h4>
 <a id="postGrad-autopage-64"></a>
-<h5 id="autosec-65"><span class="sectionnumber" >2.1.7&#x2003;</span>Training Models</h5>
+<h5 id="autosec-65">Training Models</h5>
 <a id="postGrad-autopage-65"></a>
 
 

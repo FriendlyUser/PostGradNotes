@@ -1,0 +1,636 @@
+\section{Code Commands}\label{code-commands}
+
+This is the list of commands that I have careful stored
+
+\subsection{Other Commands}\label{other-commands}
+
+\begin{Shaded}
+\NormalTok{vendor/bin/phpunit --coverage-html docs --testsuite FeatureV4}
+\end{Shaded}
+
+\begin{verbatim}
+sudo -i
+
+root@dockerhost:~# nc -l 443
+\end{verbatim}
+
+\begin{verbatim}
+echo | <command>
+echo | surge
+\end{verbatim}
+
+\begin{quote}
+Deploys the app to surge without any prompts
+\end{quote}
+
+\hypertarget{docker-commands}{%
+\subsection{Docker Commands}\label{docker-commands}}
+
+\begin{verbatim}
+\end{verbatim}
+
+\hypertarget{bash}{%
+\subsection{Bash}\label{bash}}
+
+\begin{quote}
+printenv command -- Print all or part of environment
+\end{quote}
+
+\begin{verbatim}
+sed -e '/pattern="MVG"/s/(^.*$)/<!--\1-->/' policy.xml > policy_test.xml
+<policy domain="coder" rights="none" pattern="MVG" />
+<!--  <policy domain="coder" rights="none" pattern="MVG" />-->
+\end{verbatim}
+
+\begin{verbatim}
+sed -i -e 's/rights="none" pattern="PDF"/rights="read|write" pattern="PDF"/g' policy_test.xml
+\end{verbatim}
+
+\subsection{Windows}\label{windows}
+
+\begin{verbatim}
+taskkill /im node.exe /F
+refreshenv
+\end{verbatim}
+
+where ping Taskkill is a built-in windows command that, well, kills a
+task! the /im flag stands for "imagename", and it lets you pass in the
+image name of the process to be terminated which is node.exe in this
+case. The /F flag is optional and forces termination of the process.
+
+
+\subsection{Gitlab}\label{gitlab}
+
+\url{https://gitlab.com/profile/pipeline_quota}
+
+How many minutes I have used, lol heroku-ping doesn't register, maybe it
+occurs too quickly, or pages doesn't count as CI.
+
+\subsection{BitBucket}\label{bitbucket}
+
+main account 012345 pass: bchain050
+
+\subsubsection{Git}\label{git}
+
+Undo changes made in a specific folder in Git
+
+\begin{verbatim}
+git checkout <folder 
+\end{verbatim}
+
+\begin{verbatim}
+\end{verbatim}
+
+
+\subsection{MegaTools}\label{megatools}
+
+All Books I find "useful" will get dumped to my mega account using the
+shell tools.
+
+All remote directories start with /Root
+
+\begin{verbatim}
+megals -u <USERNAME> -p <PASSWORD>
+megacopy -u <USERNAME> -p <PASSWORD> -l <LOCAL_DIR> -r <REMOTE_DIR>
+\end{verbatim}
+
+\subsection{GCP Useful Commands}\label{gcp-useful-commands}
+
+\begin{verbatim}
+# Creating a new python environment 
+# See https://conda.io/docs/user-guide/tasks/manage-python.html#installing-a-different-version-of-python
+conda create -n py36 python=3.6 anaconda
+source activate py36
+#Installing a new package 
+conda install -c omnia hmmlearn
+# Finding the list of environments for conda 
+conda list 
+# To install new kernel for juypter notebook 
+python -m ipykernel install --user --name myenv --display-name "Python (myenv)"
+\end{verbatim}
+
+\subsection{Kubernates}\label{kubernates}
+
+\subsection{Python Commands}\label{python-commands}
+
+
+\subsection{Gitlab Runner Config}\label{gitlab-runner-config}
+
+Remember to
+
+\begin{verbatim}
+sudo chmod +x /etc/gitlab-runner/config.toml
+\end{verbatim}
+
+
+\subsection{Node}\label{node}
+
+\begin{verbatim}
+npm cache clean -f
+\end{verbatim}
+
+
+\subsection{Ubuntu \& Linux}\label{ubuntu-linux}
+
+Get csv nth csv column, for first column and quotes.csv
+
+..code-block:: awk -F ""\emph{,"}" '\{print \$1 ","\}' quotes.csv
+
+STorage at
+C:UsersstudeAppDataLocalPackagesCanonicalGroupLimited.Ubuntu18.04onWindows\_79rhkp1fndgscLocalStaterootfs
+
+or
+C:UsersstudeAppDataLocalPackages\textless DISTRO\textgreater LocalStaterootfs
+
+Yes it is possible, just redirect the output to a file:
+
+..code-block:: shell SomeCommand \textgreater{} SomeFile.txt
+
+Or if you want to append data:
+
+..code-block:: shell SomeCommand \textgreater\textgreater{} SomeFile.txt
+
+..code-block:: shell taskkill /im node.exe
+
+\begin{verbatim}
+\end{verbatim}
+
+\begin{verbatim}
+\end{verbatim}
+
+
+\section{Commands}\label{commands}
+
+\begin{Shaded}
+\NormalTok{vendor/bin/phpunit --coverage-html docs --testsuite FeatureV4}
+\end{Shaded}
+
+\begin{verbatim}
+sudo -i
+
+root@dockerhost:~# nc -l 443
+\end{verbatim}
+
+
+\section{Scripts and Tools}\label{scripts-and-tools}
+
+
+\subsection{Git Tips}\label{git-tips}
+
+I use github for personal repos
+
+gitlab for things that should be private
+
+My bitbucket account is linked to the after graduation gmail account
+\href{mailto:davidli012345@gmail.com}{\nolinkurl{davidli012345@gmail.com}}
+and bitbucket is the dumping ground for source code I want to examine in
+the future.
+
+For git bash the ssh key is at
+
+C:UserswuAppDataRoamingSPB\_Data.ssh
+
+See
+\href{https://serverfault.com/questions/50775/how-do-i-change-my-private-key-passphrase}{Private key passphrase}
+
+
+\subsubsection{Postgres}\label{postgres}
+
+To start running postgres server
+
+\begin{verbatim}
+pg_ctl.exe restart -D "C:\Program Files\PostgreSQL\9.6\data"
+\end{verbatim}
+
+to quit psql Type q and then press ENTER
+
+Ctrl + D is what I usually use to exit psql console.
+
+
+\paragraph{Making DB}\label{making-db}
+
+\begin{verbatim}
+postgres=# CREATE DATABASE test;
+CREATE DATABASE
+postgres=# \c test 
+\dt 
+\q
+\end{verbatim}
+
+
+\subsubsection{Indeed-Job-Scrapper}\label{indeed-job-scrapper}
+
+Three Repos:
+
+\begin{itemize}
+
+\item
+  Indeed-Script on Gitlab student gmail account/
+\item
+  Client on Github Public Folder
+\item
+  Go Rest API on Github Public Folder (Private for now)
+\end{itemize}
+
+
+\subsection{Uvic Scripts/Tools}\label{uvic-scriptstools}
+
+\textbf{Requirements}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+
+\item
+  This program uses selenium to navigate and extract html from webpages,
+  then performs analysis with pandas and nltk.
+\item
+  If anything breaks just add a time.sleep (5) because when I was
+  testing this script, I tested it a lot, and files were stored on the
+  cache, resulting a quicker load time.
+\end{enumerate}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\begin{minipage}[b]{0.20\columnwidth}\raggedright
+info\strut
+\end{minipage} & \begin{minipage}[b]{0.34\columnwidth}\raggedright
+value\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.20\columnwidth}\raggedright
+author:\strut
+\end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright
+David Li\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.20\columnwidth}\raggedright
+Date:\strut
+\end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright
+Jan 07, 2018\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.20\columnwidth}\raggedright
+File Name:\strut
+\end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\raggedright
+lim\_job\_scrapper.py\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+Summary: Extract metadata from job postings, keywords and save job
+postings as static html pages. Requires the user can access
+\url{https://learninginmotion.uvic.ca} and submitted their "pink slip"
+see
+(\url{https://web.uvic.ca/calendar2018-01/undergrad/engineering/co-op.html})
+for details.
+
+This program will log into lim using an automated browser, then: 1. find
+job postings, 2. extract metadata for job Postings. 3. create a main
+html file containing metadata that is linked to individual job postings.
+
+Arguments passed in: 1. UVIC netlink ID 2. UVIC password 3. Co-op term
+of interest. For example current( i.e, taking classes in the spring,
+looking for summer co-op), future, past
+
+Output: Produces one index.html page containing relative links to
+individual job postings, keywords and links to the LIM webpage. Requires
+selenium, BeautifulSoup and pandas.
+
+As shown in the screenshot below the value of current depends where you
+are at in the term, for example, at May 2018, current respresents the
+preceeding term, Fall 2018, but a few weeks ago, we were still at Summer
+2018.
+
+Future improvements could include using a {[}STRIKEOUT:jinja template to
+improve the appearance of the html pages, would need to add css, also
+searchable/sortable tables would be helpful.{]}
+
+See \href{https://web.uvic.ca/~lidavid/jobScrapping/LIMScrap/}{Uvic Job
+Postings (Jan 01, 2018)} for sample output.
+
+
+\subsubsection{Other Considerations}\label{other-considerations}
+
+\paragraph{Future improvements}\label{future-improvements}
+
+\begin{itemize}
+
+\item
+  {[}STRIKEOUT:Adding a summary of results (could be a plot).{]}
+\item
+  Determining if a job is suitable based on keywords ( text analysis).
+\item
+  {[}STRIKEOUT:Implementing searching/sortable tables.{]}
+\item
+  {[}STRIKEOUT:Improving the appearance of HTML tables by rendering a
+  template (Jinja){]}
+\end{itemize}
+
+
+\subparagraph{Nice to Have}\label{nice-to-have}
+
+\begin{itemize}
+
+\item
+  Summarizating the job posting.
+\item
+  Print out all html files as pdfs.
+\end{itemize}
+
+
+\subsubsection{Running the Script}\label{running-the-script}
+
+After navigating to the directory of the script and installing the
+necessary packages (if needed). The following commands can be used to
+run the script.
+
+Also, it will count the number of jobs vs the date
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\begin{minipage}[b]{0.20\columnwidth}\raggedright
+Date\strut
+\end{minipage} & \begin{minipage}[b]{0.21\columnwidth}\raggedright
+Num of jobs\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.20\columnwidth}\raggedright
+2018-04-26\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+39\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{Shaded}
+python  lim\_job\_scrapper.py netlinkid netlinkPass term year 
+\end{Shaded}
+
+Where the arguments are: * netlinkid and netlinkPass are uvic login
+information * term is either {[}Current, Future, Past{]}
+
+\subsection{Adding apps to bitbucket}\label{adding-apps-to-bitbucket}
+
+\begin{verbatim}
+git add remote bitbucket git@bitbucket.org:grandfleet/<name of repo>
+git push bitbucket master
+\end{verbatim}
+
+
+\subsection{ENGR 003} 
+
+Decentralized Application Developer
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \begin{description}
+  \item[Tools:]
+  \begin{itemize}
+  
+  \item
+    Google Drive
+  \item
+    Trello
+  \item
+    Slack
+  \item
+    Gitlab
+  \item
+    Microsoft Word
+  \end{itemize}
+  \end{description}
+\item
+  \begin{description}
+  \item[JavaScript]
+  \begin{itemize}
+  
+  \item
+    Working with webpack, node, package management with npm and yarn
+  \item
+    Creation of React components using props and context, prop-types,
+    etc ...
+  \item
+    React Router, arrow functions, promise chains
+  \item
+    HTML + CSS + JSX + REDUX
+  \item
+    JSDOC documentation
+  \end{itemize}
+  \end{description}
+\item
+  \begin{description}
+  \item[Solidity]
+  \begin{itemize}
+  
+  \item
+    Knowledge of ERC20 and ERC721 token standards
+  \item
+    Revert, Assert, Requires statements and how to use them
+  \item
+    Optimization of smart contracts
+  \item
+    Deploying to test nets
+  \item
+    Setting up CI for truffle using gitlab, circleCI and travisCI
+  \end{itemize}
+  \end{description}
+\item
+  \begin{description}
+  \item[Databases]
+  \begin{itemize}
+  
+  \item
+    postgres (designing database schemas), advanced open source database
+  \item
+    javascript libraries, pg-promise and automated tests
+  \item
+    RESTFUL API
+  \end{itemize}
+  \end{description}
+\item
+  \begin{description}
+  \item[CI/CD]
+  \begin{itemize}
+  
+  \item
+    SSH and configuration of remote servers
+  \item
+    Docker, working with docker and dockerizing application
+  \item
+    Script Scripting in Bash
+  \item
+    Automated testing with jest, API testing with superagent
+  \end{itemize}
+  \end{description}
+\item
+  \begin{description}
+  \item[Windows]
+  \begin{itemize}
+  
+  \item
+    Choco, Scoop
+  \item
+    Boostnote and/or latex
+  \end{itemize}
+  \end{description}
+\end{enumerate}
+
+
+\subsection{ENGR 001 \& ENGR 002}\label{engr-001-engr-002}
+
+Data Analyst
+
+The tools I used in this co-op include:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \begin{description}
+  \item[Atlassian Tools:]
+  \begin{enumerate}
+  \def\labelenumii{\arabic{enumii}.}
+  
+  \item
+    Confluence -\/-\/- wiki
+  \item
+    JIRA -\/-\/- issue tracking tool
+  \end{enumerate}
+  \end{description}
+\item
+  \begin{description}
+  \item[Microsoft Tools:]
+  \begin{enumerate}
+  \def\labelenumii{\arabic{enumii}.}
+  
+  \item
+    Microsoft Word
+  \item
+    Microsoft Excel
+  \item
+    Microsoft PowerPoint
+  \item
+    Microsoft SharePoint
+  \item
+    Microsoft Visio
+  \item
+    Microsoft Outlook
+  \item
+    Microsoft Lync
+  \end{enumerate}
+  \end{description}
+\item
+  Oracle Databases
+\item
+  Java \& Powershell
+\item
+  VbScript
+\end{enumerate}
+
+
+\subsection{2018 List}\label{list}
+
+
+\subsubsection{Version Control \& CI/CD \&
+Shell}\label{version-control-cicd-shell}
+
+\begin{itemize}
+
+\item
+  Github, Bitbucket, Gitlab
+\item
+  Travis, CircleCI, Gitlab
+\item
+  Docker, Bash, OSX
+\end{itemize}
+
+
+\subsubsection{Productivity Tools}\label{productivity-tools}
+
+\begin{itemize}
+
+\item
+  Slack, Drive
+\item
+  Discord, !Rocketchat
+\end{itemize}
+
+
+\subsubsection{Documentation}\label{documentation}
+
+\begin{itemize}
+
+\item
+  Mkdocs, Sphinx, Jsdoc
+\item
+  Boostnote/Vuepress, Hugo, lwarp/latex
+\item
+  Wikijs, frozen-flask, docusaurus
+\item
+  Explore !git notebook
+  (\url{https://thomasreinecke.github.io/git-playbook/\#/playbook})
+\end{itemize}
+
+
+\subsubsection{Blockchain}\label{blockchain}
+
+\begin{itemize}
+
+\item
+  Ethereum, Truffle, Ganache
+\item
+  Drizzle, Solidity, Solidity-docgen
+\item
+  Infura, high stackvoerflow account
+\item
+  !Hashgraph
+\end{itemize}
+
+
+\subsubsection{Programming Languages}\label{programming-languages}
+
+\begin{itemize}
+
+\item
+  Javascript, Python, Latex
+\item
+  Matlab, C, C\#, Java
+\item
+  PHP, Perl, Node, Go
+\end{itemize}
+
+Markup Stuff
+
+\begin{itemize}
+
+\item
+  HTML, CSS
+\item
+  Markdown, RST
+\end{itemize}
+
+
+\subsubsection{Databases}\label{databases}
+
+Mongo, Postgres, MySQL, Oracle
+
+
+\subsubsection{CMD Tools}\label{cmd-tools}
+
+Yarn, npm, pandoc, etc .. imagemagick
+
+\hypertarget{hugo-tools-to-consider}{%
+\subsection{Hugo Tools to Consider}\label{hugo-tools-to-consider}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+
+\item
+  \url{https://themes.gohugo.io/theme/hugo-assembly/\#contact}
+\item
+  \url{https://github.com/avelino/hugo-theme-sarah}
+\item
+  \url{https://www.valentinog.com/blog/webpack-tutorial/}
+\item
+  \url{https://medium.freecodecamp.org/why-react16-is-a-blessing-to-react-developers-31433bfc210a}
+\end{enumerate}

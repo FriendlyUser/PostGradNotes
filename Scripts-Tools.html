@@ -1,0 +1,1758 @@
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="author" content="Some Author" />
+<meta name="generator" content="LaTeX Lwarp package" />
+<meta name="description" content="A description." />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<title>Webpage Title — Scripts and Tools</title>
+<link rel="stylesheet" href="prism.css" type="text/css">
+<script src="prism.js" type="text/javascript"> </script>
+<link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
+
+
+
+<script>
+// Lwarp MathJax emulation code
+//
+// Based on code by Davide P. Cervone.
+// Equation numbering: https://github.com/mathjax/MathJax/issues/2427
+// Starred and ifnextchar macros: https://github.com/mathjax/MathJax/issues/2428
+//
+// Modified by Brian Dunn to adjust equation numbering and add subequations.
+//
+// LaTeX can use \seteqnumber{subequations?}{section}{number} before each equation.
+// subequations? is 0 usually, 1 if inside subequations.
+// section is a string printed as-is, or empty.
+// number is auto-incremented by MathJax between equations.
+//
+MathJax = {
+     subequations: "0",
+     section: "",
+     loader: {
+         load: ['[tex]/tagFormat']
+     },
+     startup: {
+         ready() {
+             //       These would be replaced by import commands if you wanted to make
+             //       a proper extension.
+             const Configuration = MathJax._.input.tex.Configuration.Configuration;
+             const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
+             const Macro = MathJax._.input.tex.Symbol.Macro;
+             const TexError = MathJax._.input.tex.TexError.default;
+             const ParseUtil = MathJax._.input.tex.ParseUtil.default;
+             const expandable = MathJax._.util.Options.expandable;
+
+
+             //       Insert the replacement string into the TeX string, and check
+             //       that there haven't been too many maxro substitutions (prevents
+             //       infinite loops).
+             const useArgument = (parser, text) => {
+                  parser.string = ParseUtil.addArgs(parser, text, parser.string.slice(parser.i));
+                  parser.i = 0;
+                  if (++parser.macroCount > parser.configuration.options.maxMacros) {
+                      throw new TexError('MaxMacroSub1',
+                      'MathJax maximum macro substitution count exceeded; ' +
+                      'is there a recursive macro call?');
+                  }
+             }
+
+
+             //       Create the command map for \ifstar, \ifnextchar, \seteqnumber
+             new CommandMap('ifstar-ifnextchar-setequnumber', {
+                  ifstar: 'IfstarFunction',
+                  ifnextchar: 'IfnextcharFunction',
+                  seteqnumber: 'SeteqnumberFunction'
+             }, {
+                  //      This function implements an ifstar macro.
+                  IfstarFunction(parser, name) {
+                      const resultstar = parser.GetArgument(name);
+                      const resultnostar = parser.GetArgument(name);
+                      const star = parser.GetStar();                        // true if there is a *
+                      useArgument(parser, star ? resultstar : resultnostar);
+                  },
+
+
+                  //      This function implements an ifnextchar macro.
+                  IfnextcharFunction(parser, name) {
+                      let whichchar = parser.GetArgument(name);
+                      if (whichchar.match(/^(?:0x[0-9A-F]+|[0-9]+)$/i)) {
+                          // $ syntax highlighting
+                          whichchar = String.fromCodePoint(parseInt(whichchar));
+                      }
+                      const resultnextchar = parser.GetArgument(name);
+                      const resultnotnextchar = parser.GetArgument(name);
+                      const gotchar = (parser.GetNext() === whichchar);
+                      useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
+                  },
+
+
+                  //      This function modifies the equation numbers.
+                  SeteqnumberFunction(parser, name) {
+                          //   Get the macro parameters
+                          const star = parser.GetStar();                       // true if there is a *
+                          const optBrackets = parser.GetBrackets(name);        // contents of optional brackets
+                          const newsubequations = parser.GetArgument(name);       // the subequations argument
+                          const neweqsection = parser.GetArgument(name);       // the eq section argument
+                          const neweqnumber = parser.GetArgument(name);        // the eq number argument
+                          MathJax.config.subequations=newsubequations ;        // a string with boolean meaning
+                          MathJax.config.section=neweqsection ;                // a string with numeric meaning
+                          parser.tags.counter = parser.tags.allCounter = neweqnumber ;
+                  }
+             });
+
+
+             //       Create the ifstar-ifnextchar-setequnumber package
+             Configuration.create('ifstar-ifnextchar-setequnumber', {
+                  handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+             });
+
+
+             MathJax.startup.defaultReady();
+
+
+             // For forward references:
+             MathJax.startup.input[0].preFilters.add(({math}) => {
+                  if (math.inputData.recompile){
+                          MathJax.config.subequations = math.inputData.recompile.subequations;
+                          MathJax.config.section = math.inputData.recompile.section;
+                  }
+             });
+             MathJax.startup.input[0].postFilters.add(({math}) => {
+                  if (math.inputData.recompile){
+                          math.inputData.recompile.subequations = MathJax.config.subequations;
+                          math.inputData.recompile.section = MathJax.config.section;
+                  }
+             });
+         }       // ready
+     },           // startup
+
+
+     tex: {
+         packages: {'[+]': ['tagFormat', 'ifstar-ifnextchar-setequnumber']},
+         tags: "ams",
+                  tagFormat: {
+                          number: function (n) {
+                               if(MathJax.config.subequations==0)
+                                      return(MathJax.config.section + n);
+                               else
+                                      return(MathJax.config.section + String.fromCharCode(96+n));
+                          },
+                  },
+     }
+}
+</script>
+
+
+<script
+         id="MathJax-script"
+         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+></script>
+
+</head>
+<body>
+
+
+<a id="postGrad-autopage-119"></a>
+<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+Home</a></nav>
+
+<header>
+
+<p>
+<span
+    class="fbox"
+    style="display:inline-block ; border:1pt solid #000000; padding:3pt ; color:#000000"
+>LOGO</span>
+</p>
+
+</header>
+
+
+<div class="bodyandsidetoc" >
+<div class="sidetoccontainer" >
+
+
+<nav class="sidetoc" >
+
+
+<div class="sidetoctitle" >
+
+<p>
+<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+</p>
+
+<p>
+Contents
+</p>
+</div>
+
+
+<div class="sidetoccontents" >
+
+<p>
+<a href="index.html" class="linkhome" >
+Home</a>
+</p>
+
+<p>
+<a href="Example-chapter.html#autosec-8" class="tocchapter" >
+<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+</p>
+
+
+<p>
+<a href="Example-chapter.html#autosec-9" class="tocsection" >
+A section</a>
+</p>
+
+
+<p>
+<a href="Some-math.html#autosec-16" class="tocsection" >
+Some math</a>
+</p>
+
+
+<p>
+<a href="2020.html#autosec-18" class="tocpart" >
+<span class="sectionnumber" >I</span>&#x2003;2020</a>
+</p>
+
+
+<p>
+<a href="2020.html#autosec-19" class="tocsection" >
+Setting up Rasa on GCP</a>
+</p>
+
+
+<p>
+<a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
+<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+</p>
+
+
+<p>
+<a href="spaCy-Tutorials.html#autosec-23" class="tocsection" >
+Spacy Code Tutorials</a>
+</p>
+
+
+<p>
+<a href="GCP-Finance-course.html#autosec-71" class="tocsection" >
+GCP Finance course</a>
+</p>
+
+
+<p>
+<a href="Real-Content.html#autosec-73" class="tocchapter" >
+<span class="sectionnumber" >3</span>&#x2003;Real Content</a>
+</p>
+
+
+<p>
+<a href="Real-Content.html#autosec-76" class="tocsection" >
+SQL</a>
+</p>
+
+
+<p>
+<a href="Code-Commands.html#autosec-85" class="tocsection" >
+Code Commands</a>
+</p>
+
+
+<p>
+<a href="Commands.html#autosec-117" class="tocsection" >
+Commands</a>
+</p>
+
+
+<p>
+<a href="Scripts-Tools.html#autosec-120" class="tocsection" >
+Scripts and Tools</a>
+</p>
+
+
+<p>
+<a href="Index-0.html#autosec-164" class="tocchapter" >
+Index</a>
+</p>
+
+
+<p>
+<a href="Index-0.html#autosec-167" class="tocchapter" >
+Glossary</a>
+</p>
+
+
+<p>
+<a href="Index-0.html#autosec-169" class="tocchapter" >
+Acronyms</a>
+</p>
+
+
+</div>
+
+</nav>
+
+</div>
+
+
+<div class="bodycontainer" >
+
+
+<section class="textbody" >
+
+<h1>The Lwarp Tutorial</h1>
+
+<!--MathJax customizations:-->
+
+
+<div class="hidden" >
+
+\(\newcommand{\footnotename}{footnote}\)
+
+\(\def \LWRfootnote {1}\)
+
+\(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\newcommand \ensuremath [1]{#1}\)
+
+\(\newcommand {\LWRframebox }[2][]{\fbox {#2}} \newcommand {\framebox }[1][]{\LWRframebox } \)
+
+\(\newcommand {\setlength }[2]{}\)
+
+\(\newcommand {\addtolength }[2]{}\)
+
+\(\newcommand {\setcounter }[2]{}\)
+
+\(\newcommand {\addtocounter }[2]{}\)
+
+\(\newcommand {\cline }[1]{}\)
+
+\(\newcommand {\directlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\luatexdirectlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\newcommand {\toprule }[1][]{\hline }\)
+
+\(\let \midrule \toprule \)
+
+\(\let \bottomrule \toprule \)
+
+\(\newcommand {\cmidrule }[2][]{}\)
+
+\(\newcommand {\morecmidrules }{}\)
+
+\(\newcommand {\specialrule }[3]{\hline }\)
+
+\(\newcommand {\addlinespace }[1][]{}\)
+
+</div>
+
+<p>
+<h4 id="autosec-120">Scripts and Tools</h4>
+<a id="postGrad-autopage-120"></a>
+<a id="postGrad-autofile-9"></a><a id="scripts-and-tools"></a>
+<h5 id="autosec-121">Git Tips</h5>
+<a id="postGrad-autopage-121"></a>
+
+
+<a id="git-tips"></a>
+
+<p>
+I use github for personal repos
+</p>
+
+<p>
+gitlab for things that should be private
+</p>
+
+<p>
+My bitbucket account is linked to the after graduation gmail account <a href="mailto:davidli012345@gmail.com" target="_blank" >davidli012345@gmail.com</a> and bitbucket is the dumping ground for source code I want to examine in the future.
+</p>
+
+<p>
+For git bash the ssh key is at
+</p>
+
+<p>
+C:UserswuAppDataRoamingSPB_Data.ssh
+</p>
+
+<p>
+See <a href="https://serverfault.com/questions/50775/how-do-i-change-my-private-key-passphrase" target="_blank" >Private key passphrase</a>
+</p>
+<h6 id="autosec-122">Postgres</h6>
+<a id="postGrad-autopage-122"></a>
+
+
+<a id="postgres"></a>
+
+<p>
+To start running postgres server
+</p>
+<pre class="verbatim">
+pg_ctl.exe restart -D "C:\Program Files\PostgreSQL\9.6\data"
+</code>
+</pre>
+
+
+
+<p>
+to quit psql Type q and then press ENTER
+</p>
+
+<p>
+Ctrl + D is what I usually use to exit psql console.
+</p>
+<p>
+<span class="paragraph" id="autosec-124">Making DB</span>
+<a id="postGrad-autopage-124"></a>
+<a id="making-db"></a>
+</p>
+<pre class="verbatim">
+postgres=# CREATE DATABASE test;
+CREATE DATABASE
+postgres=# \c test
+\dt
+\q
+</code>
+</pre>
+
+<h6 id="autosec-126">Indeed-Job-Scrapper</h6>
+<a id="postGrad-autopage-126"></a>
+
+
+<a id="indeed-job-scrapper"></a>
+
+<p>
+Three Repos:
+</p>
+
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• Indeed-Script on Gitlab student gmail account/
+</p>
+
+
+</li>
+<li>
+<p>
+• Client on Github Public Folder
+</p>
+
+
+</li>
+<li>
+<p>
+• Go Rest API on Github Public Folder (Private for now)
+</p>
+</li>
+</ul>
+<h5 id="autosec-127">Uvic Scripts/Tools</h5>
+<a id="postGrad-autopage-127"></a>
+
+
+<a id="uvic-scriptstools"></a>
+
+<p>
+<b>Requirements</b>
+</p>
+
+<ul style="list-style-type:none">
+
+<li>
+<p>
+1. This program uses selenium to navigate and extract html from webpages, then performs analysis with pandas and nltk.
+</p>
+
+</li>
+<li>
+<p>
+2. If anything breaks just add a time.sleep (5) because when I was testing this script, I tested it a lot, and files were stored on the cache, resulting a quicker load time.
+</p>
+</li>
+</ul>
+
+<figure id="autoid-47" class="table ">
+<table>
+
+<tr class="tbrule">
+<td class="tdl">
+<div class="minipage" style="vertical-align:top ; justify-content:flex-start ; ">
+
+<p>
+info
+</p>
+
+
+</div>
+
+</td>
+<td class="tdl">
+<div class="minipage" style="vertical-align:top ; justify-content:flex-start ; ">
+
+<p>
+value
+</p>
+
+
+</div>
+
+</td>
+</tr>
+
+
+<tr class="hline" >
+<td class="tdl"></td>
+<td class="tdl"></td>
+</tr>
+
+
+<tr>
+<td class="tdl">
+<div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<p>
+author:
+</p>
+
+
+</div>
+
+</td>
+<td class="tdl">
+<div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<p>
+David Li
+</p>
+
+
+</div>
+
+</td>
+</tr>
+
+
+<tr>
+<td class="tdl">
+<div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<p>
+Date:
+</p>
+
+
+</div>
+
+</td>
+<td class="tdl">
+<div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<p>
+Jan 07, 2018
+</p>
+
+
+</div>
+
+</td>
+</tr>
+
+
+<tr>
+<td class="tdl">
+<div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<p>
+File Name:
+</p>
+
+
+</div>
+
+</td>
+<td class="tdl">
+<div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<p>
+lim_job_scrapper.py
+</p>
+
+
+</div>
+
+</td>
+</tr>
+
+
+<tr class="tbrule">
+<td class="tdl"></td>
+<td class="tdl"></td>
+</tr>
+
+</table>
+
+</figure>
+
+<p>
+Summary: Extract metadata from job postings, keywords and save job postings as static html pages. Requires the user can access <a href="https://learninginmotion.uvic.ca" target="_blank" >https://learninginmotion.uvic.ca</a> and submitted their "pink slip" see
+(<a href="https://web.uvic.ca/calendar2018-01/undergrad/engineering/co-op.html" target="_blank" >https://web.uvic.ca/calendar2018-01/undergrad/engineering/co-op.html</a>) for details.
+</p>
+
+<p>
+This program will log into lim using an automated browser, then: 1. find job postings, 2. extract metadata for job Postings. 3. create a main html file containing metadata that is linked to individual job postings.
+</p>
+
+<p>
+Arguments passed in: 1. UVIC netlink ID 2. UVIC password 3. Co-op term of interest. For example current( i.e, taking classes in the spring, looking for summer co-op), future, past
+</p>
+
+<p>
+Output: Produces one index.html page containing relative links to individual job postings, keywords and links to the LIM webpage. Requires selenium, BeautifulSoup and pandas.
+</p>
+
+<p>
+As shown in the screenshot below the value of current depends where you are at in the term, for example, at May 2018, current respresents the preceeding term, Fall 2018, but a few weeks ago, we were still at Summer 2018.
+</p>
+
+<p>
+Future improvements could include using a [STRIKEOUT:jinja template to improve the appearance of the html pages, would need to add css, also searchable/sortable tables would be helpful.]
+</p>
+
+<p>
+See <a href="https://web.uvic.ca/~lidavid/jobScrapping/LIMScrap/" target="_blank" >Uvic Job Postings (Jan 01, 2018)</a> for sample output.
+</p>
+<h6 id="autosec-137">Other Considerations</h6>
+<a id="postGrad-autopage-137"></a>
+
+
+<a id="other-considerations"></a>
+<p>
+<span class="paragraph" id="autosec-138">Future improvements</span>
+<a id="postGrad-autopage-138"></a>
+<a id="future-improvements"></a>
+</p>
+
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• [STRIKEOUT:Adding a summary of results (could be a plot).]
+</p>
+
+
+</li>
+<li>
+<p>
+• Determining if a job is suitable based on keywords ( text analysis).
+</p>
+
+
+</li>
+<li>
+<p>
+• [STRIKEOUT:Implementing searching/sortable tables.]
+</p>
+
+
+</li>
+<li>
+<p>
+• [STRIKEOUT:Improving the appearance of HTML tables by rendering a template (Jinja)]
+</p>
+</li>
+</ul>
+<p>
+<span class="subparagraph" id="autosec-139">Nice to Have</span>
+<a id="postGrad-autopage-139"></a>
+<a id="nice-to-have"></a>
+</p>
+
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• Summarizating the job posting.
+</p>
+
+
+</li>
+<li>
+<p>
+• Print out all html files as pdfs.
+</p>
+</li>
+</ul>
+<h6 id="autosec-140">Running the Script</h6>
+<a id="postGrad-autopage-140"></a>
+
+
+<a id="running-the-script"></a>
+
+<p>
+After navigating to the directory of the script and installing the necessary packages (if needed). The following commands can be used to run the script.
+</p>
+
+<p>
+Also, it will count the number of jobs vs the date
+</p>
+
+<figure id="autoid-48" class="table ">
+<table>
+
+<tr class="tbrule">
+<td class="tdl">
+<div class="minipage" style="vertical-align:top ; justify-content:flex-start ; ">
+
+<p>
+Date
+</p>
+
+
+</div>
+
+</td>
+<td class="tdl">
+<div class="minipage" style="vertical-align:top ; justify-content:flex-start ; ">
+
+<p>
+Num of jobs
+</p>
+
+
+</div>
+
+</td>
+</tr>
+
+
+<tr class="hline" >
+<td class="tdl"></td>
+<td class="tdl"></td>
+</tr>
+
+
+<tr>
+<td class="tdl">
+<div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<p>
+2018-04-26
+</p>
+
+
+</div>
+
+</td>
+<td class="tdl">
+<div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<p>
+39
+</p>
+
+
+</div>
+
+</td>
+</tr>
+
+
+<tr class="tbrule">
+<td class="tdl"></td>
+<td class="tdl"></td>
+</tr>
+
+</table>
+
+</figure>
+
+<p>
+python lim_job_scrapper.py netlinkid netlinkPass term year
+</p>
+
+<p>
+Where the arguments are: * netlinkid and netlinkPass are uvic login information * term is either [Current, Future, Past]
+</p>
+<h5 id="autosec-146">Adding apps to bitbucket</h5>
+<a id="postGrad-autopage-146"></a>
+
+
+<a id="adding-apps-to-bitbucket"></a>
+<pre class="verbatim">
+git add remote bitbucket git@bitbucket.org:grandfleet/<name of repo>
+git push bitbucket master
+</code>
+</pre>
+
+<h5 id="autosec-148">ENGR 003</h5>
+<a id="postGrad-autopage-148"></a>
+
+
+<p>
+Decentralized Application Developer
+</p>
+
+<ul style="list-style-type:none">
+
+<li>
+<p>
+1.
+</p>
+<dl>
+
+<dt>Tools:</dt>
+<dd>
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• Google Drive
+</p>
+
+
+</li>
+<li>
+<p>
+• Trello
+</p>
+
+
+</li>
+<li>
+<p>
+• Slack
+</p>
+
+
+</li>
+<li>
+<p>
+• Gitlab
+</p>
+
+
+</li>
+<li>
+<p>
+• Microsoft Word
+</p>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>
+<p>
+2.
+</p>
+<dl>
+
+<dt>JavaScript</dt>
+<dd>
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• Working with webpack, node, package management with npm and yarn
+</p>
+
+
+</li>
+<li>
+<p>
+• Creation of React components using props and context, prop-types, etc ...
+</p>
+
+
+</li>
+<li>
+<p>
+• React Router, arrow functions, promise chains
+</p>
+
+
+</li>
+<li>
+<p>
+• HTML + CSS + JSX + REDUX
+</p>
+
+
+</li>
+<li>
+<p>
+• JSDOC documentation
+</p>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>
+<p>
+3.
+</p>
+<dl>
+
+<dt>Solidity</dt>
+<dd>
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• Knowledge of ERC20 and ERC721 token standards
+</p>
+
+
+</li>
+<li>
+<p>
+• Revert, Assert, Requires statements and how to use them
+</p>
+
+
+</li>
+<li>
+<p>
+• Optimization of smart contracts
+</p>
+
+
+</li>
+<li>
+<p>
+• Deploying to test nets
+</p>
+
+
+</li>
+<li>
+<p>
+• Setting up CI for truffle using gitlab, circleCI and travisCI
+</p>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>
+<p>
+4.
+</p>
+<dl>
+
+<dt>Databases</dt>
+<dd>
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• postgres (designing database schemas), advanced open source database
+</p>
+
+
+</li>
+<li>
+<p>
+• javascript libraries, pg-promise and automated tests
+</p>
+
+
+</li>
+<li>
+<p>
+• RESTFUL API
+</p>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>
+<p>
+5.
+</p>
+<dl>
+
+<dt>CI/CD</dt>
+<dd>
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• SSH and configuration of remote servers
+</p>
+
+
+</li>
+<li>
+<p>
+• Docker, working with docker and dockerizing application
+</p>
+
+
+</li>
+<li>
+<p>
+• Script Scripting in Bash
+</p>
+
+
+</li>
+<li>
+<p>
+• Automated testing with jest, API testing with superagent
+</p>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>
+<p>
+6.
+</p>
+<dl>
+
+<dt>Windows</dt>
+<dd>
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• Choco, Scoop
+</p>
+
+
+</li>
+<li>
+<p>
+• Boostnote and/or latex
+</p>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<h5 id="autosec-149">ENGR 001 &amp; ENGR 002</h5>
+<a id="postGrad-autopage-149"></a>
+
+
+<a id="engr-001-engr-002"></a>
+
+<p>
+Data Analyst
+</p>
+
+<p>
+The tools I used in this co-op include:
+</p>
+
+<ul style="list-style-type:none">
+
+<li>
+<p>
+1.
+</p>
+<dl>
+
+<dt>Atlassian Tools:</dt>
+<dd>
+<ul style="list-style-type:none">
+
+<li>
+<p>
+1. Confluence --- wiki
+</p>
+
+</li>
+<li>
+<p>
+2. JIRA --- issue tracking tool
+</p>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>
+<p>
+2.
+</p>
+<dl>
+
+<dt>Microsoft Tools:</dt>
+<dd>
+<ul style="list-style-type:none">
+
+<li>
+<p>
+1. Microsoft Word
+</p>
+
+</li>
+<li>
+<p>
+2. Microsoft Excel
+</p>
+
+</li>
+<li>
+<p>
+3. Microsoft PowerPoint
+</p>
+
+</li>
+<li>
+<p>
+4. Microsoft SharePoint
+</p>
+
+</li>
+<li>
+<p>
+5. Microsoft Visio
+</p>
+
+</li>
+<li>
+<p>
+6. Microsoft Outlook
+</p>
+
+</li>
+<li>
+<p>
+7. Microsoft Lync
+</p>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>
+<p>
+3. Oracle Databases
+</p>
+
+</li>
+<li>
+<p>
+4. Java &amp; Powershell
+</p>
+
+</li>
+<li>
+<p>
+5. VbScript
+</p>
+</li>
+</ul>
+<h5 id="autosec-150">2018 List</h5>
+<a id="postGrad-autopage-150"></a>
+
+
+<a id="list"></a>
+<h6 id="autosec-151">Version Control &amp; CI/CD &amp; Shell</h6>
+<a id="postGrad-autopage-151"></a>
+
+
+<a id="version-control-cicd-shell"></a>
+
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• Github, Bitbucket, Gitlab
+</p>
+
+
+</li>
+<li>
+<p>
+• Travis, CircleCI, Gitlab
+</p>
+
+
+</li>
+<li>
+<p>
+• Docker, Bash, OSX
+</p>
+</li>
+</ul>
+<h6 id="autosec-152">Productivity Tools</h6>
+<a id="postGrad-autopage-152"></a>
+
+
+<a id="productivity-tools"></a>
+
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• Slack, Drive
+</p>
+
+
+</li>
+<li>
+<p>
+• Discord, !Rocketchat
+</p>
+</li>
+</ul>
+<h6 id="autosec-153">Documentation</h6>
+<a id="postGrad-autopage-153"></a>
+
+
+<a id="documentation"></a>
+
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• Mkdocs, Sphinx, Jsdoc
+</p>
+
+
+</li>
+<li>
+<p>
+• Boostnote/Vuepress, Hugo, lwarp/latex
+</p>
+
+
+</li>
+<li>
+<p>
+• Wikijs, frozen-flask, docusaurus
+</p>
+
+
+</li>
+<li>
+<p>
+• Explore !git notebook (<a href="https://thomasreinecke.github.io/git-playbook/\#/playbook" target="_blank" >https://thomasreinecke.github.io/git-playbook/\#/playbook</a>)
+</p>
+</li>
+</ul>
+<h6 id="autosec-154">Blockchain</h6>
+<a id="postGrad-autopage-154"></a>
+
+
+<a id="blockchain"></a>
+
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• Ethereum, Truffle, Ganache
+</p>
+
+
+</li>
+<li>
+<p>
+• Drizzle, Solidity, Solidity-docgen
+</p>
+
+
+</li>
+<li>
+<p>
+• Infura, high stackvoerflow account
+</p>
+
+
+</li>
+<li>
+<p>
+• !Hashgraph
+</p>
+</li>
+</ul>
+<h6 id="autosec-155">Programming Languages</h6>
+<a id="postGrad-autopage-155"></a>
+
+
+<a id="programming-languages"></a>
+
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• Javascript, Python, Latex
+</p>
+
+
+</li>
+<li>
+<p>
+• Matlab, C, C#, Java
+</p>
+
+
+</li>
+<li>
+<p>
+• PHP, Perl, Node, Go
+</p>
+</li>
+</ul>
+
+<p>
+Markup Stuff
+</p>
+
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• HTML, CSS
+</p>
+
+
+</li>
+<li>
+<p>
+• Markdown, RST
+</p>
+</li>
+</ul>
+<h6 id="autosec-156">Databases</h6>
+<a id="postGrad-autopage-156"></a>
+
+
+<a id="databases"></a>
+
+<p>
+Mongo, Postgres, MySQL, Oracle
+</p>
+<h6 id="autosec-157">CMD Tools</h6>
+<a id="postGrad-autopage-157"></a>
+
+
+<a id="cmd-tools"></a>
+
+<p>
+Yarn, npm, pandoc, etc .. imagemagick
+</p>
+
+<a id="LWR-ht-hugo-tools-to-consider"></a>
+
+<p>
+%
+</p>
+<h5 id="autosec-158">Hugo Tools to Consider</h5>
+<a id="postGrad-autopage-158"></a>
+
+
+<a id="hugo-tools-to-consider"></a>
+
+<ul style="list-style-type:none">
+
+<li>
+<p>
+1. <a href="https://themes.gohugo.io/theme/hugo-assembly/\#contact" target="_blank" >https://themes.gohugo.io/theme/hugo-assembly/\#contact</a>
+</p>
+
+</li>
+<li>
+<p>
+2. <a href="https://github.com/avelino/hugo-theme-sarah" target="_blank" >https://github.com/avelino/hugo-theme-sarah</a>
+</p>
+
+</li>
+<li>
+<p>
+3. <a href="https://www.valentinog.com/blog/webpack-tutorial/" target="_blank" >https://www.valentinog.com/blog/webpack-tutorial/</a>
+</p>
+
+</li>
+<li>
+<p>
+4. <a href="https://medium.freecodecamp.org/why-react16-is-a-blessing-to-react-developers-31433bfc210a" target="_blank" >https://medium.freecodecamp.org/why-react16-is-a-blessing-to-react-developers-31433bfc210a</a>
+</p>
+</li>
+</ul>
+
+<div class="mdframed"
+style="
+background: #FFFFB2 ;
+border: 1pt solid #FFFF80 ;
+border-radius: 0pt ;
+box-shadow: 8pt 8pt 8pt #808080 ;
+">
+
+<div
+    class="mdframedtitle"
+    style="background: #FFFFD9 ;
+"
+>
+<p>
+<span class="textrm textbf textup textulc" >Algorithm Features</span>
+</p>
+</div>
+<p>
+A good algorithm must have three features: correctness, maintainability, and effciency.
+</p>
+
+</div>
+
+<div class="mdframed"
+style="
+background: #ECB2C6 ;
+border: 1pt solid #DF809F ;
+border-radius: 0pt ;
+box-shadow: 8pt 8pt 8pt #808080 ;
+">
+
+<div
+    class="mdframedtitle"
+    style="background: #F5D9E2 ;
+"
+>
+<p>
+<span class="textrm textbf textup textulc" >Data Structures</span>
+</p>
+</div>
+<p>
+The term data structure refers to the organization of data in a computer’s memory, in order to retrieve it quickly for processing. It is a scheme for data organization to decouple the functional definition of a data structure from its implementation. A data structure is
+chosen based on the problem type and the operations performed on the data.
+</p>
+
+</div>
+
+<p>
+There are five basic rules for calculating an algorithm’s Big O notation.
+</p>
+
+<ul style="list-style-type:none">
+
+<li>
+<p>
+1. If an algorithm performs a certain sequence of steps f(N) times for a mathematical function f, then it takes O(f(N)) steps.
+</p>
+
+</li>
+<li>
+<p>
+2. If an algorithm performs an operation that takes O(f(N)) steps and then performs a second operation that takes O(g(N)) steps for functions f and g, then the algorithm’s total performance is O(f(N) g(N)).
+</p>
+
+</li>
+<li>
+<p>
+3. If an algorithm takes \(O(f(N)+g(N))\) time and the function f(N) is greater than g(N) for large N, then the algorithm’s performance can be simplified to \(O(f(N))\).
+</p>
+
+</li>
+<li>
+<p>
+4. If an algorithm performs an operation that takes \(O(f(N))\) steps, and for every step in that operation it performs another \(O(g(N))\) steps, then the algorithm’s total performance is \(O(f(N)\times g(N)\).
+</p>
+
+</li>
+<li>
+<p>
+5. Ignore constant multiples. If C is a constant, \(O(C \times f(N))\) is the same as \(O(f(N))\), and \(O(C \times f(N))\) is the same as O(f(N)).
+</p>
+</li>
+</ul>
+
+<p>
+Adapter, bridge, composite, decorator, facade, flyweight, private class data, and proxy are the Gang of Four (GoF) structural design patterns.
+</p>
+
+<p>
+The adapter pattern comprises the target, adaptee, adapter, and client:
+</p>
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• Target is the interface that the client calls and invokes methods on the adapter and adaptee.
+</p>
+
+
+</li>
+<li>
+<p>
+• The client wants the incompatible interface implemented by the adapter.
+</p>
+
+
+</li>
+<li>
+<p>
+• The adapter translates the incompatible interface of the adaptee into an interface that the client wants.
+</p>
+</li>
+</ul>
+
+<a id="autoid-49"></a>
+
+
+<div class="figurecaption" >
+
+<p>
+Listing&nbsp;3.7:&nbsp;Golang Adaptor Example
+</p>
+</div>
+<pre><code class = "language-python">
+//main  package has examples shown
+// in Hands-On Data Structures and algorithms with Go book
+package main
+// importing fmt package
+import (
+"fmt"
+)
+// IProcess interface
+type IProcess interface {
+         process()
+}
+
+
+// Adapter struct
+type Adapter struct {
+         adaptee Adaptee
+}
+
+
+// Adapter class method process
+func (adapter Adapter) process() {
+         fmt.Println("Adapter␣process")
+         adapter.adaptee.convert()
+}
+
+
+// Adaptee Struct
+type Adaptee struct {
+         adapterType int
+}
+
+
+// Adaptee class method convert
+func (adaptee Adaptee) convert() {
+         fmt.Println("Adaptee␣convert␣method")
+}
+
+
+// main method
+func main() {
+         var processor IProcess = Adapter{}
+         processor.process()
+}
+</code>
+</pre>
+
+
+
+<p>
+<b>Bridge</b> Bridge decouples the implementation from the abstraction. The abstract base class can be subclassed to provide different implementations and allow implementation details to be modified easily. The interface, which is a bridge, helps in making the
+functionality of concrete classes independent from the interface implementer classes. The bridge patterns allow the implementation details to change at runtime.
+</p>
+
+<a id="autoid-50"></a>
+
+
+<div class="figurecaption" >
+
+<p>
+Listing&nbsp;3.8:&nbsp;Golang Adaptor Example
+</p>
+</div>
+<pre><code class = "language-go">
+// main  package has examples shown
+// in Hands-On Data Structures and algorithms with Go book
+package main
+// importing fmt package
+import (
+         "fmt"
+)
+
+
+// IDrawShape interface
+type IDrawShape interface {
+         drawShape(x[5] float32,y[5] float32)
+}
+
+
+// DrawShape struct
+type DrawShape struct{}
+
+
+// DrawShape struct has method draw Shape with float x and y coordinates
+func (drawShape DrawShape) drawShape(x[5] float32, y[5] float32) {
+         fmt.Println("Drawing␣Shape")
+}
+// IContour interace
+type IContour interface {
+         drawContour(x[5] float32, y[5] float32)
+         resizeByFactor(factor int)
+}
+// DrawContour struct
+type DrawContour struct {
+         x[5] float32
+         y[5] float32
+         shape DrawShape
+         factor int
+}
+
+
+//DrawContour method drawContour given the coordinates
+func (contour DrawContour) drawContour(x[5] float32,y[5] float32) {
+         fmt.Println("Drawing␣Contour")
+         contour.shape.drawShape(contour.x, contour.y)
+}
+
+
+//DrawContour method resizeByFactor given factor
+func (contour DrawContour) resizeByFactor(factor int) {
+         contour.factor = factor
+}
+
+
+// main method
+func main() {
+         var x = [5]float32{1,2,3,4,5}
+         var y = [5]float32{1,2,3,4,5}
+         var contour IContour = DrawContour{x,y,DrawShape{},2}
+         contour.drawContour(x,y)
+         contour.resizeByFactor(2)
+}
+</code>
+</pre>
+
+
+
+<div class="mdframed"
+style="
+background: #ECB2C6 ;
+border: 1pt solid #DF809F ;
+border-radius: 0pt ;
+box-shadow: 8pt 8pt 8pt #808080 ;
+">
+
+<div
+    class="mdframedtitle"
+    style="background: #F5D9E2 ;
+"
+>
+<p>
+<span class="textrm textbf textup textulc" >Composite</span>
+</p>
+</div>
+<p>
+A composite is a group of similar objects in a single object. Objects are stored in a tree form to persist the whole hierarchy. The composite pattern is used to change a hierarchical collection of objects.
+</p>
+
+</div>
+
+<p>
+The composite pattern comprises the component interface, component class, composite, and client:
+</p>
+<ul style="list-style-type:none">
+
+<li>
+<p>
+• The component interface defines the default behavior of all objects and behaviors for accessing the components of the composite.
+</p>
+
+
+</li>
+<li>
+<p>
+• The composite and component classes implement the component interface.
+</p>
+
+
+</li>
+<li>
+<p>
+• The client interacts with the component interface to invoke methods in the composite.
+</p>
+</li>
+</ul>
+
+<div class="mdframed"
+style="
+background: #ECB2C6 ;
+border: 1pt solid #DF809F ;
+border-radius: 0pt ;
+box-shadow: 8pt 8pt 8pt #808080 ;
+">
+
+<div
+    class="mdframedtitle"
+    style="background: #F5D9E2 ;
+"
+>
+<p>
+<span class="textrm textbf textup textulc" >Decorator</span>
+</p>
+</div>
+<p>
+In a scenario where class responsibilities are removed or added, the decorator pattern is applied. The decorator pattern helps with subclassing when modifying functionality, instead of static inheritance. An object can have multiple decorators and runtime decorators. The
+single responsibility principle can be achieved using a decorator.
+</p>
+
+</div>
+
+<a id="autoid-51"></a>
+
+
+<div class="figurecaption" >
+
+<p>
+Listing&nbsp;3.9:&nbsp;Golang Program
+</p>
+</div>
+<pre><code class = "language-go">
+package  main
+
+
+import (
+         "fmt"
+         "io/ioutil"
+)
+</code>
+</pre>
+
+</section>
+
+</div>
+
+</div>
+
+<footer>
+
+<p>
+Contact Information and Copyright
+</p>
+
+</footer>
+
+
+<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+Home</a></nav>
+
+</body>
+</html>

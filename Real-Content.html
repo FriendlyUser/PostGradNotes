@@ -208,13 +208,13 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-9" class="tocsection" >
-<span class="sectionnumber" >1.1</span>&#x2003;A section</a>
+A section</a>
 </p>
 
 
 <p>
 <a href="Some-math.html#autosec-16" class="tocsection" >
-<span class="sectionnumber" >1.2</span>&#x2003;Some math</a>
+Some math</a>
 </p>
 
 
@@ -226,7 +226,7 @@ Home</a>
 
 <p>
 <a href="2020.html#autosec-19" class="tocsection" >
-<span class="sectionnumber" >1.3</span>&#x2003;Setting up Rasa on GCP</a>
+Setting up Rasa on GCP</a>
 </p>
 
 
@@ -238,13 +238,13 @@ Home</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-23" class="tocsection" >
-<span class="sectionnumber" >2.1</span>&#x2003;Spacy Code Tutorials</a>
+Spacy Code Tutorials</a>
 </p>
 
 
 <p>
 <a href="GCP-Finance-course.html#autosec-71" class="tocsection" >
-<span class="sectionnumber" >2.2</span>&#x2003;GCP Finance course</a>
+GCP Finance course</a>
 </p>
 
 
@@ -256,24 +256,42 @@ Home</a>
 
 <p>
 <a href="Real-Content.html#autosec-76" class="tocsection" >
-<span class="sectionnumber" >3.1</span>&#x2003;SQL</a>
+SQL</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-89" class="tocchapter" >
+<a href="Code-Commands.html#autosec-85" class="tocsection" >
+Code Commands</a>
+</p>
+
+
+<p>
+<a href="Commands.html#autosec-117" class="tocsection" >
+Commands</a>
+</p>
+
+
+<p>
+<a href="Scripts-Tools.html#autosec-120" class="tocsection" >
+Scripts and Tools</a>
+</p>
+
+
+<p>
+<a href="Index-0.html#autosec-164" class="tocchapter" >
 Index</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-92" class="tocchapter" >
+<a href="Index-0.html#autosec-167" class="tocchapter" >
 Glossary</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-94" class="tocchapter" >
+<a href="Index-0.html#autosec-169" class="tocchapter" >
 Acronyms</a>
 </p>
 
@@ -324,6 +342,20 @@ Acronyms</a>
 \(\newcommand {\luatexdirectlua }[1]{\text {(directlua)}}\)
 
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\newcommand {\toprule }[1][]{\hline }\)
+
+\(\let \midrule \toprule \)
+
+\(\let \bottomrule \toprule \)
+
+\(\newcommand {\cmidrule }[2][]{}\)
+
+\(\newcommand {\morecmidrules }{}\)
+
+\(\newcommand {\specialrule }[3]{\hline }\)
+
+\(\newcommand {\addlinespace }[1][]{}\)
 
 </div>
 
@@ -560,7 +592,7 @@ var spy_is_present = true;
 <p>
 Probably just trial and error as for images, swipe them off the internet, because I still need animations for now.
 </p>
-<h4 id="autosec-76"><span class="sectionnumber" >3.1&#x2003;</span>SQL</h4>
+<h4 id="autosec-76">SQL</h4>
 <a id="postGrad-autopage-76"></a>
 
 
@@ -606,7 +638,7 @@ SELECT  DISTINCT ON (a.place_id)
 </code>
 </pre>
 
-<h5 id="autosec-79"><span class="sectionnumber" >3.1.1&#x2003;</span>Publishing Dart Packages With Docker</h5>
+<h5 id="autosec-79">Publishing Dart Packages With Docker</h5>
 <a id="postGrad-autopage-79"></a>
 
 
@@ -781,348 +813,30 @@ Will shove it in hopefully for something to happen.
 Kinda lazy with the felgo games.
 </p>
 
-<div class="mdframed"
-style="
-background: #FFFFB2 ;
-border: 1pt solid #FFFF80 ;
-border-radius: 0pt ;
-box-shadow: 8pt 8pt 8pt #808080 ;
-">
-
-<div
-    class="mdframedtitle"
-    style="background: #FFFFD9 ;
-"
->
 <p>
-<span class="textrm textbf textup textulc" >Algorithm Features</span>
-</p>
-</div>
-<p>
-A good algorithm must have three features: correctness, maintainability, and effciency.
-</p>
-
-</div>
-
-<div class="mdframed"
-style="
-background: #ECB2C6 ;
-border: 1pt solid #DF809F ;
-border-radius: 0pt ;
-box-shadow: 8pt 8pt 8pt #808080 ;
-">
-
-<div
-    class="mdframedtitle"
-    style="background: #F5D9E2 ;
-"
->
-<p>
-<span class="textrm textbf textup textulc" >Data Structures</span>
-</p>
-</div>
-<p>
-The term data structure refers to the organization of data in a computer’s memory, in order to retrieve it quickly for processing. It is a scheme for data organization to decouple the functional definition of a data structure from its implementation. A data structure is
-chosen based on the problem type and the operations performed on the data.
-</p>
-
-</div>
-
-<p>
-There are five basic rules for calculating an algorithm’s Big O notation.
-</p>
-
-<ul style="list-style-type:none">
-
-<li>
-<p>
-1. If an algorithm performs a certain sequence of steps f(N) times for a mathematical function f, then it takes O(f(N)) steps.
-</p>
-
-</li>
-<li>
-<p>
-2. If an algorithm performs an operation that takes O(f(N)) steps and then performs a second operation that takes O(g(N)) steps for functions f and g, then the algorithm’s total performance is O(f(N) g(N)).
-</p>
-
-</li>
-<li>
-<p>
-3. If an algorithm takes \(O(f(N)+g(N))\) time and the function f(N) is greater than g(N) for large N, then the algorithm’s performance can be simplified to \(O(f(N))\).
-</p>
-
-</li>
-<li>
-<p>
-4. If an algorithm performs an operation that takes \(O(f(N))\) steps, and for every step in that operation it performs another \(O(g(N))\) steps, then the algorithm’s total performance is \(O(f(N)\times g(N)\).
-</p>
-
-</li>
-<li>
-<p>
-5. Ignore constant multiples. If C is a constant, \(O(C \times f(N))\) is the same as \(O(f(N))\), and \(O(C \times f(N))\) is the same as O(f(N)).
-</p>
-</li>
-</ul>
-
-<p>
-Adapter, bridge, composite, decorator, facade, flyweight, private class data, and proxy are the Gang of Four (GoF) structural design patterns.
+Get https://switch-xci.com/fire-emblem-three-houses-switch-nsp-xci
 </p>
 
 <p>
-The adapter pattern comprises the target, adaptee, adapter, and client:
+Download Utorrent
 </p>
-<ul style="list-style-type:none">
-
-<li>
-<p>
-• Target is the interface that the client calls and invokes methods on the adapter and adaptee.
-</p>
-
-
-</li>
-<li>
-<p>
-• The client wants the incompatible interface implemented by the adapter.
-</p>
-
-
-</li>
-<li>
-<p>
-• The adapter translates the incompatible interface of the adaptee into an interface that the client wants.
-</p>
-</li>
-</ul>
-
-<a id="autoid-47"></a>
-
-
-<div class="figurecaption" >
 
 <p>
-Listing&nbsp;3.7:&nbsp;Golang Adaptor Example
+Download Yuzu
 </p>
-</div>
-<pre><code class = "language-go">
-//main  package has examples shown
-// in Hands-On Data Structures and algorithms with Go book
-package main
-// importing fmt package
-import (
-"fmt"
-)
-// IProcess interface
-type IProcess interface {
-         process()
-}
-
-
-// Adapter struct
-type Adapter struct {
-         adaptee Adaptee
-}
-
-
-// Adapter class method process
-func (adapter Adapter) process() {
-         fmt.Println("Adapter␣process")
-         adapter.adaptee.convert()
-}
-
-
-// Adaptee Struct
-type Adaptee struct {
-         adapterType int
-}
-
-
-// Adaptee class method convert
-func (adaptee Adaptee) convert() {
-         fmt.Println("Adaptee␣convert␣method")
-}
-
-
-// main method
-func main() {
-         var processor IProcess = Adapter{}
-         processor.process()
-}
-</code>
-</pre>
-
-
 
 <p>
-<b>Bridge</b> Bridge decouples the implementation from the abstraction. The abstract base class can be subclassed to provide different implementations and allow implementation details to be modified easily. The interface, which is a bridge, helps in making the
-functionality of concrete classes independent from the interface implementer classes. The bridge patterns allow the implementation details to change at runtime.
+https://www.youtube.com/watch?v=bGNBnPSNa8c
 </p>
-
-<a id="autoid-48"></a>
-
-
-<div class="figurecaption" >
 
 <p>
-Listing&nbsp;3.8:&nbsp;Golang Adaptor Example
+Install Virtual Audio Cable
 </p>
-</div>
-<pre><code class = "language-go">
-// main  package has examples shown
-// in Hands-On Data Structures and algorithms with Go book
-package main
-// importing fmt package
-import (
-         "fmt"
-)
-
-
-// IDrawShape interface
-type IDrawShape interface {
-         drawShape(x[5] float32,y[5] float32)
-}
-
-
-// DrawShape struct
-type DrawShape struct{}
-
-
-// DrawShape struct has method draw Shape with float x and y coordinates
-func (drawShape DrawShape) drawShape(x[5] float32, y[5] float32) {
-         fmt.Println("Drawing␣Shape")
-}
-// IContour interace
-type IContour interface {
-         drawContour(x[5] float32, y[5] float32)
-         resizeByFactor(factor int)
-}
-// DrawContour struct
-type DrawContour struct {
-         x[5] float32
-         y[5] float32
-         shape DrawShape
-         factor int
-}
-
-
-//DrawContour method drawContour given the coordinates
-func (contour DrawContour) drawContour(x[5] float32,y[5] float32) {
-         fmt.Println("Drawing␣Contour")
-         contour.shape.drawShape(contour.x, contour.y)
-}
-
-
-//DrawContour method resizeByFactor given factor
-func (contour DrawContour) resizeByFactor(factor int) {
-         contour.factor = factor
-}
-
-
-// main method
-func main() {
-         var x = [5]float32{1,2,3,4,5}
-         var y = [5]float32{1,2,3,4,5}
-         var contour IContour = DrawContour{x,y,DrawShape{},2}
-         contour.drawContour(x,y)
-         contour.resizeByFactor(2)
-}
-</code>
-</pre>
-
-
-
-<div class="mdframed"
-style="
-background: #ECB2C6 ;
-border: 1pt solid #DF809F ;
-border-radius: 0pt ;
-box-shadow: 8pt 8pt 8pt #808080 ;
-">
-
-<div
-    class="mdframedtitle"
-    style="background: #F5D9E2 ;
-"
->
-<p>
-<span class="textrm textbf textup textulc" >Composite</span>
-</p>
-</div>
-<p>
-A composite is a group of similar objects in a single object. Objects are stored in a tree form to persist the whole hierarchy. The composite pattern is used to change a hierarchical collection of objects.
-</p>
-
-</div>
 
 <p>
-The composite pattern comprises the component interface, component class, composite, and client:
-</p>
-<ul style="list-style-type:none">
-
-<li>
-<p>
-• The component interface defines the default behavior of all objects and behaviors for accessing the components of the composite.
+https://www.microsoft.com/en-us/download/details.aspx?id=48145
 </p>
 
-
-</li>
-<li>
-<p>
-• The composite and component classes implement the component interface.
-</p>
-
-
-</li>
-<li>
-<p>
-• The client interacts with the component interface to invoke methods in the composite.
-</p>
-</li>
-</ul>
-
-<div class="mdframed"
-style="
-background: #ECB2C6 ;
-border: 1pt solid #DF809F ;
-border-radius: 0pt ;
-box-shadow: 8pt 8pt 8pt #808080 ;
-">
-
-<div
-    class="mdframedtitle"
-    style="background: #F5D9E2 ;
-"
->
-<p>
-<span class="textrm textbf textup textulc" >Decorator</span>
-</p>
-</div>
-<p>
-In a scenario where class responsibilities are removed or added, the decorator pattern is applied. The decorator pattern helps with subclassing when modifying functionality, instead of static inheritance. An object can have multiple decorators and runtime decorators. The
-single responsibility principle can be achieved using a decorator.
-</p>
-
-</div>
-
-<a id="autoid-49"></a>
-
-
-<div class="figurecaption" >
-
-<p>
-Listing&nbsp;3.9:&nbsp;Golang Program
-</p>
-</div>
-<pre><code class = "language-go">
-package  main
-
-
-import (
-         "fmt"
-         "io/ioutil"
-)
-</code>
-</pre>
 
 </section>
 
