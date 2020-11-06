@@ -10,7 +10,7 @@
 <!--[if lt IE 9]>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
-<title>Webpage Title — Code Commands</title>
+<title>Webpage Title — Interviews</title>
 <link rel="stylesheet" href="prism.css" type="text/css">
 <script src="prism.js" type="text/javascript"> </script>
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
@@ -156,7 +156,7 @@ MathJax = {
 <body>
 
 
-<a id="postGrad-autopage-88"></a>
+<a id="postGrad-autopage-83"></a>
 <nav class="topnavigation" ><a href="index.html" class="linkhome" >
 Home</a></nav>
 
@@ -382,270 +382,140 @@ Acronyms</a>
 </div>
 
 <p>
-<h4 id="autosec-89">Code Commands</h4>
-<a id="postGrad-autopage-89"></a>
-<a id="postGrad-autofile-8"></a><a id="code-commands"></a>
+<h3 id="autosec-84">Chapter&nbsp;<span class="sectionnumber" >4&#x2003;</span>Interviews</h3>
+<a id="postGrad-autopage-84"></a>
+<a id="postGrad-autofile-7"></a>
 
 <p>
-This is the list of commands that I have careful stored
+KPMG interview <b>Web application in twitter - not going todo this in 24 hours</b>
 </p>
-<h5 id="autosec-90">Other Commands</h5>
-<a id="postGrad-autopage-90"></a>
-
-
-<a id="other-commands"></a>
 
 <p>
-vendor/bin/phpunit –coverage-html docs –testsuite FeatureV4
+= Post a Tweet: - ACTION: Users should be able to enter a Tweet in a text box and hit a button to post the Tweet - SYSTEM: Send a POST request from the frontend to the backend API server to insert a Tweet in the database = View all posted Tweets - ACTION:
+Users should be able to go to a page and view all the Tweets they have posted - SYSTEM: Send a GET request from the frontend to the backend API server to retrieve all the Tweet for a user = Post comments for a Tweet - ACTION: Users should be able to add
+comments to a Tweet - SYSTEM: Send a POST request from the frontend to the backend API server to post a comment ona Tweet = View all the comments for a Tweet - ACTION: Users should be able to view all comments for a Tweet they have posted - SYSTEM: Send
+a GET request to get all related comments for a Tweet = (Bonus) Live updating Tweets - ACTION: Users will be able to see live updating Tweets without reloading the web page. Whenever a Tweet is posted from another instance of the web client, the Tweet should show
+up in the original web client automatically without reloading. = (Bonus) Build this application using serverless technology (e.g. Azure functions)
 </p>
-<pre class="verbatim">
-sudo -i
+<a id="autoid-47" ></a >
 
 
-root@dockerhost:~# nc -l 443
-</code>
-</pre>
-
-<pre class="verbatim">
-echo | <command>
-echo | surge
-</code>
-</pre>
-
-<blockquote>
+<div class="figurecaption" >
 
 <p>
-Deploys the app to surge without any prompts
+Listing&nbsp;4.1:&nbsp;SQL Query for KPMG Interview
 </p>
-</blockquote>
-
-<a id="LWR-ht-docker-commands"></a>
-
-<p>
-%
-</p>
-<h5 id="autosec-94">Docker Commands</h5>
-<a id="postGrad-autopage-94"></a>
-
-
-<a id="docker-commands"></a>
-<pre class="verbatim">
-
-
-</code>
-</pre>
-
-
-<a id="LWR-ht-bash"></a>
-
-<p>
-%
-</p>
-<h5 id="autosec-96">Bash</h5>
-<a id="postGrad-autopage-96"></a>
-
-
-<a id="bash"></a>
-<blockquote>
-
-<p>
-printenv command – Print all or part of environment
-</p>
-</blockquote>
-<pre class="verbatim">
-sed -e '/pattern="MVG"/s/(^.*$)/<!--\1-->/' policy.xml > policy_test.xml
-<policy domain="coder" rights="none" pattern="MVG" />
-<!--     <policy domain="coder" rights="none" pattern="MVG" />-->
-</code>
-</pre>
-
-<pre class="verbatim">
-sed -i -e 's/rights="none" pattern="PDF"/rights="read|write" pattern="PDF"/g' policy_test.xml
-</code>
-</pre>
-
-<h5 id="autosec-100">Windows</h5>
-<a id="postGrad-autopage-100"></a>
-
-
-<a id="windows"></a>
-<pre class="verbatim">
-taskkill /im node.exe /F
-refreshenv
+</div>
+<pre><code class = "language-python">
+CREATE TABLE products (
+productCode varchar(255),
+productName varchar(255),
+productLine varchar(255),
+productScale varchar(255),
+productVendor varchar(255),
+productDescription varchar(255)
+);
+INSERT INTO products (productCode, productName, productLine, productScale,
+productVendor, productDescription)
+VALUES (&apos;1678&apos;,
+&apos;1969 Harley Davidson Ultimate Chopper&apos;,
+&apos;Motorcycles&apos;,
+&apos;1:10&apos;,
+&apos;Min Lin Diecast&apos;,
+&apos;This replica features working kickstand, front suspension, gear-shift lever, footbrake lever, drive chain, wheels and steering. All parts are particularly delicate due to their precise scale and require special care and attention.&apos;
+),
+(&apos;1949&apos;,
+&apos;1952 Alpine Renault 1300&apos;,
+&apos;Classic Cars&apos;,
+&apos;1:10&apos;,
+&apos;Classic Metal Creations&apos;,
+&apos;Turnable front wheels; steering function; detailed interior; detailed engine; opening hood; opening trunk; opening doors; and detailed chassis.&apos;),
+(&apos;4698&apos;,
+&apos;2003 Harley-Davidson Eagle&apos;,
+&apos;Drag Bike&apos;,
+&apos;Motorcycles&apos;,
+&apos;1:10&apos;,
+&apos;Red Start Diecast Model features, official Harley Davidson logos and insignias, detachable rear wheelie bar, heavy diecast metal with resin parts, authentic multi-color tampo-printed graphics&apos;);
 </code>
 </pre>
 
 
 <p>
-where ping Taskkill is a built-in windows command that, well, kills a task! the /im flag stands for "imagename", and it lets you pass in the image name of the process to be terminated which is node.exe in this case. The /F flag is optional and forces termination of the
-process.
+The answer using TOP 1 Using microsoft SQL server
 </p>
-<h5 id="autosec-102">Gitlab</h5>
-<a id="postGrad-autopage-102"></a>
+<a id="autoid-48" ></a >
 
 
-<a id="gitlab"></a>
+<div class="figurecaption" >
 
 <p>
-<a href="https://gitlab.com/profile/pipeline_quota" target="_blank" >https://gitlab.com/profile/pipeline_quota</a>
+Listing&nbsp;4.2:&nbsp;SQL Query for KPMG Interview – Answer
 </p>
-
-<p>
-How many minutes I have used, lol heroku-ping doesn’t register, maybe it occurs too quickly, or pages doesn’t count as CI.
-</p>
-<h5 id="autosec-103">BitBucket</h5>
-<a id="postGrad-autopage-103"></a>
-
-
-<a id="bitbucket"></a>
-
-<p>
-main account 012345 pass: bchain050
-</p>
-<h6 id="autosec-104">Git</h6>
-<a id="postGrad-autopage-104"></a>
-
-
-<a id="git"></a>
-
-<p>
-Undo changes made in a specific folder in Git
-</p>
-<pre class="verbatim">
-git checkout <folder
+</div>
+<pre><code class = "language-sql">
+SELECT TOP 1 *
+FROM (
+ SELECT TOP 2 *
+ FROM products
+ ORDER BY productCode
+) z
+ORDER BY productCode DESC
 </code>
 </pre>
 
-<pre class="verbatim">
-
-
-</code>
-</pre>
-
-<h5 id="autosec-107">MegaTools</h5>
-<a id="postGrad-autopage-107"></a>
-
-
-<a id="megatools"></a>
-
 <p>
-All Books I find "useful" will get dumped to my mega account using the shell tools.
+<span class="paragraph" id="autosec-87">Thoughts</span>
+<a id="postGrad-autopage-87"></a>
+
 </p>
 
 <p>
-All remote directories start with /Root
-</p>
-<pre class="verbatim">
-megals -u <USERNAME> -p <PASSWORD>
-megacopy -u <USERNAME> -p <PASSWORD> -l <LOCAL_DIR> -r <REMOTE_DIR>
-</code>
-</pre>
-
-<h5 id="autosec-109">GCP Useful Commands</h5>
-<a id="postGrad-autopage-109"></a>
-
-
-<a id="gcp-useful-commands"></a>
-<pre class="verbatim">
-# Creating a new python environment
-# See https://conda.io/docs/user-guide/tasks/manage-python.html#installing-a-different-version-of-python
-conda create -n py36 python=3.6 anaconda
-source activate py36
-#Installing a new package
-conda install -c omnia hmmlearn
-# Finding the list of environments for conda
-conda list
-# To install new kernel for juypter notebook
-python -m ipykernel install --user --name myenv --display-name "Python (myenv)"
-</code>
-</pre>
-
-<h5 id="autosec-111">Kubernates</h5>
-<a id="postGrad-autopage-111"></a>
-
-
-<a id="kubernates"></a>
-<h5 id="autosec-112">Python Commands</h5>
-<a id="postGrad-autopage-112"></a>
-
-
-<a id="python-commands"></a>
-<h5 id="autosec-113">Gitlab Runner Config</h5>
-<a id="postGrad-autopage-113"></a>
-
-
-<a id="gitlab-runner-config"></a>
-
-<p>
-Remember to
-</p>
-<pre class="verbatim">
-sudo chmod +x /etc/gitlab-runner/config.toml
-</code>
-</pre>
-
-<h5 id="autosec-115">Node</h5>
-<a id="postGrad-autopage-115"></a>
-
-
-<a id="node"></a>
-<pre class="verbatim">
-npm cache clean -f
-</code>
-</pre>
-
-<h5 id="autosec-117">Ubuntu &amp; Linux</h5>
-<a id="postGrad-autopage-117"></a>
-
-
-<a id="ubuntu-linux"></a>
-
-<p>
-Get csv nth csv column, for first column and quotes.csv
+Setting on felgo cloud builds was a pain, but somehow I managed to do it.
 </p>
 
 <p>
-..code-block:: awk -F ""<em>,"</em>" ’{print &#x00024;1 ","}’ quotes.csv
+Need to tag that particular release, the problem was a mix of license code, the way numbering works for felgo among other things.
 </p>
 
 <p>
-STorage at C:UsersstudeAppDataLocalPackagesCanonicalGroupLimited.Ubuntu18.04onWindows_79rhkp1fndgscLocalStaterootfs
+The issue was plugins I did not need, but were added in.
 </p>
 
 <p>
-or C:UsersstudeAppDataLocalPackages&lt;DISTRO&gt;LocalStaterootfs
+Looking into admob for google suggests I need around 2k view/downloads to make money,
 </p>
 
 <p>
-Yes it is possible, just redirect the output to a file:
+Will shove it in hopefully for something to happen.
 </p>
 
 <p>
-..code-block:: shell SomeCommand &gt; SomeFile.txt
+Kinda lazy with the felgo games.
 </p>
 
 <p>
-Or if you want to append data:
+Get https://switch-xci.com/fire-emblem-three-houses-switch-nsp-xci
 </p>
 
 <p>
-..code-block:: shell SomeCommand &gt;&gt; SomeFile.txt
+Download Utorrent
 </p>
 
 <p>
-..code-block:: shell taskkill /im node.exe
+Download Yuzu
 </p>
-<pre class="verbatim">
 
+<p>
+https://www.youtube.com/watch?v=bGNBnPSNa8c
+</p>
 
-</code>
-</pre>
+<p>
+Install Virtual Audio Cable
+</p>
 
-<pre class="verbatim">
-
-
-</code>
-</pre>
+<p>
+https://www.microsoft.com/en-us/download/details.aspx?id=48145
+</p>
 
 
 </section>

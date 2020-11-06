@@ -1,7 +1,7 @@
 % Contains various notes from coding interviews from companies
 % including kpmg
 
-
+\chapter{Interviews}
 KPMG interview
 \textbf{Web application in twitter - not going todo this in 24 hours}
 
@@ -26,7 +26,7 @@ a Tweet is posted from another instance of the web client, the Tweet should show
 web client automatically without reloading.
 = (Bonus) Build this application using serverless technology (e.g. Azure functions)
 
-\begin{listing}[caption={SQL Query for KPMG Interview}]
+\begin{lstlisting}[caption={SQL Query for KPMG Interview}]
 CREATE TABLE products (
 productCode varchar(255),
 productName varchar(255),
@@ -56,10 +56,10 @@ VALUES ('1678',
 'Motorcycles',
 '1:10',
 'Red Start Diecast Model features, official Harley Davidson logos and insignias, detachable rear wheelie bar, heavy diecast metal with resin parts, authentic multi-color tampo-printed graphics');
-\end{listing}
+\end{lstlisting}
 
 The answer using TOP 1 Using microsoft SQL server
-\begin{listing}[caption={SQL Query for KPMG Interview -- Answer}]
+\begin{lstlisting}[caption={SQL Query for KPMG Interview -- Answer}]
 SELECT TOP 1 *
 FROM (
   SELECT TOP 2 * 
@@ -67,4 +67,4 @@ FROM (
   ORDER BY productCode
 ) z
 ORDER BY productCode DESC
-\end{listing}
+\end{lstlisting}
