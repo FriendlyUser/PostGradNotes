@@ -15,13 +15,13 @@
 <script src="prism.js" type="text/javascript"> </script>
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
-
 <script>
 // Lwarp MathJax emulation code
 //
 // Based on code by Davide P. Cervone.
 // Equation numbering: https://github.com/mathjax/MathJax/issues/2427
 // Starred and ifnextchar macros: https://github.com/mathjax/MathJax/issues/2428
+// \left, \right delimiters: https://github.com/mathjax/MathJax/issues/2535
 //
 // Modified by Brian Dunn to adjust equation numbering and add subequations.
 //
@@ -31,127 +31,165 @@
 // number is auto-incremented by MathJax between equations.
 //
 MathJax = {
-     subequations: "0",
-     section: "",
-     loader: {
-         load: ['[tex]/tagformat', '[tex]/textmacros'],
-     },
-     startup: {
-         ready() {
-             //       These would be replaced by import commands if you wanted to make
-             //       a proper extension.
-             const Configuration = MathJax._.input.tex.Configuration.Configuration;
-             const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
-             const Macro = MathJax._.input.tex.Symbol.Macro;
-             const TexError = MathJax._.input.tex.TexError.default;
-             const ParseUtil = MathJax._.input.tex.ParseUtil.default;
-             const expandable = MathJax._.util.Options.expandable;
+  subequations: "0",
+  section: "",
+  loader: {
+    load: ['[tex]/tagformat', '[tex]/textmacros'],
+  },
+  startup: {
+    ready() {
+      // These would be replaced by import commands if you wanted to make
+      // a proper extension.
+      const Configuration = MathJax._.input.tex.Configuration.Configuration;
+      const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
+      const Macro = MathJax._.input.tex.Symbol.Macro;
+      const TexError = MathJax._.input.tex.TexError.default;
+      const ParseUtil = MathJax._.input.tex.ParseUtil.default;
+      const expandable = MathJax._.util.Options.expandable;
 
+        // Insert the replacement string into the TeX string, and check
+        // that there haven't been too many maxro substitutions (prevents
+        // infinite loops).
+        const useArgument = (parser, text) => {
+          parser.string = ParseUtil.addArgs(parser, text, parser.string.slice(parser.i));
+          parser.i = 0;
+          if (++parser.macroCount > parser.configuration.options.maxMacros) {
+            throw new TexError('MaxMacroSub1',
+            'MathJax maximum macro substitution count exceeded; ' +
+            'is there a recursive macro call?');
+          }
+        }
 
-             //       Insert the replacement string into the TeX string, and check
-             //       that there haven't been too many maxro substitutions (prevents
-             //       infinite loops).
-             const useArgument = (parser, text) => {
-                  parser.string = ParseUtil.addArgs(parser, text, parser.string.slice(parser.i));
-                  parser.i = 0;
-                  if (++parser.macroCount > parser.configuration.options.maxMacros) {
-                      throw new TexError('MaxMacroSub1',
-                      'MathJax maximum macro substitution count exceeded; ' +
-                      'is there a recursive macro call?');
-                  }
-             }
+        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
+        new CommandMap('ifstar-ifnextchar-setequnumber', {
+          ifstar: 'IfstarFunction',
+          ifnextchar: 'IfnextcharFunction',
+          seteqnumber: 'SeteqnumberFunction'
+        }, {
+          // This function implements an ifstar macro.
+          IfstarFunction(parser, name) {
+             const resultstar = parser.GetArgument(name);
+             const resultnostar = parser.GetArgument(name);
+             const star = parser.GetStar();                 // true if there is a *
+             useArgument(parser, star ? resultstar : resultnostar);
+          },
 
+          // This function implements an ifnextchar macro.
+          IfnextcharFunction(parser, name) {
+            let whichchar = parser.GetArgument(name);
+            if (whichchar.match(/^(?:0x[0-9A-F]+|[0-9]+)$/i)) {
+              // $ syntax highlighting
+              whichchar = String.fromCodePoint(parseInt(whichchar));
+            }
+            const resultnextchar = parser.GetArgument(name);
+            const resultnotnextchar = parser.GetArgument(name);
+            const gotchar = (parser.GetNext() === whichchar);
+            useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
+          },
 
-             //       Create the command map for \ifstar, \ifnextchar, \seteqnumber
-             new CommandMap('ifstar-ifnextchar-setequnumber', {
-                  ifstar: 'IfstarFunction',
-                  ifnextchar: 'IfnextcharFunction',
-                  seteqnumber: 'SeteqnumberFunction'
-             }, {
-                  //      This function implements an ifstar macro.
-                  IfstarFunction(parser, name) {
-                      const resultstar = parser.GetArgument(name);
-                      const resultnostar = parser.GetArgument(name);
-                      const star = parser.GetStar();                        // true if there is a *
-                      useArgument(parser, star ? resultstar : resultnostar);
-                  },
+          // This function modifies the equation numbers.
+          SeteqnumberFunction(parser, name) {
+              // Get the macro parameters
+              const star = parser.GetStar();                  // true if there is a *
+              const optBrackets = parser.GetBrackets(name);   // contents of optional brackets
+              const newsubequations = parser.GetArgument(name); // the subequations argument
+              const neweqsection = parser.GetArgument(name); // the eq section argument
+              const neweqnumber = parser.GetArgument(name);   // the eq number argument
+              MathJax.config.subequations=newsubequations ;   // a string with boolean meaning
+              MathJax.config.section=neweqsection ;           // a string with numeric meaning
+              parser.tags.counter = parser.tags.allCounter = neweqnumber ;
+          }
 
+        });
 
-                  //      This function implements an ifnextchar macro.
-                  IfnextcharFunction(parser, name) {
-                      let whichchar = parser.GetArgument(name);
-                      if (whichchar.match(/^(?:0x[0-9A-F]+|[0-9]+)$/i)) {
-                          // $ syntax highlighting
-                          whichchar = String.fromCodePoint(parseInt(whichchar));
-                      }
-                      const resultnextchar = parser.GetArgument(name);
-                      const resultnotnextchar = parser.GetArgument(name);
-                      const gotchar = (parser.GetNext() === whichchar);
-                      useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
-                  },
+        // Create the ifstar-ifnextchar-setequnumber package
+        Configuration.create('ifstar-ifnextchar-setequnumber', {
+          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        });
 
+        MathJax.startup.defaultReady();
 
-                  //      This function modifies the equation numbers.
-                  SeteqnumberFunction(parser, name) {
-                          //   Get the macro parameters
-                          const star = parser.GetStar();                       // true if there is a *
-                          const optBrackets = parser.GetBrackets(name);        // contents of optional brackets
-                          const newsubequations = parser.GetArgument(name);       // the subequations argument
-                          const neweqsection = parser.GetArgument(name);       // the eq section argument
-                          const neweqnumber = parser.GetArgument(name);        // the eq number argument
-                          MathJax.config.subequations=newsubequations ;        // a string with boolean meaning
-                          MathJax.config.section=neweqsection ;                // a string with numeric meaning
-                          parser.tags.counter = parser.tags.allCounter = neweqnumber ;
-                  }
-             });
+        // For forward references:
+        MathJax.startup.input[0].preFilters.add(({math}) => {
+          if (math.inputData.recompile){
+              MathJax.config.subequations = math.inputData.recompile.subequations;
+              MathJax.config.section = math.inputData.recompile.section;
+          }
+        });
+        MathJax.startup.input[0].postFilters.add(({math}) => {
+          if (math.inputData.recompile){
+              math.inputData.recompile.subequations = MathJax.config.subequations;
+              math.inputData.recompile.section = MathJax.config.section;
+          }
+        });
 
+          // For \left, \right with unicode-math:
+          const {DelimiterMap} = MathJax._.input.tex.SymbolMap;
+          const {Symbol} = MathJax._.input.tex.Symbol;
+          const {MapHandler} = MathJax._.input.tex.MapHandler;
+          const delimiter = MapHandler.getMap('delimiter');
+          delimiter.add('\\lBrack', new Symbol('\\lBrack', '\u27E6'));
+          delimiter.add('\\rBrack', new Symbol('\\rBrack', '\u27E7'));
+          delimiter.add('\\lAngle', new Symbol('\\lAngle', '\u27EA'));
+          delimiter.add('\\rAngle', new Symbol('\\rAngle', '\u27EB'));
+          delimiter.add('\\lbrbrak', new Symbol('\\lbrbrak', '\u2772'));
+          delimiter.add('\\rbrbrak', new Symbol('\\rbrbrak', '\u2773'));
+          delimiter.add('\\lbag', new Symbol('\\lbag', '\u27C5'));
+          delimiter.add('\\rbag', new Symbol('\\rbag', '\u27C6'));
+          delimiter.add('\\llparenthesis', new Symbol('\\llparenthesis', '\u2987'));
+          delimiter.add('\\rrparenthesis', new Symbol('\\rrparenthesis', '\u2988'));
+          delimiter.add('\\llangle', new Symbol('\\llangle', '\u2989'));
+          delimiter.add('\\rrangle', new Symbol('\\rrangle', '\u298A'));
+          delimiter.add('\\Lbrbrak', new Symbol('\\Lbrbrak', '\u27EC'));
+          delimiter.add('\\Rbrbrak', new Symbol('\\Rbrbrak', '\u27ED'));
+          delimiter.add('\\lBrace', new Symbol('\\lBrace', '\u2983'));
+          delimiter.add('\\rBrace', new Symbol('\\rBrace', '\u2984'));
+          delimiter.add('\\lParen', new Symbol('\\lParen', '\u2985'));
+          delimiter.add('\\rParen', new Symbol('\\rParen', '\u2986'));
+          delimiter.add('\\lbrackubar', new Symbol('\\lbrackubar', '\u298B'));
+          delimiter.add('\\rbrackubar', new Symbol('\\rbrackubar', '\u298C'));
+          delimiter.add('\\lbrackultick', new Symbol('\\lbrackultick', '\u298D'));
+          delimiter.add('\\rbracklrtick', new Symbol('\\rbracklrtick', '\u298E'));
+          delimiter.add('\\lbracklltick', new Symbol('\\lbracklltick', '\u298F'));
+          delimiter.add('\\rbrackurtick', new Symbol('\\rbrackurtick', '\u2990'));
+          delimiter.add('\\langledot', new Symbol('\\langledot', '\u2991'));
+          delimiter.add('\\rangledot', new Symbol('\\rangledot', '\u2992'));
+          delimiter.add('\\lparenless', new Symbol('\\lparenless', '\u2993'));
+          delimiter.add('\\rparengtr', new Symbol('\\rparengtr', '\u2994'));
+          delimiter.add('\\Lparengtr', new Symbol('\\Lparengtr', '\u2995'));
+          delimiter.add('\\Rparenless', new Symbol('\\Rparenless', '\u2996'));
+          delimiter.add('\\lblkbrbrak', new Symbol('\\lblkbrbrak', '\u2997'));
+          delimiter.add('\\rblkbrbrak', new Symbol('\\rblkbrbrak', '\u2998'));
+          delimiter.add('\\lvzigzag', new Symbol('\\lvzigzag', '\u29D8'));
+          delimiter.add('\\rvzigzag', new Symbol('\\rvzigzag', '\u29D9'));
+          delimiter.add('\\Lvzigzag', new Symbol('\\Lvzigzag', '\u29DA'));
+          delimiter.add('\\Rvzigzag', new Symbol('\\Rvzigzag', '\u29DB'));
+          delimiter.add('\\lcurvyangle', new Symbol('\\lcurvyangle', '\u29FC'));
+          delimiter.add('\\rcurvyangle', new Symbol('\\rcurvyangle', '\u29FD'));
+          delimiter.add('\\Vvert', new Symbol('\\Vvert', '\u2980'));
+    }     // ready
+  },      // startup
 
-             //       Create the ifstar-ifnextchar-setequnumber package
-             Configuration.create('ifstar-ifnextchar-setequnumber', {
-                  handler: {macro: ['ifstar-ifnextchar-setequnumber']}
-             });
-
-
-             MathJax.startup.defaultReady();
-
-
-             // For forward references:
-             MathJax.startup.input[0].preFilters.add(({math}) => {
-                  if (math.inputData.recompile){
-                          MathJax.config.subequations = math.inputData.recompile.subequations;
-                          MathJax.config.section = math.inputData.recompile.section;
-                  }
-             });
-             MathJax.startup.input[0].postFilters.add(({math}) => {
-                  if (math.inputData.recompile){
-                          math.inputData.recompile.subequations = MathJax.config.subequations;
-                          math.inputData.recompile.section = MathJax.config.section;
-                  }
-             });
-         }       // ready
-     },           // startup
-
-
-     tex: {
-         packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
-         tags: "ams",
-                  tagformat: {
-                          number: function (n) {
-                               if(MathJax.config.subequations==0)
-                                      return(MathJax.config.section + n);
-                               else
-                                      return(MathJax.config.section + String.fromCharCode(96+n));
-                          },
-                  },
-     }
+  tex: {
+    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    tags: "ams",
+         tagformat: {
+             number: function (n) {
+                 if(MathJax.config.subequations==0)
+                     return(MathJax.config.section + n);
+                 else
+                     return(MathJax.config.section + String.fromCharCode(96+n));
+             },
+         },
+  }
 }
 </script>
 
-
 <script
-         id="MathJax-script"
-         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+    id="MathJax-script"
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
 ></script>
+
 </head>
 <body>
 
@@ -517,7 +555,6 @@ Listing&nbsp;1.2:&nbsp;Golang Program
 <pre><code class = "language-go">
 package main
 
-
 import (
 "fmt"
 "io/ioutil"
@@ -545,94 +582,88 @@ print(os.getcwd())
 lwarpFiles = []
 dir_list = os.listdir()
 for full_file_name in dir_list:
-   base_nameTemp, extensionTemp = os.path.splitext(full_file_name)
-   if extensionTemp == &apos;.html&apos;: # then .pdf file --&gt; convert to image!
-          lwarpFiles.append(full_file_name)
-
+    base_nameTemp , extensionTemp = os.path.splitext( full_file_name )
+    if extensionTemp == &apos;.html&apos;: # then .pdf file --&gt; convert to image!
+        lwarpFiles.append( full_file_name )
 
 import re
 directory = &apos;docs&apos;
 if not os.path.exists(directory):
-   os.makedirs(directory)
+    os.makedirs(directory)
 for outputFile in lwarpFiles:
-   try:
-          base_nameTemp, extensionTemp = os.path.splitext(outputFile)
-          finalOutputName = base_nameTemp + extensionTemp
-          htmlFile = open(outputFile ,&apos;r&apos;,encoding=&apos;utf-8&apos;)
-          htmlSyntaxFile = open(directory + r&apos;/&apos; +finalOutputName,&apos;w&apos;,encoding=&apos;utf-8&apos;)
-   except OSError:
-          print(&apos;Cannot open files, probably because they are being used. \n&apos;)
-          pass
-   # include prismCss and prismjs in the final html final, consider merging the existing css file with prism.css
-   prismCss = r&apos;&lt;link rel="stylesheet" href="prism.css" type="text/css"&gt;&apos;
-   prismJs = r&apos;&lt;script src="prism.js" type="text/javascript"&gt; &lt;/script&gt;&apos;
+    try:
+         base_nameTemp , extensionTemp = os.path.splitext(outputFile)
+         finalOutputName = base_nameTemp + extensionTemp
+         htmlFile = open(outputFile ,&apos;r&apos;,encoding=&apos;utf-8&apos;)
+         htmlSyntaxFile = open(directory + r&apos;/&apos; + finalOutputName ,&apos;w&apos;,encoding=&apos;utf-8&apos;)
+    except OSError:
+         print(&apos;Cannot open files, probably because they are being used. \n&apos;)
+         pass
+    # include prismCss and prismjs in the final html final, consider merging the existing css file with prism.css
+    prismCss = r&apos;&lt;link rel="stylesheet" href="prism.css" type="text/css"&gt;&apos;
+    prismJs = r&apos;&lt;script src="prism.js" type="text/javascript"&gt; &lt;/script&gt;&apos;
 
+    # Replace the lwarp &lt;pre class=" programlisting " &gt;
+    # with something that works for prism
+    lwarpCodeSyn = r&apos;&lt;pre class=" programlisting "&gt;&apos;
+    lwarpCodeVerb = r&apos;&lt;pre class="verbatim"&gt;&apos;
+    matlab ="language-matlab"
+    latex = "language-latex"
+    python = "language-python"
+    cplusplus = "language-cpp"
+    json = "language-json"
+    bash = "language-bash"
+    yaml = "language-yaml"
+    golang = "language-go"
+    js = "language-javascript"
+    sql = "language-sql"
+    # Go through each even entry in replacements and then check if a replacement should happen
+    replacementTerms = ["Cpp", cplusplus, "Latex␣Code", latex, "Python␣Script", python,
+        "Bash␣Script", bash,"Matlab␣Script", matlab,"Yaml␣File", yaml,
+        "JSON␣Output", json, "Golang", golang, "Javascript␣Program", js,
+        "SQL␣Query", sql, "spaCy", python]
+    prismVerbCodeSyn = r&apos;&lt;pre&gt;&lt;code class = "&apos;␣+␣latex␣+␣r&apos;"&gt;&apos;
+    prismCodeSyn = r&apos;&lt;pre&gt;&lt;code class = "&apos;␣+␣cplusplus␣+␣r&apos;"&gt;&apos;
 
-   # Replace the lwarp &lt;pre class="programlisting" &gt;
-   # with something that works for prism
-   lwarpCodeSyn = r&apos;&lt;pre class="programlisting"&gt;&apos;
-   lwarpCodeVerb = r&apos;&lt;pre class="verbatim"&gt;&apos;
-   matlab ="language-matlab"
-   latex = "language-latex"
-   python = "language-python"
-   cplusplus = "language-cpp"
-   json = "language-json"
-   bash = "language-bash"
-   yaml = "language-yaml"
-   golang = "language-go"
-   js = "language-javascript"
-   sql = "language-sql"
-   # Go through each even entry in replacements and then check if a replacement should happen
-   replacementTerms = ["Cpp", cplusplus, "Latex␣Code", latex, "Python␣Script", python,
-          "Bash␣Script", bash,"Matlab␣Script", matlab,"Yaml␣File", yaml,
-          "JSON␣Output", json, "Golang", golang, "Javascript␣Program", js,
-          "SQL␣Query", sql, "spaCy", python]
-   prismVerbCodeSyn = r&apos;&lt;pre&gt;&lt;code class = "&apos;␣+␣latex␣+␣r&apos;"&gt;&apos;
-   prismCodeSyn = r&apos;&lt;pre&gt;&lt;code class = "&apos;␣+␣cplusplus␣+␣r&apos;"&gt;&apos;
-
-
-   # Determines if the next pre tag should be changed
-   changeNextPre = False
-   #replacementLine = ""
-   for line in htmlFile:
-          # Include prism.js and prism.css after the title in the html document
-          newline = re.sub(r&apos;&lt;/title&gt;&apos;,r&apos;&lt;/title&gt;&apos; + &apos;\n&apos; + prismCss + &apos;\n&apos; + prismJs, line)
-
+    # Determines if the next pre tag should be changed
+    changeNextPre = False
+    # replacementLine = ""
+    for line in htmlFile:
+         # Include prism.js and prism.css after the title in the html document
+         newline = re.sub(r&apos;&lt;/title&gt;&apos;,r&apos;&lt;/title&gt;&apos; + &apos;\n&apos; + prismCss + &apos;\n&apos; + prismJs, line)
 
           # CHange if the next pre tag should be changed, if it is not true already.
           if changeNextPre == False:
-             for i in range (0, int(len(replacementTerms)/2)):
-                  # match only matches from the beginning of the string. Your code works fine if you do pct_re.search(line) instead. See https://stackoverflow.com/questions/17680631/python-regular-expression-not-matching
-                  pattern = re.compile(replacementTerms[i*2])
+              for i in range (0, int(len( replacementTerms )/2)):
+                  # match only matches from the beginning of the string. Your code works fine if you do pct_re.search(line) instead. See https:// stackoverflow .com/questions /17680631/ python-regular-expression-not-matching
+                  pattern = re.compile( replacementTerms [i*2])
                   changeNextPre = bool(re.search(pattern,newline))
-                  #print(r&apos;&lt;p&gt;&apos;+replacementTerms[i*2])
-                  if changeNextPre:
-                     #print("Match Found")
-                     replacementLine = r&apos;&lt;pre&gt;&lt;code class = "&apos;␣+␣replacementTerms[2*i+1]␣+␣r&apos;"&gt;&apos;
-                     #print(replacementTerms)
-                     break
-
+                  #print(r&apos;&lt;p&gt;&apos;+ replacementTerms [i*2])
+                  if changeNextPre :
+                      #print("Match Found")
+                      replacementLine = r&apos;&lt;pre&gt;&lt;code class = "&apos;␣+␣ replacementTerms [2*i+1]␣+␣r&apos;"&gt;&apos;
+                      #print( replacementTerms )
+                      break
 
           ## get code syntax highlighting
           if changeNextPre == False:
-             # Assume matlab is being used
-             newline = re.sub(lwarpCodeSyn, prismCodeSyn, newline)
+              # Assume matlab is being used
+              newline = re.sub(lwarpCodeSyn, prismCodeSyn, newline)
           else:
-             templine = re.subn(lwarpCodeSyn, replacementLine,newline)
-             newline = templine[0]
-             # if a match occurs reset changeNextPre to false
-             if templine[1] &gt;0:
+              templine = re.subn(lwarpCodeSyn, replacementLine ,newline)
+              newline = templine[0]
+              # if a match occurs reset changeNextPre to false
+              if templine[1] &gt; 0:
                   changeNextPre = False
           ## since a new code tag is introduced it must be closed
           newline = re.sub(r&apos;&lt;/pre&gt;&apos;,r&apos;&lt;/code&gt;&apos; + &apos;\n&apos; + r&apos;&lt;/pre&gt;&apos; + &apos;\n&apos;, newline)
           # account for new problem of &lt;pre class="verbatim" &gt;
-          #newline = re.sub( lwarpCodeVerb, prismVerbCodeSyn, newline)
-          htmlSyntaxFile.write(str(newline))
+          #newline = re.sub( lwarpCodeVerb , prismVerbCodeSyn , newline)
+          htmlSyntaxFile .write(str(newline))
           #print(newline)
 
-
-   htmlFile.close()
-   htmlSyntaxFile.close()
+    htmlFile.close()
+    htmlSyntaxFile .close()
 print(&apos;Script is Done creating files&apos;)
 </code>
 </pre>

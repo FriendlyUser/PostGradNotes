@@ -15,13 +15,13 @@
 <script src="prism.js" type="text/javascript"> </script>
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
-
 <script>
 // Lwarp MathJax emulation code
 //
 // Based on code by Davide P. Cervone.
 // Equation numbering: https://github.com/mathjax/MathJax/issues/2427
 // Starred and ifnextchar macros: https://github.com/mathjax/MathJax/issues/2428
+// \left, \right delimiters: https://github.com/mathjax/MathJax/issues/2535
 //
 // Modified by Brian Dunn to adjust equation numbering and add subequations.
 //
@@ -31,127 +31,165 @@
 // number is auto-incremented by MathJax between equations.
 //
 MathJax = {
-     subequations: "0",
-     section: "",
-     loader: {
-         load: ['[tex]/tagformat', '[tex]/textmacros'],
-     },
-     startup: {
-         ready() {
-             //       These would be replaced by import commands if you wanted to make
-             //       a proper extension.
-             const Configuration = MathJax._.input.tex.Configuration.Configuration;
-             const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
-             const Macro = MathJax._.input.tex.Symbol.Macro;
-             const TexError = MathJax._.input.tex.TexError.default;
-             const ParseUtil = MathJax._.input.tex.ParseUtil.default;
-             const expandable = MathJax._.util.Options.expandable;
+  subequations: "0",
+  section: "",
+  loader: {
+    load: ['[tex]/tagformat', '[tex]/textmacros'],
+  },
+  startup: {
+    ready() {
+      // These would be replaced by import commands if you wanted to make
+      // a proper extension.
+      const Configuration = MathJax._.input.tex.Configuration.Configuration;
+      const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
+      const Macro = MathJax._.input.tex.Symbol.Macro;
+      const TexError = MathJax._.input.tex.TexError.default;
+      const ParseUtil = MathJax._.input.tex.ParseUtil.default;
+      const expandable = MathJax._.util.Options.expandable;
 
+        // Insert the replacement string into the TeX string, and check
+        // that there haven't been too many maxro substitutions (prevents
+        // infinite loops).
+        const useArgument = (parser, text) => {
+          parser.string = ParseUtil.addArgs(parser, text, parser.string.slice(parser.i));
+          parser.i = 0;
+          if (++parser.macroCount > parser.configuration.options.maxMacros) {
+            throw new TexError('MaxMacroSub1',
+            'MathJax maximum macro substitution count exceeded; ' +
+            'is there a recursive macro call?');
+          }
+        }
 
-             //       Insert the replacement string into the TeX string, and check
-             //       that there haven't been too many maxro substitutions (prevents
-             //       infinite loops).
-             const useArgument = (parser, text) => {
-                  parser.string = ParseUtil.addArgs(parser, text, parser.string.slice(parser.i));
-                  parser.i = 0;
-                  if (++parser.macroCount > parser.configuration.options.maxMacros) {
-                      throw new TexError('MaxMacroSub1',
-                      'MathJax maximum macro substitution count exceeded; ' +
-                      'is there a recursive macro call?');
-                  }
-             }
+        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
+        new CommandMap('ifstar-ifnextchar-setequnumber', {
+          ifstar: 'IfstarFunction',
+          ifnextchar: 'IfnextcharFunction',
+          seteqnumber: 'SeteqnumberFunction'
+        }, {
+          // This function implements an ifstar macro.
+          IfstarFunction(parser, name) {
+             const resultstar = parser.GetArgument(name);
+             const resultnostar = parser.GetArgument(name);
+             const star = parser.GetStar();                 // true if there is a *
+             useArgument(parser, star ? resultstar : resultnostar);
+          },
 
+          // This function implements an ifnextchar macro.
+          IfnextcharFunction(parser, name) {
+            let whichchar = parser.GetArgument(name);
+            if (whichchar.match(/^(?:0x[0-9A-F]+|[0-9]+)$/i)) {
+              // $ syntax highlighting
+              whichchar = String.fromCodePoint(parseInt(whichchar));
+            }
+            const resultnextchar = parser.GetArgument(name);
+            const resultnotnextchar = parser.GetArgument(name);
+            const gotchar = (parser.GetNext() === whichchar);
+            useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
+          },
 
-             //       Create the command map for \ifstar, \ifnextchar, \seteqnumber
-             new CommandMap('ifstar-ifnextchar-setequnumber', {
-                  ifstar: 'IfstarFunction',
-                  ifnextchar: 'IfnextcharFunction',
-                  seteqnumber: 'SeteqnumberFunction'
-             }, {
-                  //      This function implements an ifstar macro.
-                  IfstarFunction(parser, name) {
-                      const resultstar = parser.GetArgument(name);
-                      const resultnostar = parser.GetArgument(name);
-                      const star = parser.GetStar();                        // true if there is a *
-                      useArgument(parser, star ? resultstar : resultnostar);
-                  },
+          // This function modifies the equation numbers.
+          SeteqnumberFunction(parser, name) {
+              // Get the macro parameters
+              const star = parser.GetStar();                  // true if there is a *
+              const optBrackets = parser.GetBrackets(name);   // contents of optional brackets
+              const newsubequations = parser.GetArgument(name); // the subequations argument
+              const neweqsection = parser.GetArgument(name); // the eq section argument
+              const neweqnumber = parser.GetArgument(name);   // the eq number argument
+              MathJax.config.subequations=newsubequations ;   // a string with boolean meaning
+              MathJax.config.section=neweqsection ;           // a string with numeric meaning
+              parser.tags.counter = parser.tags.allCounter = neweqnumber ;
+          }
 
+        });
 
-                  //      This function implements an ifnextchar macro.
-                  IfnextcharFunction(parser, name) {
-                      let whichchar = parser.GetArgument(name);
-                      if (whichchar.match(/^(?:0x[0-9A-F]+|[0-9]+)$/i)) {
-                          // $ syntax highlighting
-                          whichchar = String.fromCodePoint(parseInt(whichchar));
-                      }
-                      const resultnextchar = parser.GetArgument(name);
-                      const resultnotnextchar = parser.GetArgument(name);
-                      const gotchar = (parser.GetNext() === whichchar);
-                      useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
-                  },
+        // Create the ifstar-ifnextchar-setequnumber package
+        Configuration.create('ifstar-ifnextchar-setequnumber', {
+          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        });
 
+        MathJax.startup.defaultReady();
 
-                  //      This function modifies the equation numbers.
-                  SeteqnumberFunction(parser, name) {
-                          //   Get the macro parameters
-                          const star = parser.GetStar();                       // true if there is a *
-                          const optBrackets = parser.GetBrackets(name);        // contents of optional brackets
-                          const newsubequations = parser.GetArgument(name);       // the subequations argument
-                          const neweqsection = parser.GetArgument(name);       // the eq section argument
-                          const neweqnumber = parser.GetArgument(name);        // the eq number argument
-                          MathJax.config.subequations=newsubequations ;        // a string with boolean meaning
-                          MathJax.config.section=neweqsection ;                // a string with numeric meaning
-                          parser.tags.counter = parser.tags.allCounter = neweqnumber ;
-                  }
-             });
+        // For forward references:
+        MathJax.startup.input[0].preFilters.add(({math}) => {
+          if (math.inputData.recompile){
+              MathJax.config.subequations = math.inputData.recompile.subequations;
+              MathJax.config.section = math.inputData.recompile.section;
+          }
+        });
+        MathJax.startup.input[0].postFilters.add(({math}) => {
+          if (math.inputData.recompile){
+              math.inputData.recompile.subequations = MathJax.config.subequations;
+              math.inputData.recompile.section = MathJax.config.section;
+          }
+        });
 
+          // For \left, \right with unicode-math:
+          const {DelimiterMap} = MathJax._.input.tex.SymbolMap;
+          const {Symbol} = MathJax._.input.tex.Symbol;
+          const {MapHandler} = MathJax._.input.tex.MapHandler;
+          const delimiter = MapHandler.getMap('delimiter');
+          delimiter.add('\\lBrack', new Symbol('\\lBrack', '\u27E6'));
+          delimiter.add('\\rBrack', new Symbol('\\rBrack', '\u27E7'));
+          delimiter.add('\\lAngle', new Symbol('\\lAngle', '\u27EA'));
+          delimiter.add('\\rAngle', new Symbol('\\rAngle', '\u27EB'));
+          delimiter.add('\\lbrbrak', new Symbol('\\lbrbrak', '\u2772'));
+          delimiter.add('\\rbrbrak', new Symbol('\\rbrbrak', '\u2773'));
+          delimiter.add('\\lbag', new Symbol('\\lbag', '\u27C5'));
+          delimiter.add('\\rbag', new Symbol('\\rbag', '\u27C6'));
+          delimiter.add('\\llparenthesis', new Symbol('\\llparenthesis', '\u2987'));
+          delimiter.add('\\rrparenthesis', new Symbol('\\rrparenthesis', '\u2988'));
+          delimiter.add('\\llangle', new Symbol('\\llangle', '\u2989'));
+          delimiter.add('\\rrangle', new Symbol('\\rrangle', '\u298A'));
+          delimiter.add('\\Lbrbrak', new Symbol('\\Lbrbrak', '\u27EC'));
+          delimiter.add('\\Rbrbrak', new Symbol('\\Rbrbrak', '\u27ED'));
+          delimiter.add('\\lBrace', new Symbol('\\lBrace', '\u2983'));
+          delimiter.add('\\rBrace', new Symbol('\\rBrace', '\u2984'));
+          delimiter.add('\\lParen', new Symbol('\\lParen', '\u2985'));
+          delimiter.add('\\rParen', new Symbol('\\rParen', '\u2986'));
+          delimiter.add('\\lbrackubar', new Symbol('\\lbrackubar', '\u298B'));
+          delimiter.add('\\rbrackubar', new Symbol('\\rbrackubar', '\u298C'));
+          delimiter.add('\\lbrackultick', new Symbol('\\lbrackultick', '\u298D'));
+          delimiter.add('\\rbracklrtick', new Symbol('\\rbracklrtick', '\u298E'));
+          delimiter.add('\\lbracklltick', new Symbol('\\lbracklltick', '\u298F'));
+          delimiter.add('\\rbrackurtick', new Symbol('\\rbrackurtick', '\u2990'));
+          delimiter.add('\\langledot', new Symbol('\\langledot', '\u2991'));
+          delimiter.add('\\rangledot', new Symbol('\\rangledot', '\u2992'));
+          delimiter.add('\\lparenless', new Symbol('\\lparenless', '\u2993'));
+          delimiter.add('\\rparengtr', new Symbol('\\rparengtr', '\u2994'));
+          delimiter.add('\\Lparengtr', new Symbol('\\Lparengtr', '\u2995'));
+          delimiter.add('\\Rparenless', new Symbol('\\Rparenless', '\u2996'));
+          delimiter.add('\\lblkbrbrak', new Symbol('\\lblkbrbrak', '\u2997'));
+          delimiter.add('\\rblkbrbrak', new Symbol('\\rblkbrbrak', '\u2998'));
+          delimiter.add('\\lvzigzag', new Symbol('\\lvzigzag', '\u29D8'));
+          delimiter.add('\\rvzigzag', new Symbol('\\rvzigzag', '\u29D9'));
+          delimiter.add('\\Lvzigzag', new Symbol('\\Lvzigzag', '\u29DA'));
+          delimiter.add('\\Rvzigzag', new Symbol('\\Rvzigzag', '\u29DB'));
+          delimiter.add('\\lcurvyangle', new Symbol('\\lcurvyangle', '\u29FC'));
+          delimiter.add('\\rcurvyangle', new Symbol('\\rcurvyangle', '\u29FD'));
+          delimiter.add('\\Vvert', new Symbol('\\Vvert', '\u2980'));
+    }     // ready
+  },      // startup
 
-             //       Create the ifstar-ifnextchar-setequnumber package
-             Configuration.create('ifstar-ifnextchar-setequnumber', {
-                  handler: {macro: ['ifstar-ifnextchar-setequnumber']}
-             });
-
-
-             MathJax.startup.defaultReady();
-
-
-             // For forward references:
-             MathJax.startup.input[0].preFilters.add(({math}) => {
-                  if (math.inputData.recompile){
-                          MathJax.config.subequations = math.inputData.recompile.subequations;
-                          MathJax.config.section = math.inputData.recompile.section;
-                  }
-             });
-             MathJax.startup.input[0].postFilters.add(({math}) => {
-                  if (math.inputData.recompile){
-                          math.inputData.recompile.subequations = MathJax.config.subequations;
-                          math.inputData.recompile.section = MathJax.config.section;
-                  }
-             });
-         }       // ready
-     },           // startup
-
-
-     tex: {
-         packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
-         tags: "ams",
-                  tagformat: {
-                          number: function (n) {
-                               if(MathJax.config.subequations==0)
-                                      return(MathJax.config.section + n);
-                               else
-                                      return(MathJax.config.section + String.fromCharCode(96+n));
-                          },
-                  },
-     }
+  tex: {
+    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    tags: "ams",
+         tagformat: {
+             number: function (n) {
+                 if(MathJax.config.subequations==0)
+                     return(MathJax.config.section + n);
+                 else
+                     return(MathJax.config.section + String.fromCharCode(96+n));
+             },
+         },
+  }
 }
 </script>
 
-
 <script
-         id="MathJax-script"
-         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+    id="MathJax-script"
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
 ></script>
+
 </head>
 <body>
 
@@ -405,14 +443,11 @@ Listing&nbsp;2.1:&nbsp;spaCy Basic English NLP
 # Import the English language class
 from spacy.lang.en import English
 
-
 # Create the nlp object
 nlp = English()
 
-
 # Process a text
 doc = nlp("This␣is␣a␣sentence.")
-
 
 # Print the document text
 print(doc.text)
@@ -436,18 +471,14 @@ Listing&nbsp;2.2:&nbsp;spaCy First Token
 # Import the English language class and create the nlp object
 from spacy.lang.en import English
 
-
 # Create the nlp object
 nlp = English()
-
 
 # Process the text
 doc = nlp("I␣like␣tree␣kangaroos␣and␣narwhals.")
 
-
 # Select the first token
 first_token = doc[0]
-
 
 # Print the first token&apos;s text
 print(first_token.text)
@@ -475,11 +506,11 @@ doc = nlp("I␣like␣tree␣kangaroos␣and␣narwhals.")
 âĂŃ
 # A slice of the Doc for "tree kangaroos"
 tree_kangaroos = doc[2:4]
-print(tree_kangaroos.text)
+print( tree_kangaroos .text)
 âĂŃ
 # A slice of the Doc for "tree kangaroos and narwhals" (without the ".")
 tree_kangaroos_and_narwhals = doc[2:-1]
-print(tree_kangaroos_and_narwhals.text)
+print( tree_kangaroos_and_narwhals .text)
 </code>
 </pre>
 
@@ -497,9 +528,7 @@ Listing&nbsp;2.4:&nbsp;spaCy Detect Percentages
 <pre><code class = "language-python">
 from spacy.lang.en import English
 
-
 nlp = English()
-
 
 # Process the text
 doc = nlp(
@@ -507,15 +536,14 @@ doc = nlp(
     "Now␣less␣than␣4%␣are."
 )
 
-
 # Iterate over the tokens in the doc
 for token in doc:
     # Check if the token resembles a number
     if token.like_num:
-         # Get the next token in the document
-         next_token = doc[token.i + 1]
-         # Check if the next token&apos;s text equals "%"
-         if next_token.text == "%":
+        # Get the next token in the document
+        next_token = doc[token.i + 1]
+        # Check if the next token&apos;s text equals "%"
+        if next_token.text == "%":
             print("Percentage␣found:", token.text)
 </code>
 </pre>
@@ -534,17 +562,13 @@ Listing&nbsp;2.5:&nbsp;spaCy Loading Models
 <pre><code class = "language-python">
 import spacy
 
-
-# Load the "en_core_web_sm" model
-nlp = spacy.load("en_core_web_sm")
-
+# Load the " en_core_web_sm " model
+nlp = spacy.load(" en_core_web_sm ")
 
 text = "ItâĂŹs␣official:␣Apple␣is␣the␣first␣U.S.␣public␣company␣to␣reach␣a␣$1␣trillion␣market␣value"
 
-
 # Process the text
 doc = nlp(text)
-
 
 # Print the document text
 print(doc.text)
@@ -572,24 +596,20 @@ Listing&nbsp;2.6:&nbsp;spaCy Linguistic Annotations V1
 <pre><code class = "language-python">
 import spacy
 
-
-nlp = spacy.load("en_core_web_sm")
-
+nlp = spacy.load(" en_core_web_sm ")
 
 text = "ItâĂŹs␣official:␣Apple␣is␣the␣first␣U.S.␣public␣company␣to␣reach␣a␣$1␣trillion␣market␣value"
-
 
 # Process the text
 doc = nlp(text)
 
-
 for token in doc:
-   # Get the token text, part-of-speech tag and dependency label
-   token_text = token.text
-   token_pos = token.pos_
-   token_dep = token.dep_
-   # This is for formatting only
-   print(f"{token_text:&lt;12}{token_pos:&lt;10}{token_dep:&lt;10}")
+    # Get the token text, part-of-speech tag and dependency label
+    token_text = token.text
+    token_pos = token.pos_
+    token_dep = token.dep_
+    # This is for formatting only
+    print(f"{token_text:&lt;12}{token_pos:&lt;10}{token_dep:&lt;10}")
 </code>
 </pre>
 
@@ -605,21 +625,17 @@ Listing&nbsp;2.7:&nbsp;spaCy Linguistic Annotations V2
 <pre><code class = "language-python">
 import spacy
 
-
-nlp = spacy.load("en_core_web_sm")
-
+nlp = spacy.load(" en_core_web_sm ")
 
 text = "ItâĂŹs␣official:␣Apple␣is␣the␣first␣U.S.␣public␣company␣to␣reach␣a␣$1␣trillion␣market␣value"
-
 
 # Process the text
 doc = nlp(text)
 
-
 # Iterate over the predicted entities
 for ent in doc.ents:
-   # Print the entity text and its label
-   print(ent.text, ent.label_)
+    # Print the entity text and its label
+    print(ent.text, ent.label_)
 </code>
 </pre>
 
@@ -637,26 +653,20 @@ Listing&nbsp;2.8:&nbsp;spaCy Linguistic Annotations V2
 <pre><code class = "language-python">
 import spacy
 
-
-nlp = spacy.load("en_core_web_sm")
-
+nlp = spacy.load(" en_core_web_sm ")
 
 text = "Upcoming␣iPhone␣X␣release␣date␣leaked␣as␣Apple␣reveals␣pre-orders"
-
 
 # Process the text
 doc = nlp(text)
 
-
 # Iterate over the entities
 for ent in doc.ents:
-   # Print the entity text and label
-   print(ent.text, ent.label_)
-
+    # Print the entity text and label
+    print(ent.text, ent.label_)
 
 # Get the span for "iPhone X"
 iphone_x = doc[1:3]
-
 
 # Print the span text
 print("Missing␣entity:", iphone_x.text)
@@ -677,26 +687,20 @@ Listing&nbsp;2.9:&nbsp;spaCy Matcher
 <pre><code class = "language-python">
 import spacy
 
-
 # Import the Matcher
 from spacy.matcher import Matcher
 
-
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load(" en_core_web_sm ")
 doc = nlp("Upcoming␣iPhone␣X␣release␣date␣leaked␣as␣Apple␣reveals␣pre-orders")
-
 
 # Initialize the Matcher with the shared vocabulary
 matcher = Matcher(nlp.vocab)
 
-
 # Create a pattern matching two tokens: "iPhone" and "X"
 pattern = [{"TEXT": "iPhone"}, {"TEXT": "X"}]
 
-
 # Add the pattern to the matcher
-matcher.add("IPHONE_X_PATTERN", None, pattern)
-
+matcher.add(" IPHONE_X_PATTERN ", None, pattern)
 
 # Use the matcher on the doc
 matches = matcher(doc)
@@ -717,10 +721,8 @@ Listing&nbsp;2.10:&nbsp;spaCy Writing Matcher
 import spacy
 from spacy.matcher import Matcher
 
-
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load(" en_core_web_sm ")
 matcher = Matcher(nlp.vocab)
-
 
 doc = nlp(
     "After␣making␣the␣iOS␣update␣you␣won&apos;t␣notice␣a␣radical␣system-wide␣"
@@ -729,20 +731,17 @@ doc = nlp(
     "some␣tweaks␣once␣you␣delve␣a␣little␣deeper."
 )
 
-
 # Write a pattern for full iOS versions ("iOS 7", "iOS 11", "iOS 10")
 pattern = [{"TEXT": "iOS"}, {"IS_DIGIT": True}]
 
-
 # Add the pattern to the matcher and apply the matcher to the doc
-matcher.add("IOS_VERSION_PATTERN", None, pattern)
+matcher.add(" IOS_VERSION_PATTERN ", None, pattern)
 matches = matcher(doc)
 print("Total␣matches␣found:", len(matches))
 
-
 # Iterate over the matches and print the span text
 for match_id, start, end in matches:
-   print("Match␣found:", doc[start:end].text)
+    print("Match␣found:", doc[start:end].text)
 </code>
 </pre>
 
@@ -759,10 +758,8 @@ Listing&nbsp;2.11:&nbsp;spaCy Writing Matcher II
 import spacy
 from spacy.matcher import Matcher
 
-
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load(" en_core_web_sm ")
 matcher = Matcher(nlp.vocab)
-
 
 doc = nlp(
     "i␣downloaded␣Fortnite␣on␣my␣laptop␣and␣can&apos;t␣open␣the␣game␣at␣all.␣Help?␣"
@@ -771,20 +768,17 @@ doc = nlp(
     "I␣also␣need␣to␣download␣Winzip?"
 )
 
-
 # Write a pattern that matches a form of "download" plus proper noun
 pattern = [{"LEMMA": "download"}, {"POS": "PROPN"}]
 
-
 # Add the pattern to the matcher and apply the matcher to the doc
-matcher.add("DOWNLOAD_THINGS_PATTERN", None, pattern)
+matcher.add(" DOWNLOAD_THINGS_PATTERN ", None, pattern)
 matches = matcher(doc)
 print("Total␣matches␣found:", len(matches))
 
-
 # Iterate over the matches and print the span text
 for match_id, start, end in matches:
-   print("Match␣found:", doc[start:end].text)
+    print("Match␣found:", doc[start:end].text)
 </code>
 </pre>
 
@@ -801,30 +795,25 @@ Listing&nbsp;2.12:&nbsp;spaCy Writing Matcher III
 import spacy
 from spacy.matcher import Matcher
 
-
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load(" en_core_web_sm ")
 matcher = Matcher(nlp.vocab)
-
 
 doc = nlp(
     "Features␣of␣the␣app␣include␣a␣beautiful␣design,␣smart␣search,␣automatic␣"
     "labels␣and␣optional␣voice␣responses."
 )
 
-
 # Write a pattern for adjective plus one or two nouns
 pattern = [{"POS": "ADJ"}, {"POS": "NOUN"}, {"POS":"NOUN", "OP": "?"}]
 
-
 # Add the pattern to the matcher and apply the matcher to the doc
-matcher.add("ADJ_NOUN_PATTERN", None, pattern)
+matcher.add(" ADJ_NOUN_PATTERN ", None, pattern)
 matches = matcher(doc)
 print("Total␣matches␣found:", len(matches))
 
-
 # Iterate over the matches and print the span text
 for match_id, start, end in matches:
-   print("Match␣found:", doc[start:end].text)
+    print("Match␣found:", doc[start:end].text)
 </code>
 </pre>
 
@@ -842,15 +831,12 @@ Listing&nbsp;2.13:&nbsp;spaCy Cat hash
 <pre><code class = "language-python">
 from spacy.lang.en import English
 
-
 nlp = English()
 doc = nlp("I␣have␣a␣cat")
-
 
 # Look up the hash for the word "cat"
 cat_hash = nlp.vocab.strings["cat"]
 print(cat_hash)
-
 
 # Look up the cat_hash to get the string
 cat_string = nlp.vocab.strings[cat_hash]
@@ -870,19 +856,16 @@ Listing&nbsp;2.14:&nbsp;spaCy Person hash
 <pre><code class = "language-python">
 from spacy.lang.en import English
 
-
 nlp = English()
 doc = nlp("David␣Bowie␣is␣a␣PERSON")
-
 
 # Look up the hash for the string label "PERSON"
 person_hash = nlp.vocab.strings["PERSON"]
 print(person_hash)
 
-
 # Look up the person_hash to get the string
 person_string = nlp.vocab.strings[person_hash]
-print(person_string)
+print( person_string )
 </code>
 </pre>
 
@@ -898,33 +881,26 @@ Listing&nbsp;2.15:&nbsp;spaCy Docs, spans and entities from scratch
 <pre><code class = "language-python">
 from spacy.lang.en import English
 
-
 nlp = English()
-
 
 # Import the Doc and Span classes
 from spacy.tokens import Doc, Span
 
-
 words = ["I", "like", "David", "Bowie"]
 spaces = [True, True, True, False]
-
 
 # Create a doc from the words and spaces
 doc = Doc(nlp.vocab, words=words, spaces=spaces)
 print(doc.text)
 
-
 # Create a span for "David Bowie" from the doc and assign it the label "PERSON"
 span = Span(doc, 2, 4, label="PERSON")
 print(span.text, span.label_)
 
-
 # Add the span to the doc&apos;s entities
 doc.ents = [span]
 
-
-# Print entities&apos; text and labels
+# Print entities &apos; text and labels
 print([(ent.text, ent.label_) for ent in doc.ents])
 </code>
 </pre>
@@ -941,39 +917,33 @@ Listing&nbsp;2.16:&nbsp;spaCy Code rewrite to use spaCy functions
 <pre><code class = "language-python">
 # import spacy
 
-
-# nlp = spacy.load("en_core_web_sm")
+# nlp = spacy.load(" en_core_web_sm ")
 # doc = nlp("Berlin is a nice city")
-
 
 # # Get all tokens and part-of-speech tags
 # token_texts = [token.text for token in doc]
 # pos_tags = [token.pos_ for token in doc]
 
-
 # for index, pos in enumerate(pos_tags):
-   # # Check if the current token is a proper noun
-   # if pos == "PROPN":
-         # # Check if the next token is a verb
-         # if pos_tags[index + 1] == "VERB":
+    # # Check if the current token is a proper noun
+    # if pos == "PROPN":
+        # # Check if the next token is a verb
+        # if pos_tags[index + 1] == "VERB":
             # result = token_texts[index]
             # print("Found proper noun before a verb:", result)
 
-
 import spacy
 
-
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load(" en_core_web_sm ")
 doc = nlp("Berlin␣is␣a␣nice␣city")
-
 
 # Iterate over the tokens
 for token in doc:
-   # Check if the current token is a proper noun
-   if token.pos_ == "PROPN":
-         # Check if the next token is a verb
-         if doc[token.i + 1].pos_ == "VERB":
-            print("Found␣proper␣noun␣before␣a␣verb:", token.text)
+    # Check if the current token is a proper noun
+    if token.pos_ == "PROPN":
+        # Check if the next token is a verb
+        if doc[token.i + 1].pos_ == "VERB":
+               print("Found␣proper␣noun␣before␣a␣verb:", token.text)
 </code>
 </pre>
 
@@ -989,18 +959,15 @@ Listing&nbsp;2.17:&nbsp;spaCy Word Vectors
 <pre><code class = "language-python">
 import spacy
 
-
 # Load the en_core_web_md model
-nlp = spacy.load("en_core_web_md")
-
+nlp = spacy.load(" en_core_web_md ")
 
 # Process a text
 doc = nlp("Two␣bananas␣in␣pyjamas")
 
-
 # Get the vector for the token "bananas"
 bananas_vector = doc[1].vector
-print(bananas_vector)
+print( bananas_vector )
 </code>
 </pre>
 
@@ -1016,13 +983,10 @@ Listing&nbsp;2.18:&nbsp;spaCy Similarities I
 <pre><code class = "language-python">
 import spacy
 
-
-nlp = spacy.load("en_core_web_md")
-
+nlp = spacy.load(" en_core_web_md ")
 
 doc1 = nlp("It&apos;s␣a␣warm␣summer␣day")
 doc2 = nlp("It&apos;s␣sunny␣outside")
-
 
 # Get the similarity of doc1 and doc2
 similarity = doc1.similarity(doc2)
@@ -1042,17 +1006,13 @@ Listing&nbsp;2.19:&nbsp;spaCy Similarities II
 <pre><code class = "language-python">
 import spacy
 
-
-nlp = spacy.load("en_core_web_md")
-
+nlp = spacy.load(" en_core_web_md ")
 
 doc = nlp("This␣was␣a␣great␣restaurant.␣Afterwards,␣we␣went␣to␣a␣really␣nice␣bar.")
-
 
 # Create spans for "great restaurant" and "really nice bar"
 span1 = doc[3:5]
 span2 = doc[-4:-1]
-
 
 # Get the similarity of the spans
 similarity = span1.similarity(span2)
@@ -1073,16 +1033,16 @@ Listing&nbsp;2.20:&nbsp;spaCy Extracting Countries and Relationship
 import spacy
 from spacy.matcher import Matcher
 âĂŃ
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load(" en_core_web_sm ")
 doc = nlp(
-      "Twitch␣Prime,␣the␣perks␣program␣for␣Amazon␣Prime␣members␣offering␣free␣"
-      "loot,␣games␣and␣other␣benefits,␣is␣ditching␣one␣of␣its␣best␣features:␣"
-      "ad-free␣viewing.␣According␣to␣an␣email␣sent␣out␣to␣Amazon␣Prime␣members␣"
-      "today,␣ad-free␣viewing␣will␣no␣longer␣be␣included␣as␣a␣part␣of␣Twitch␣"
-      "Prime␣for␣new␣members,␣beginning␣on␣September␣14.␣However,␣members␣with␣"
-      "existing␣annual␣subscriptions␣will␣be␣able␣to␣continue␣to␣enjoy␣ad-free␣"
-      "viewing␣until␣their␣subscription␣comes␣up␣for␣renewal.␣Those␣with␣"
-      "monthly␣subscriptions␣will␣have␣access␣to␣ad-free␣viewing␣until␣October␣15."
+    "Twitch␣Prime,␣the␣perks␣program␣for␣Amazon␣Prime␣members␣offering␣free␣"
+    "loot,␣games␣and␣other␣benefits,␣is␣ditching␣one␣of␣its␣best␣features:␣"
+    "ad-free␣viewing.␣According␣to␣an␣email␣sent␣out␣to␣Amazon␣Prime␣members␣"
+    "today,␣ad-free␣viewing␣will␣no␣longer␣be␣included␣as␣a␣part␣of␣Twitch␣"
+    "Prime␣for␣new␣members,␣beginning␣on␣September␣14.␣However,␣members␣with␣"
+    "existing␣annual␣ subscriptions ␣will␣be␣able␣to␣continue␣to␣enjoy␣ad-free␣"
+    "viewing␣until␣their␣subscription␣comes␣up␣for␣renewal.␣Those␣with␣"
+    "monthly␣ subscriptions ␣will␣have␣access␣to␣ad-free␣viewing␣until␣October␣15."
 )
 âĂŃ
 # Create the match patterns
@@ -1096,8 +1056,8 @@ matcher.add("PATTERN2", None, pattern2)
 âĂŃ
 # Iterate over the matches
 for match_id, start, end in matcher(doc):
-      # Print pattern string name and text of matched span
-      print(doc.vocab.strings[match_id], doc[start:end].text)
+    # Print pattern string name and text of matched span
+    print(doc.vocab.strings[match_id], doc[start:end].text)
 </code>
 </pre>
 
@@ -1116,39 +1076,32 @@ from spacy.matcher import PhraseMatcher
 from spacy.tokens import Span
 import json
 
-
 with open("exercises/en/countries.json") as f:
-   COUNTRIES = json.loads(f.read())
+    COUNTRIES = json.loads(f.read())
 with open("exercises/en/country_text.txt") as f:
-   TEXT = f.read()
+    TEXT = f.read()
 
-
-nlp = spacy.load("en_core_web_sm")
-matcher = PhraseMatcher(nlp.vocab)
+nlp = spacy.load(" en_core_web_sm ")
+matcher = PhraseMatcher (nlp.vocab)
 patterns = list(nlp.pipe(COUNTRIES))
 matcher.add("COUNTRY", None, *patterns)
-
 
 # Create a doc and reset existing entities
 doc = nlp(TEXT)
 doc.ents = []
 
-
 # Iterate over the matches
 for match_id, start, end in matcher(doc):
-   # Create a Span with the label for "GPE"
-   span = Span(doc, start, end, label="GPE")
+    # Create a Span with the label for "GPE"
+    span = Span(doc, start, end, label="GPE")
 
+    # Overwrite the doc.ents and add the span
+    doc.ents = list(doc.ents) + [span]
 
-   # Overwrite the doc.ents and add the span
-   doc.ents = list(doc.ents) + [span]
-
-
-   # Get the span&apos;s root head token
-   span_root_head = span.root.head
-   # Print the text of the span root&apos;s head token and the span text
-   print(span_root_head.text, "--&gt;", span.text)
-
+    # Get the span&apos;s root head token
+    span_root_head = span.root.head
+    # Print the text of the span root&apos;s head token and the span text
+    print( span_root_head .text, "--&gt;", span.text)
 
 # Print the entities in the document
 print([(ent.text, ent.label_) for ent in doc.ents if ent.label_ == "GPE"])
@@ -1168,27 +1121,21 @@ Listing&nbsp;2.22:&nbsp;spaCy Efficient Phrase
 import json
 from spacy.lang.en import English
 
-
 with open("exercises/en/countries.json") as f:
-   COUNTRIES = json.loads(f.read())
-
+    COUNTRIES = json.loads(f.read())
 
 nlp = English()
 doc = nlp("Czech␣Republic␣may␣help␣Slovakia␣protect␣its␣airspace")
 
-
 # Import the PhraseMatcher and initialize it
 from spacy.matcher import PhraseMatcher
 
-
-matcher = PhraseMatcher(nlp.vocab)
-
+matcher = PhraseMatcher (nlp.vocab)
 
 # Create pattern Doc objects and add them to the matcher
 # This is the faster version of: [nlp(country) for country in COUNTRIES]
 patterns = list(nlp.pipe(COUNTRIES))
 matcher.add("COUNTRY", None, *patterns)
-
 
 # Call the matcher on the test document and print the result
 matches = matcher(doc)
@@ -1210,14 +1157,11 @@ Listing&nbsp;2.23:&nbsp;spaCy Inspecting Code
 <pre><code class = "language-python">
 import spacy
 
-
 # Load the en_core_web_sm model
-nlp = spacy.load("en_core_web_sm")
-
+nlp = spacy.load(" en_core_web_sm ")
 
 # Print the names of the pipeline components
 print(nlp.pipe_names)
-
 
 # Print the full pipeline of (name, component) tuples
 print(nlp.pipeline)
@@ -1236,25 +1180,22 @@ Listing&nbsp;2.24:&nbsp;spaCy Custom Components
 <pre><code class = "language-python">
 import spacy
 
-
 # Define the custom component
-def length_component(doc):
-   # Get the doc&apos;s length
-   doc_length = len(doc)
-   print(f"This␣document␣is␣{doc_length}␣tokens␣long.")
-   # Return the doc
-   return doc
+def length_component (doc):
+    # Get the doc&apos;s length
+    doc_length = len(doc)
+    print(f"This␣document␣is␣{doc_length}␣tokens␣long.")
+    # Return the doc
+    return doc
 
 
 
 # Load the small English model
-nlp = spacy.load("en_core_web_sm")
-
+nlp = spacy.load(" en_core_web_sm ")
 
 # Add the component first in the pipeline and print the pipe names
-nlp.add_pipe(length_component,first=True)
+nlp.add_pipe( length_component ,first=True)
 print(nlp.pipe_names)
-
 
 # Process a text
 doc = nlp("Simple␣Text")
@@ -1275,31 +1216,28 @@ import spacy
 from spacy.matcher import PhraseMatcher
 from spacy.tokens import Span
 
-
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load(" en_core_web_sm ")
 animals = ["Golden␣Retriever", "cat", "turtle", "Rattus␣norvegicus"]
 animal_patterns = list(nlp.pipe(animals))
-print("animal_patterns:", animal_patterns)
-matcher = PhraseMatcher(nlp.vocab)
-matcher.add("ANIMAL", None, *animal_patterns)
-
+print(" animal_patterns :", animal_patterns )
+matcher = PhraseMatcher (nlp.vocab)
+matcher.add("ANIMAL", None, * animal_patterns )
 
 # Define the custom component
-def animal_component(doc):
-   # Apply the matcher to the doc
-   matches = matcher(doc)
-   # Create a Span for each match and assign the label "ANIMAL"
-   spans = [Span(doc, start, end, label="ANIMAL") for match_id, start, end in matches]
-   # Overwrite the doc.ents with the matched spans
-   doc.ents = spans
-   return doc
+def animal_component (doc):
+    # Apply the matcher to the doc
+    matches = matcher(doc)
+    # Create a Span for each match and assign the label "ANIMAL"
+    spans = [Span(doc, start, end, label="ANIMAL") for match_id, start, end in matches]
+    # Overwrite the doc.ents with the matched spans
+    doc.ents = spans
+    return doc
 
 
 
 # Add the component to the pipeline after the "ner" component
-nlp.add_pipe(animal_component, after="ner")
+nlp.add_pipe( animal_component , after="ner")
 print(nlp.pipe_names)
-
 
 # Process the text and print the text and label for the doc.ents
 doc = nlp("I␣have␣a␣cat␣and␣a␣Golden␣Retriever")
@@ -1320,18 +1258,14 @@ Listing&nbsp;2.26:&nbsp;spaCy Extension Attributes 1
 from spacy.lang.en import English
 from spacy.tokens import Token
 
-
 nlp = English()
 
-
 # Register the Token extension attribute "is_country" with the default value False
-Token.set_extension("is_country", default=False)
-
+Token. set_extension ("is_country", default=False)
 
 # Process the text and set the is_country attribute to True for the token "Spain"
 doc = nlp("I␣live␣in␣Spain.")
 doc[3]._.is_country = True
-
 
 # Print the token text and the is_country attribute for all tokens
 print([(token.text, token._.is_country) for token in doc])
@@ -1351,24 +1285,21 @@ Listing&nbsp;2.27:&nbsp;spaCy Extension Attributes 2
 from spacy.lang.en import English
 from spacy.tokens import Token
 
-
 nlp = English()
-
 
 # Define the getter function that takes a token and returns its reversed text
 def get_reversed(token):
-   return token.text[::-1]
+    return token.text[::-1]
 
 
 
 # Register the Token property extension "reversed" with the getter get_reversed
-Token.set_extension("reversed", getter=get_reversed)
-
+Token. set_extension ("reversed", getter=get_reversed)
 
 # Process the text and print the reversed attribute for each token
-doc = nlp("All␣generalizations␣are␣false,␣including␣this␣one.")
+doc = nlp("All␣ generalizations ␣are␣false,␣including␣this␣one.")
 for token in doc:
-   print("reversed:", token._.reversed)
+    print("reversed:", token._.reversed)
 </code>
 </pre>
 
@@ -1385,20 +1316,17 @@ Listing&nbsp;2.28:&nbsp;spaCy Extension Attributes I
 from spacy.lang.en import English
 from spacy.tokens import Doc
 
-
 nlp = English()
 
-
 # Define the getter function
-def get_has_number(doc):
-   # Return if any of the tokens in the doc return True for token.like_num
-   return any(token.like_num for token in doc)
+def get_has_number (doc):
+    # Return if any of the tokens in the doc return True for token.like_num
+    return any(token.like_num for token in doc)
 
 
 
 # Register the Doc property extension "has_number" with the getter get_has_number
-Doc.set_extension("has_number", getter=get_has_number)
-
+Doc. set_extension ("has_number", getter= get_has_number )
 
 # Process the text and check the custom has_number attribute
 doc = nlp("The␣museum␣closed␣for␣five␣years␣in␣2012.")
@@ -1419,20 +1347,17 @@ Listing&nbsp;2.29:&nbsp;spaCy Extension Attributes II
 from spacy.lang.en import English
 from spacy.tokens import Span
 
-
 nlp = English()
-
 
 # Define the method
 def to_html(span, tag):
-   # Wrap the span text in a HTML tag and return it
-   return f"&lt;{tag}&gt;{span.text}&lt;/{tag}&gt;"
+    # Wrap the span text in a HTML tag and return it
+    return f"&lt;{tag}&gt;{span.text}&lt;/{tag}&gt;"
 
 
 
 # Register the Span method extension "to_html" with the method to_html
-Span.set_extension("to_html", method=to_html)
-
+Span. set_extension ("to_html", method=to_html)
 
 # Process the text and call the to_html method on the span with the tag name "strong"
 doc = nlp("Hello␣world,␣this␣is␣a␣sentence.")
@@ -1454,22 +1379,20 @@ Listing&nbsp;2.30:&nbsp;spaCy Entities Extension
 import spacy
 from spacy.tokens import Span
 
-
-nlp = spacy.load("en_core_web_sm")
-
+nlp = spacy.load(" en_core_web_sm ")
 
 
-def get_wikipedia_url(span):
+
+def get_wikipedia_url (span):
     # Get a Wikipedia URL if the span has one of the labels
     if span.label_ in ("PERSON", "ORG", "GPE", "LOCATION"):
-         entity_text = span.text.replace("␣", "_")
-         return "https://en.wikipedia.org/w/index.php?search=" + entity_text
+        entity_text = span.text.replace("␣", "_")
+        return "https://en.wikipedia.org/w/index.php?search=" + entity_text
 
 
 
 # Set the Span extension wikipedia_url using get getter get_wikipedia_url
-Span.set_extension("wikipedia_url", getter=get_wikipedia_url)
-
+Span. set_extension (" wikipedia_url ", getter= get_wikipedia_url )
 
 doc = nlp(
     "In␣over␣fifty␣years␣from␣his␣very␣first␣recordings␣right␣through␣to␣his␣"
@@ -1477,7 +1400,7 @@ doc = nlp(
 )
 for ent in doc.ents:
     # Print the text and Wikipedia URL of the entity
-    print(ent.text, ent._.wikipedia_url
+    print(ent.text, ent._. wikipedia_url
 </code>
 </pre>
 
@@ -1499,27 +1422,22 @@ import json
 from spacy.matcher import Matcher
 from spacy.lang.en import English
 
-
 with open("exercises/en/iphone.json") as f:
-   TEXTS = json.loads(f.read())
-
+    TEXTS = json.loads(f.read())
 
 nlp = English()
 matcher = Matcher(nlp.vocab)
 
-
 # Two tokens whose lowercase forms match "iphone" and "x"
 pattern1 = [{"LOWER": "iphone"}, {"LOWER": "x"}]
-
 
 # Token whose lowercase form matches "iphone" and a digit
 pattern2 = [{"LOWER": "iphone"}, {"IS_DIGIT": True}]
 
-
 # Add patterns to the matcher and check the result
 matcher.add("GADGET", None, pattern1, pattern2)
 for doc in nlp.pipe(TEXTS):
-   print([doc[start:end] for match_id, start, end in matcher(doc)])
+    print([doc[start:end] for match_id, start, end in matcher(doc)])
 </code>
 </pre>
 
@@ -1537,10 +1455,8 @@ import json
 from spacy.matcher import Matcher
 from spacy.lang.en import English
 
-
 with open("exercises/en/iphone.json") as f:
-   TEXTS = json.loads(f.read())
-
+    TEXTS = json.loads(f.read())
 
 nlp = English()
 matcher = Matcher(nlp.vocab)
@@ -1548,22 +1464,21 @@ pattern1 = [{"LOWER": "iphone"}, {"LOWER": "x"}]
 pattern2 = [{"LOWER": "iphone"}, {"IS_DIGIT": True}]
 matcher.add("GADGET", None, pattern1, pattern2)
 
-
 TRAINING_DATA = []
-
 
 # Create a Doc object for each text in TEXTS
 for doc in nlp.pipe(TEXTS):
-   # Match on the doc and create a list of matched spans
-   spans = [doc[start:end] for match_id, start, end in matcher(doc)]
-   # Get (start character, end character, label) tuples of matches
-   entities = [(span.start_char, span.end_char, "GADGET") for span in spans]
-   # Format the matches as a (doc.text, entities) tuple
-   training_example = (doc.text, {"entities": entities})
-   # Append the example to the training data
-   TRAINING_DATA.append(training_example)
+    # Match on the doc and create a list of matched spans
+    spans = [doc[start:end] for match_id, start, end in matcher(doc)]
+    # Get (start character, end character, label) tuples of matches
+    entities = [(span.start_char, span.end_char, "GADGET") for span in spans]
+    # Format the matches as a (doc.text, entities) tuple
+    training_example = (doc.text, {"entities": entities})
+    # Append the example to the training data
+    TRAINING_DATA .append( training_example )
 
-print(*TRAINING_DATA, sep="\n")
+
+print(* TRAINING_DATA , sep="\n")
 </code>
 </pre>
 
@@ -1605,36 +1520,30 @@ import spacy
 import random
 import json
 
-
 with open("exercises/en/gadgets.json") as f:
-      TRAINING_DATA = json.loads(f.read())
-
+    TRAINING_DATA = json.loads(f.read())
 
 nlp = spacy.blank("en")
 ner = nlp.create_pipe("ner")
 nlp.add_pipe(ner)
 ner.add_label("GADGET")
 
-
 # Start the training
-nlp.begin_training()
-
+nlp. begin_training ()
 
 # Loop for 10 iterations
 for itn in range(10):
-      # Shuffle the training data
-      random.shuffle(TRAINING_DATA)
-      losses = {}
-
+    # Shuffle the training data
+    random.shuffle( TRAINING_DATA )
+    losses = {}
 
       # Batch the examples and iterate over them
-      for batch in spacy.util.minibatch(TRAINING_DATA, size=2):
+      for batch in spacy.util.minibatch( TRAINING_DATA , size=2):
           texts = [text for text, entities in batch]
           annotations = [entities for text, entities in batch]
 
-
           # Update the model
-         nlp.update(texts, annotations, losses=losses)
+          nlp.update(texts, annotations, losses=losses)
       print(losses)
 </code>
 </pre>

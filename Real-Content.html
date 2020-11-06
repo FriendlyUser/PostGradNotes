@@ -15,13 +15,13 @@
 <script src="prism.js" type="text/javascript"> </script>
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
-
 <script>
 // Lwarp MathJax emulation code
 //
 // Based on code by Davide P. Cervone.
 // Equation numbering: https://github.com/mathjax/MathJax/issues/2427
 // Starred and ifnextchar macros: https://github.com/mathjax/MathJax/issues/2428
+// \left, \right delimiters: https://github.com/mathjax/MathJax/issues/2535
 //
 // Modified by Brian Dunn to adjust equation numbering and add subequations.
 //
@@ -31,127 +31,165 @@
 // number is auto-incremented by MathJax between equations.
 //
 MathJax = {
-     subequations: "0",
-     section: "",
-     loader: {
-         load: ['[tex]/tagformat', '[tex]/textmacros'],
-     },
-     startup: {
-         ready() {
-             //       These would be replaced by import commands if you wanted to make
-             //       a proper extension.
-             const Configuration = MathJax._.input.tex.Configuration.Configuration;
-             const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
-             const Macro = MathJax._.input.tex.Symbol.Macro;
-             const TexError = MathJax._.input.tex.TexError.default;
-             const ParseUtil = MathJax._.input.tex.ParseUtil.default;
-             const expandable = MathJax._.util.Options.expandable;
+  subequations: "0",
+  section: "",
+  loader: {
+    load: ['[tex]/tagformat', '[tex]/textmacros'],
+  },
+  startup: {
+    ready() {
+      // These would be replaced by import commands if you wanted to make
+      // a proper extension.
+      const Configuration = MathJax._.input.tex.Configuration.Configuration;
+      const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
+      const Macro = MathJax._.input.tex.Symbol.Macro;
+      const TexError = MathJax._.input.tex.TexError.default;
+      const ParseUtil = MathJax._.input.tex.ParseUtil.default;
+      const expandable = MathJax._.util.Options.expandable;
 
+        // Insert the replacement string into the TeX string, and check
+        // that there haven't been too many maxro substitutions (prevents
+        // infinite loops).
+        const useArgument = (parser, text) => {
+          parser.string = ParseUtil.addArgs(parser, text, parser.string.slice(parser.i));
+          parser.i = 0;
+          if (++parser.macroCount > parser.configuration.options.maxMacros) {
+            throw new TexError('MaxMacroSub1',
+            'MathJax maximum macro substitution count exceeded; ' +
+            'is there a recursive macro call?');
+          }
+        }
 
-             //       Insert the replacement string into the TeX string, and check
-             //       that there haven't been too many maxro substitutions (prevents
-             //       infinite loops).
-             const useArgument = (parser, text) => {
-                  parser.string = ParseUtil.addArgs(parser, text, parser.string.slice(parser.i));
-                  parser.i = 0;
-                  if (++parser.macroCount > parser.configuration.options.maxMacros) {
-                      throw new TexError('MaxMacroSub1',
-                      'MathJax maximum macro substitution count exceeded; ' +
-                      'is there a recursive macro call?');
-                  }
-             }
+        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
+        new CommandMap('ifstar-ifnextchar-setequnumber', {
+          ifstar: 'IfstarFunction',
+          ifnextchar: 'IfnextcharFunction',
+          seteqnumber: 'SeteqnumberFunction'
+        }, {
+          // This function implements an ifstar macro.
+          IfstarFunction(parser, name) {
+             const resultstar = parser.GetArgument(name);
+             const resultnostar = parser.GetArgument(name);
+             const star = parser.GetStar();                 // true if there is a *
+             useArgument(parser, star ? resultstar : resultnostar);
+          },
 
+          // This function implements an ifnextchar macro.
+          IfnextcharFunction(parser, name) {
+            let whichchar = parser.GetArgument(name);
+            if (whichchar.match(/^(?:0x[0-9A-F]+|[0-9]+)$/i)) {
+              // $ syntax highlighting
+              whichchar = String.fromCodePoint(parseInt(whichchar));
+            }
+            const resultnextchar = parser.GetArgument(name);
+            const resultnotnextchar = parser.GetArgument(name);
+            const gotchar = (parser.GetNext() === whichchar);
+            useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
+          },
 
-             //       Create the command map for \ifstar, \ifnextchar, \seteqnumber
-             new CommandMap('ifstar-ifnextchar-setequnumber', {
-                  ifstar: 'IfstarFunction',
-                  ifnextchar: 'IfnextcharFunction',
-                  seteqnumber: 'SeteqnumberFunction'
-             }, {
-                  //      This function implements an ifstar macro.
-                  IfstarFunction(parser, name) {
-                      const resultstar = parser.GetArgument(name);
-                      const resultnostar = parser.GetArgument(name);
-                      const star = parser.GetStar();                        // true if there is a *
-                      useArgument(parser, star ? resultstar : resultnostar);
-                  },
+          // This function modifies the equation numbers.
+          SeteqnumberFunction(parser, name) {
+              // Get the macro parameters
+              const star = parser.GetStar();                  // true if there is a *
+              const optBrackets = parser.GetBrackets(name);   // contents of optional brackets
+              const newsubequations = parser.GetArgument(name); // the subequations argument
+              const neweqsection = parser.GetArgument(name); // the eq section argument
+              const neweqnumber = parser.GetArgument(name);   // the eq number argument
+              MathJax.config.subequations=newsubequations ;   // a string with boolean meaning
+              MathJax.config.section=neweqsection ;           // a string with numeric meaning
+              parser.tags.counter = parser.tags.allCounter = neweqnumber ;
+          }
 
+        });
 
-                  //      This function implements an ifnextchar macro.
-                  IfnextcharFunction(parser, name) {
-                      let whichchar = parser.GetArgument(name);
-                      if (whichchar.match(/^(?:0x[0-9A-F]+|[0-9]+)$/i)) {
-                          // $ syntax highlighting
-                          whichchar = String.fromCodePoint(parseInt(whichchar));
-                      }
-                      const resultnextchar = parser.GetArgument(name);
-                      const resultnotnextchar = parser.GetArgument(name);
-                      const gotchar = (parser.GetNext() === whichchar);
-                      useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
-                  },
+        // Create the ifstar-ifnextchar-setequnumber package
+        Configuration.create('ifstar-ifnextchar-setequnumber', {
+          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        });
 
+        MathJax.startup.defaultReady();
 
-                  //      This function modifies the equation numbers.
-                  SeteqnumberFunction(parser, name) {
-                          //   Get the macro parameters
-                          const star = parser.GetStar();                       // true if there is a *
-                          const optBrackets = parser.GetBrackets(name);        // contents of optional brackets
-                          const newsubequations = parser.GetArgument(name);       // the subequations argument
-                          const neweqsection = parser.GetArgument(name);       // the eq section argument
-                          const neweqnumber = parser.GetArgument(name);        // the eq number argument
-                          MathJax.config.subequations=newsubequations ;        // a string with boolean meaning
-                          MathJax.config.section=neweqsection ;                // a string with numeric meaning
-                          parser.tags.counter = parser.tags.allCounter = neweqnumber ;
-                  }
-             });
+        // For forward references:
+        MathJax.startup.input[0].preFilters.add(({math}) => {
+          if (math.inputData.recompile){
+              MathJax.config.subequations = math.inputData.recompile.subequations;
+              MathJax.config.section = math.inputData.recompile.section;
+          }
+        });
+        MathJax.startup.input[0].postFilters.add(({math}) => {
+          if (math.inputData.recompile){
+              math.inputData.recompile.subequations = MathJax.config.subequations;
+              math.inputData.recompile.section = MathJax.config.section;
+          }
+        });
 
+          // For \left, \right with unicode-math:
+          const {DelimiterMap} = MathJax._.input.tex.SymbolMap;
+          const {Symbol} = MathJax._.input.tex.Symbol;
+          const {MapHandler} = MathJax._.input.tex.MapHandler;
+          const delimiter = MapHandler.getMap('delimiter');
+          delimiter.add('\\lBrack', new Symbol('\\lBrack', '\u27E6'));
+          delimiter.add('\\rBrack', new Symbol('\\rBrack', '\u27E7'));
+          delimiter.add('\\lAngle', new Symbol('\\lAngle', '\u27EA'));
+          delimiter.add('\\rAngle', new Symbol('\\rAngle', '\u27EB'));
+          delimiter.add('\\lbrbrak', new Symbol('\\lbrbrak', '\u2772'));
+          delimiter.add('\\rbrbrak', new Symbol('\\rbrbrak', '\u2773'));
+          delimiter.add('\\lbag', new Symbol('\\lbag', '\u27C5'));
+          delimiter.add('\\rbag', new Symbol('\\rbag', '\u27C6'));
+          delimiter.add('\\llparenthesis', new Symbol('\\llparenthesis', '\u2987'));
+          delimiter.add('\\rrparenthesis', new Symbol('\\rrparenthesis', '\u2988'));
+          delimiter.add('\\llangle', new Symbol('\\llangle', '\u2989'));
+          delimiter.add('\\rrangle', new Symbol('\\rrangle', '\u298A'));
+          delimiter.add('\\Lbrbrak', new Symbol('\\Lbrbrak', '\u27EC'));
+          delimiter.add('\\Rbrbrak', new Symbol('\\Rbrbrak', '\u27ED'));
+          delimiter.add('\\lBrace', new Symbol('\\lBrace', '\u2983'));
+          delimiter.add('\\rBrace', new Symbol('\\rBrace', '\u2984'));
+          delimiter.add('\\lParen', new Symbol('\\lParen', '\u2985'));
+          delimiter.add('\\rParen', new Symbol('\\rParen', '\u2986'));
+          delimiter.add('\\lbrackubar', new Symbol('\\lbrackubar', '\u298B'));
+          delimiter.add('\\rbrackubar', new Symbol('\\rbrackubar', '\u298C'));
+          delimiter.add('\\lbrackultick', new Symbol('\\lbrackultick', '\u298D'));
+          delimiter.add('\\rbracklrtick', new Symbol('\\rbracklrtick', '\u298E'));
+          delimiter.add('\\lbracklltick', new Symbol('\\lbracklltick', '\u298F'));
+          delimiter.add('\\rbrackurtick', new Symbol('\\rbrackurtick', '\u2990'));
+          delimiter.add('\\langledot', new Symbol('\\langledot', '\u2991'));
+          delimiter.add('\\rangledot', new Symbol('\\rangledot', '\u2992'));
+          delimiter.add('\\lparenless', new Symbol('\\lparenless', '\u2993'));
+          delimiter.add('\\rparengtr', new Symbol('\\rparengtr', '\u2994'));
+          delimiter.add('\\Lparengtr', new Symbol('\\Lparengtr', '\u2995'));
+          delimiter.add('\\Rparenless', new Symbol('\\Rparenless', '\u2996'));
+          delimiter.add('\\lblkbrbrak', new Symbol('\\lblkbrbrak', '\u2997'));
+          delimiter.add('\\rblkbrbrak', new Symbol('\\rblkbrbrak', '\u2998'));
+          delimiter.add('\\lvzigzag', new Symbol('\\lvzigzag', '\u29D8'));
+          delimiter.add('\\rvzigzag', new Symbol('\\rvzigzag', '\u29D9'));
+          delimiter.add('\\Lvzigzag', new Symbol('\\Lvzigzag', '\u29DA'));
+          delimiter.add('\\Rvzigzag', new Symbol('\\Rvzigzag', '\u29DB'));
+          delimiter.add('\\lcurvyangle', new Symbol('\\lcurvyangle', '\u29FC'));
+          delimiter.add('\\rcurvyangle', new Symbol('\\rcurvyangle', '\u29FD'));
+          delimiter.add('\\Vvert', new Symbol('\\Vvert', '\u2980'));
+    }     // ready
+  },      // startup
 
-             //       Create the ifstar-ifnextchar-setequnumber package
-             Configuration.create('ifstar-ifnextchar-setequnumber', {
-                  handler: {macro: ['ifstar-ifnextchar-setequnumber']}
-             });
-
-
-             MathJax.startup.defaultReady();
-
-
-             // For forward references:
-             MathJax.startup.input[0].preFilters.add(({math}) => {
-                  if (math.inputData.recompile){
-                          MathJax.config.subequations = math.inputData.recompile.subequations;
-                          MathJax.config.section = math.inputData.recompile.section;
-                  }
-             });
-             MathJax.startup.input[0].postFilters.add(({math}) => {
-                  if (math.inputData.recompile){
-                          math.inputData.recompile.subequations = MathJax.config.subequations;
-                          math.inputData.recompile.section = MathJax.config.section;
-                  }
-             });
-         }       // ready
-     },           // startup
-
-
-     tex: {
-         packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
-         tags: "ams",
-                  tagformat: {
-                          number: function (n) {
-                               if(MathJax.config.subequations==0)
-                                      return(MathJax.config.section + n);
-                               else
-                                      return(MathJax.config.section + String.fromCharCode(96+n));
-                          },
-                  },
-     }
+  tex: {
+    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    tags: "ams",
+         tagformat: {
+             number: function (n) {
+                 if(MathJax.config.subequations==0)
+                     return(MathJax.config.section + n);
+                 else
+                     return(MathJax.config.section + String.fromCharCode(96+n));
+             },
+         },
+  }
 }
 </script>
 
-
 <script
-         id="MathJax-script"
-         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+    id="MathJax-script"
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
 ></script>
+
 </head>
 <body>
 
@@ -574,18 +612,15 @@ var a = qint.new(1, &apos;alice&apos;);
 var fiber = qint.new(1, &apos;fiber&apos;);
 var b = qint.new(1, &apos;bob&apos;);
 
-
 function random_bit(q) {
     q.write(0);
     q.had();
     return q.read();
 }
 
-
 // Generate two random bits
 var send_had = random_bit(a);
 var send_val = random_bit(a);
-
 
 // Prepare Alice&apos;s qubit
 a.write(0);
@@ -594,10 +629,8 @@ if (send_val) // Use a random bit to set the value
 if (send_had) // Use a random bit to apply HAD or not
     a.had();
 
-
 // Send the qubit!
 fiber.exchange(a);
-
 
 // Activate the spy
 var spy_is_present = true;
@@ -629,7 +662,7 @@ Listing&nbsp;3.2:&nbsp;SQL Query for length
 </p>
 </div>
 <pre><code class = "language-sql">
-SELECT first_name, length(first_name) as first_length, last_name, length(last_name) as last_length, length(first_name)+length(last_name) as total_length FROM users WHERE length(first_name)+length(last_name) &gt;30;
+SELECT first_name, length(first_name) as first_length, last_name, length(last_name) as last_length, length(first_name)+length(last_name) as total_length FROM users WHERE length(first_name)+length(last_name) &gt; 30;
 </code>
 </pre>
 
@@ -644,13 +677,13 @@ Listing&nbsp;3.3:&nbsp;SQL Query for addresses
 </div>
 <pre><code class = "language-sql">
 SELECT DISTINCT ON (a.place_id)
-           a.full_json #&gt;&gt; &apos;{5,short_name}&apos; AS state
-         , a.full_json #&gt;&gt; &apos;{7,long_name}&apos; AS postal_code
-         , a.full_json #&gt;&gt; &apos;{3,short_name}&apos; AS city
-         FROM addresses_autocomplete a
-         JOIN regions r ON r.short_name = a.full_json #&gt;&gt; &apos;{5,short_name}&apos;
-         WHERE a.formatted = $1
-         AND    json_array_length(a.full_json) &gt;7
+            a.full_json #&gt;&gt; &apos;{5,short_name}&apos; AS state
+          , a.full_json #&gt;&gt; &apos;{7,long_name}&apos; AS postal_code
+          , a.full_json #&gt;&gt; &apos;{3,short_name}&apos; AS city
+          FROM   addresses_autocomplete a
+          JOIN   regions r ON r.short_name = a.full_json #&gt;&gt; &apos;{5,short_name}&apos;
+          WHERE a.formatted = $1
+          AND    json_array_length (a.full_json) &gt; 7
          AND    r.country_id = 1
 </code>
 </pre>
@@ -690,9 +723,9 @@ Listing&nbsp;3.4:&nbsp;Javascript Program get ip address
 </div>
 <pre><code class = "language-javascript">
 var ip = req.headers[&apos;x-forwarded-for&apos;] ||
-    req.connection.remoteAddress ||
-    req.socket.remoteAddress ||
-    (req.connection.socket ? req.connection.socket.remoteAddress : null);
+     req.connection. remoteAddress ||
+     req.socket. remoteAddress ||
+    (req.connection.socket ? req.connection.socket. remoteAddress : null);
 </code>
 </pre>
 
@@ -707,44 +740,38 @@ Listing&nbsp;3.5:&nbsp;Javascript Program HTTP server
 </div>
 <pre><code class = "language-javascript">
 var http = require("http"),
-      url = require("url"),
-      path = require("path"),
-      fs = require("fs"),
-      port = process.argv[2] || 8888;
-
+    url = require("url"),
+    path = require("path"),
+    fs = require("fs"),
+    port = process.argv[2] || 8888;
 
 http.createServer(function(request, response) {
 
-
   var uri = url.parse(request.url).pathname
-      , filename = path.join(process.cwd(), uri);
-
+    , filename = path.join(process.cwd(), uri);
 
   fs.exists(filename, function(exists) {
-      if(!exists) {
-          response.writeHead(404, {"Content-Type": "text/plain"});
-          response.write("404␣Not␣Found\n");
-          response.end();
-          return;
-      }
+    if(!exists) {
+      response.writeHead (404, {"Content-Type": "text/plain"});
+      response.write("404␣Not␣Found\n");
+      response.end();
+      return;
+    }
 
-
-      if (fs.statSync(filename).isDirectory()) filename += &apos;/index.html&apos;;
-
+      if (fs.statSync(filename).isDirectory ()) filename += &apos;/index.html&apos;;
 
       fs.readFile(filename, "binary", function(err, file) {
-          if(err) {
-              response.writeHead(500, {"Content-Type": "text/plain"});
-              response.write(err + "\n");
-              response.end();
-              return;
-          }
-
-
-          response.writeHead(200);
-          response.write(file, "binary");
+        if(err) {
+          response.writeHead (500, {"Content-Type": "text/plain"});
+          response.write(err + "\n");
           response.end();
-      });
+          return;
+        }
+
+      response.writeHead (200);
+      response.write(file, "binary");
+      response.end();
+    });
   });
 }).listen(parseInt(port, 10));
 </code>
