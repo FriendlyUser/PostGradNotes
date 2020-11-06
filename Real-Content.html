@@ -16,7 +16,6 @@
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
 
-
 <script>
 // Lwarp MathJax emulation code
 //
@@ -35,7 +34,7 @@ MathJax = {
      subequations: "0",
      section: "",
      loader: {
-         load: ['[tex]/tagFormat']
+         load: ['[tex]/tagformat', '[tex]/textmacros'],
      },
      startup: {
          ready() {
@@ -134,9 +133,9 @@ MathJax = {
 
 
      tex: {
-         packages: {'[+]': ['tagFormat', 'ifstar-ifnextchar-setequnumber']},
+         packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
          tags: "ams",
-                  tagFormat: {
+                  tagformat: {
                           number: function (n) {
                                if(MathJax.config.subequations==0)
                                       return(MathJax.config.section + n);
@@ -153,7 +152,6 @@ MathJax = {
          id="MathJax-script"
          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
 ></script>
-
 </head>
 <body>
 
@@ -341,6 +339,24 @@ Acronyms</a>
 
 \(\newcommand {\luatexdirectlua }[1]{\text {(directlua)}}\)
 
+\(\newcommand {\protect }{}\)
+
+\(\def \LWRabsorbnumber #1 {}\)
+
+\(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
+
+\(\def \mathcode #1={\mathchar }\)
+
+\(\let \delcode \mathcode \)
+
+\(\let \delimiter \mathchar \)
+
+\(\let \LWRref \ref \)
+
+\(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
@@ -360,7 +376,7 @@ Acronyms</a>
 </div>
 
 <p>
-<h3 id="autosec-73"><span class="sectionnumber" >3&#x2003;</span>Real Content</h3>
+<h3 id="autosec-73">Chapter&nbsp;<span class="sectionnumber" >3&#x2003;</span>Real Content</h3>
 <a id="postGrad-autopage-73"></a>
 <a id="postGrad-autofile-6"></a>
 
@@ -535,8 +551,7 @@ QPU, and others are not. The QPU runs on a separate clock from the CPU, and usua
 </ul>
 
 </div>
-
-<a id="autoid-41"></a>
+<a id="autoid-41" ></a >
 
 
 <div class="figurecaption" >
@@ -546,12 +561,12 @@ Listing&nbsp;3.1:&nbsp;Javascript Program: Quantum random spy hunter
 </p>
 </div>
 <pre><code class = "language-python">
-Example  2-4. Quantum random spy hunter
+Example 2-4. Quantum random spy hunter
 qc.reset(3);
 qc.discard();
-var a = qint.new(1, 'alice');
-var fiber = qint.new(1, 'fiber');
-var b = qint.new(1, 'bob');
+var a = qint.new(1, &apos;alice&apos;);
+var fiber = qint.new(1, &apos;fiber&apos;);
+var b = qint.new(1, &apos;bob&apos;);
 
 
 function random_bit(q) {
@@ -566,7 +581,7 @@ var send_had = random_bit(a);
 var send_val = random_bit(a);
 
 
-// Prepare Alice's qubit
+// Prepare Alice&apos;s qubit
 a.write(0);
 if (send_val) // Use a random bit to set the value
     a.not();
@@ -584,7 +599,6 @@ var spy_is_present = true;
 </pre>
 
 
-
 <p>
 <b>Magneta Music Generation</b> Some of the beats generated were acceptable, could make sound effects from randomized shorter effects.
 </p>
@@ -599,8 +613,7 @@ Probably just trial and error as for images, swipe them off the internet, becaus
 <p>
 Query
 </p>
-
-<a id="autoid-42"></a>
+<a id="autoid-42" ></a >
 
 
 <div class="figurecaption" >
@@ -609,14 +622,12 @@ Query
 Listing&nbsp;3.2:&nbsp;SQL Query for length
 </p>
 </div>
-SELECT  first_name, length(first_name) as first_length, last_name, length(last_name) as last_length, length(first_name)+length(last_name) as total_length FROM users WHERE length(first_name)+length(last_name) &gt;30;
 <pre><code class = "language-sql">
+SELECT first_name, length(first_name) as first_length, last_name, length(last_name) as last_length, length(first_name)+length(last_name) as total_length FROM users WHERE length(first_name)+length(last_name) &gt;30;
 </code>
 </pre>
 
-
-
-<a id="autoid-43"></a>
+<a id="autoid-43" ></a >
 
 
 <div class="figurecaption" >
@@ -626,15 +637,15 @@ Listing&nbsp;3.3:&nbsp;SQL Query for addresses
 </p>
 </div>
 <pre><code class = "language-sql">
-SELECT  DISTINCT ON (a.place_id)
-          a.full_json #&gt;&gt; '{5,short_name}' AS state
-         , a.full_json #&gt;&gt; '{7,long_name}' AS postal_code
-         , a.full_json #&gt;&gt; '{3,short_name}' AS city
+SELECT DISTINCT ON (a.place_id)
+           a.full_json #&gt;&gt; &apos;{5,short_name}&apos; AS state
+         , a.full_json #&gt;&gt; &apos;{7,long_name}&apos; AS postal_code
+         , a.full_json #&gt;&gt; &apos;{3,short_name}&apos; AS city
          FROM addresses_autocomplete a
-         JOIN regions r ON r.short_name = a.full_json #&gt;&gt; '{5,short_name}'
+         JOIN regions r ON r.short_name = a.full_json #&gt;&gt; &apos;{5,short_name}&apos;
          WHERE a.formatted = $1
-         AND   json_array_length(a.full_json) &gt;7
-         AND   r.country_id = 1
+         AND    json_array_length(a.full_json) &gt;7
+         AND    r.country_id = 1
 </code>
 </pre>
 
@@ -662,8 +673,7 @@ I believe pub publish spins out a http listener at a localhost port which is why
 <p>
 Learned that ‘::1‘ means localhost for ip 6, and express has a useful function called req.ip to get client ip, but fails if you are using a proxy.
 </p>
-
-<a id="autoid-44"></a>
+<a id="autoid-44" ></a >
 
 
 <div class="figurecaption" >
@@ -673,16 +683,14 @@ Listing&nbsp;3.4:&nbsp;Javascript Program get ip address
 </p>
 </div>
 <pre><code class = "language-javascript">
-var ip  = req.headers['x-forwarded-for'] ||
+var ip = req.headers[&apos;x-forwarded-for&apos;] ||
     req.connection.remoteAddress ||
     req.socket.remoteAddress ||
     (req.connection.socket ? req.connection.socket.remoteAddress : null);
 </code>
 </pre>
 
-
-
-<a id="autoid-45"></a>
+<a id="autoid-45" ></a >
 
 
 <div class="figurecaption" >
@@ -692,7 +700,7 @@ Listing&nbsp;3.5:&nbsp;Javascript Program HTTP server
 </p>
 </div>
 <pre><code class = "language-javascript">
-var http  = require("http"),
+var http = require("http"),
       url = require("url"),
       path = require("path"),
       fs = require("fs"),
@@ -715,7 +723,7 @@ http.createServer(function(request, response) {
       }
 
 
-      if (fs.statSync(filename).isDirectory()) filename += '/index.html';
+      if (fs.statSync(filename).isDirectory()) filename += &apos;/index.html&apos;;
 
 
       fs.readFile(filename, "binary", function(err, file) {
@@ -735,7 +743,6 @@ http.createServer(function(request, response) {
 }).listen(parseInt(port, 10));
 </code>
 </pre>
-
 
 
 <p>
@@ -768,8 +775,7 @@ The situation with .NET in 2019 is that there are three forked .NET platforms co
 <p>
 It is important to understand that .NET Standard is just a standard. You are not able to install .NET Standard in the same way that you cannot install HTML5. To use HTML5, you must install a web browser that implements the HTML5 standard.
 </p>
-
-<a id="autoid-46"></a>
+<a id="autoid-46" ></a >
 
 
 <div class="figurecaption" >
@@ -778,8 +784,8 @@ It is important to understand that .NET Standard is just a standard. You are not
 Listing&nbsp;3.6:&nbsp;Cpp Testing
 </p>
 </div>
-#include  &lt;iostream&gt;
 <pre><code class = "language-cpp">
+#include &lt;iostream&gt;
 </code>
 </pre>
 

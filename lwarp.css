@@ -56,10 +56,11 @@ span.sectionnumber { margin-right: 0em }
 span.indexitem {margin-left: 0em}
 span.indexsubitem {margin-left: 2em}
 span.indexsubsubitem {margin-left: 4em}
+div.indexheading {margin-top: 2ex ; font-weight: bold}
 
 div.hidden, span.hidden { display: none ; }
 
-kbd, span.texttt {
+kbd, span.texttt, p span.texttt {
     font-family: "DejaVu Mono", "Bitstream Vera Mono", "Lucida Console",
         "Nimbus Mono L", "Liberation Mono", "FreeMono", "Andale Mono",
         "Courier New", monospace;
@@ -157,6 +158,8 @@ span.overline {
     text-decoration: overline ;
     text-decoration-skip: auto ;
 }
+
+div.hrule { border-top: 1px solid silver }
 
 /* for vertical text: */
 div.verticalrl { writing-mode: vertical-rl }
@@ -477,7 +480,7 @@ div.bodywithoutsidetoc div.bodycontainer {
 }
 
 section.textbody div.footnotes{
-    margin: 3ex 2em 0ex 2em ;
+    margin: 3ex 2em .5ex 2em ;
     border-bottom: 2px solid silver ;
 }
 
@@ -719,20 +722,33 @@ div.wpminipage { border: 1px solid green ; margin: .5ex ; padding: .5ex ;}
   display: inline-block ;
 }
 
-.mdframed {
+/* mdframed, tcolorbox, shadebox packages */
+.mdframed, .tcolorbox, .shadebox {
     padding: 0ex ;
     margin: 2ex 0em 2ex 0em ;
+    border: 1px solid black ;
 }
 
-.mdframed p { padding: 0ex .5em 0ex .5em ; }
+.tcolorbox {
+    border-radius: 10pt ;
+    margin: 2ex 1em 2ex 1em ;
+}
 
-.mdframed dl { padding: 1ex .5em 0ex .5em ; }
+.mdframed p, .tcolorbox p { padding: 0ex .5em 0ex .5em ; }
 
-.mdframedtitle {
+.mdframed dl, .tcolorbox dl { padding: 1ex .5em 0ex .5em ; }
+
+.mdframedtitle, .tcolorboxtitle {
     padding: .5ex 0pt 0pt 0pt ;
     border-radius: 10pt 10pt 0pt 0pt ;
     display: block ;
     margin-bottom: 1ex ;
+    border-bottom: 1px solid silver ;
+}
+
+.tcolorboxsubtitle .tcolorbox {
+    margin: 2ex 0em 2ex 0em ;
+    border-radius: 0pt ;
 }
 
 .mdframedsubtitle {
@@ -1351,8 +1367,13 @@ nav .authorartist{ display:inline; }
 
 /* Native LaTeX theorems: */
 
-.theoremcontents { font-style: italic; margin-top: 3ex ; margin-bottom: 3ex ; }
-.theoremlabel { font-style: normal; font-weight: bold ; margin-right: .5em ; }
+.theoremcontents {
+    font-style: italic; margin-top: 3ex ; margin-bottom: 3ex ;
+}
+
+.theoremlabel {
+    font-style: normal; font-weight: bold ; margin-right: .5em ;
+}
 
 /* theorem, amsthm, and ntheorem packages */
 
@@ -1420,6 +1441,33 @@ div.amsthmproof
 }
 
 span.amsthmnoteremark {}
+
+/* thmbox */
+
+.thmbox {
+    font-style: italic; margin-top: 3ex ; margin-bottom: 3ex ;
+    border: 1px solid gray ;
+    padding: 1ex ;
+}
+
+.thmboxtitle {
+    font-style: normal; font-weight: bold ; margin-right: .5em ;
+    border-bottom: 1px solid gray ;
+}
+
+span.thmboxproofname, span.thmboxexamplename {
+    font-weight: bold ;
+}
+
+div.thmboxproof, div.thmboxexample {
+    font-size: 0.85em ;
+    margin: 2ex ;
+}
+
+div.thmboxleftbar {
+    border-left: 2px solid black ;
+    padding-left: 1em ;
+}
 
 /* For the backnaur package: */
 div.backnaur {

@@ -16,7 +16,6 @@
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
 
-
 <script>
 // Lwarp MathJax emulation code
 //
@@ -35,7 +34,7 @@ MathJax = {
      subequations: "0",
      section: "",
      loader: {
-         load: ['[tex]/tagFormat']
+         load: ['[tex]/tagformat', '[tex]/textmacros'],
      },
      startup: {
          ready() {
@@ -134,9 +133,9 @@ MathJax = {
 
 
      tex: {
-         packages: {'[+]': ['tagFormat', 'ifstar-ifnextchar-setequnumber']},
+         packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
          tags: "ams",
-                  tagFormat: {
+                  tagformat: {
                           number: function (n) {
                                if(MathJax.config.subequations==0)
                                       return(MathJax.config.section + n);
@@ -153,7 +152,6 @@ MathJax = {
          id="MathJax-script"
          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
 ></script>
-
 </head>
 <body>
 
@@ -341,6 +339,24 @@ Acronyms</a>
 
 \(\newcommand {\luatexdirectlua }[1]{\text {(directlua)}}\)
 
+\(\newcommand {\protect }{}\)
+
+\(\def \LWRabsorbnumber #1 {}\)
+
+\(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
+
+\(\def \mathcode #1={\mathchar }\)
+
+\(\let \delcode \mathcode \)
+
+\(\let \delimiter \mathchar \)
+
+\(\let \LWRref \ref \)
+
+\(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
@@ -405,7 +421,6 @@ To start running postgres server
 pg_ctl.exe restart -D "C:\Program Files\PostgreSQL\9.6\data"
 </code>
 </pre>
-
 
 
 <p>
@@ -1506,8 +1521,7 @@ The adapter pattern comprises the target, adaptee, adapter, and client:
 </p>
 </li>
 </ul>
-
-<a id="autoid-49"></a>
+<a id="autoid-49" ></a >
 
 
 <div class="figurecaption" >
@@ -1517,7 +1531,7 @@ Listing&nbsp;3.7:&nbsp;Golang Adaptor Example
 </p>
 </div>
 <pre><code class = "language-python">
-//main  package has examples shown
+//main package has examples shown
 // in Hands-On Data Structures and algorithms with Go book
 package main
 // importing fmt package
@@ -1564,13 +1578,11 @@ func main() {
 </pre>
 
 
-
 <p>
 <b>Bridge</b> Bridge decouples the implementation from the abstraction. The abstract base class can be subclassed to provide different implementations and allow implementation details to be modified easily. The interface, which is a bridge, helps in making the
 functionality of concrete classes independent from the interface implementer classes. The bridge patterns allow the implementation details to change at runtime.
 </p>
-
-<a id="autoid-50"></a>
+<a id="autoid-50" ></a >
 
 
 <div class="figurecaption" >
@@ -1580,7 +1592,7 @@ Listing&nbsp;3.8:&nbsp;Golang Adaptor Example
 </p>
 </div>
 <pre><code class = "language-go">
-// main  package has examples shown
+// main package has examples shown
 // in Hands-On Data Structures and algorithms with Go book
 package main
 // importing fmt package
@@ -1640,7 +1652,6 @@ func main() {
 }
 </code>
 </pre>
-
 
 
 <div class="mdframed"
@@ -1715,8 +1726,7 @@ single responsibility principle can be achieved using a decorator.
 </p>
 
 </div>
-
-<a id="autoid-51"></a>
+<a id="autoid-51" ></a >
 
 
 <div class="figurecaption" >
@@ -1726,7 +1736,7 @@ Listing&nbsp;3.9:&nbsp;Golang Program
 </p>
 </div>
 <pre><code class = "language-go">
-package  main
+package main
 
 
 import (

@@ -16,7 +16,6 @@
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
 
-
 <script>
 // Lwarp MathJax emulation code
 //
@@ -35,7 +34,7 @@ MathJax = {
      subequations: "0",
      section: "",
      loader: {
-         load: ['[tex]/tagFormat']
+         load: ['[tex]/tagformat', '[tex]/textmacros'],
      },
      startup: {
          ready() {
@@ -134,9 +133,9 @@ MathJax = {
 
 
      tex: {
-         packages: {'[+]': ['tagFormat', 'ifstar-ifnextchar-setequnumber']},
+         packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
          tags: "ams",
-                  tagFormat: {
+                  tagformat: {
                           number: function (n) {
                                if(MathJax.config.subequations==0)
                                       return(MathJax.config.section + n);
@@ -153,7 +152,6 @@ MathJax = {
          id="MathJax-script"
          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
 ></script>
-
 </head>
 <body>
 
@@ -341,6 +339,24 @@ Acronyms</a>
 
 \(\newcommand {\luatexdirectlua }[1]{\text {(directlua)}}\)
 
+\(\newcommand {\protect }{}\)
+
+\(\def \LWRabsorbnumber #1 {}\)
+
+\(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
+
+\(\def \mathcode #1={\mathchar }\)
+
+\(\let \delcode \mathcode \)
+
+\(\let \delimiter \mathchar \)
+
+\(\let \LWRref \ref \)
+
+\(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
@@ -378,8 +394,7 @@ At a high level, Flutter is a reactive, declarative, and composable view-layer l
 <p>
 Before running all commands switch to root user, ensure you have the latest version of pip make a bare bones server in gcp micro works fine us-west-1, debian-10-buster
 </p>
-
-<a id="autoid-5"></a>
+<a id="autoid-5" ></a >
 
 
 <div class="figurecaption" >
@@ -388,16 +403,14 @@ Before running all commands switch to root user, ensure you have the latest vers
 Listing&nbsp;1.4:&nbsp;Bash Script
 </p>
 </div>
-<pre
-sudo class="programlisting">
-      su
+<pre><code class = "language-python">
+sudo su
 sudo apt install python3-pip
 sudo -H pip3 install --upgrade pip
 pip install rasa
 rasa init
 </code>
 </pre>
-
 
 
 <p>
