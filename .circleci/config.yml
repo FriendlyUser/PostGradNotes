@@ -2,13 +2,16 @@ version: 2
 jobs:
   lwarp:
     docker:
+<<<<<<< HEAD
       - image: grandfleet/dolwarp:v0.891
+=======
+      - image: grandfleet/dolwarp:v0.87
+>>>>>>> 2ae792f956ae94377baec0547ce3d3d0f2f6ed4c
     working_directory: ~/latex
     steps:
       - checkout
       - run: apt-get update && apt-get install poppler-utils -y
-      - run: lwarpmk --help || true
-      - run: lualatex postGrad.tex
+      - run: pdflatex postGrad.tex
       - run: lwarpmk printglossary
       - run: lwarpmk printindex
       - run: lwarpmk print
@@ -21,7 +24,6 @@ jobs:
       - run: lwarpmk htmlindex
       - run: bibtex postGrad_html
       - run: lwarpmk html1 && lwarpmk limages || true
-      - run: lwarpmk pdftohtml
       - run: mkdir -p temp_lwarpmk && mv *.html temp_lwarpmk/ && mv *.css temp_lwarpmk/ || true
       - run: cp -R images temp_lwarpmk || true
       - run: cd temp_lwarpmk && ls && cd ../

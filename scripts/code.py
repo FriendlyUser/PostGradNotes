@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# Run in root
 ### Adding prism style highlighting in docs
 import os
 # os.chdir('../')
@@ -44,7 +45,9 @@ for outputFile in lwarpFiles:
     sql = "language-sql"
     # Go through each even entry in replacements and then check if a replacement should happen
     replacementTerms = ["Cpp", cplusplus, "Latex Code", latex, "Python Script", python, 
-        "Bash Script", bash,"Matlab Script", matlab,"Yaml File",yaml,"JSON Output", json, "Golang", golang, "Javascript Program", js, "SQL Query", sql]
+        "Bash Script", bash,"Matlab Script", matlab,"Yaml File", yaml,
+        "JSON Output", json, "Golang", golang, "Javascript Program", js,
+        "SQL Query", sql, "spaCy", python]
     prismVerbCodeSyn = r'<pre><code class = "' + latex + r'">'
     prismCodeSyn = r'<pre><code class = "' + cplusplus + r'">'
     
