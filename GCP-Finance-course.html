@@ -285,55 +285,55 @@ GCP Finance course</a>
 
 
 <p>
-<a href="Interviews.html#autosec-73" class="tocchapter" >
+<a href="Interviews.html#autosec-74" class="tocchapter" >
 <span class="sectionnumber" >3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-79" class="tocchapter" >
+<a href="Real-Content.html#autosec-80" class="tocchapter" >
 <span class="sectionnumber" >4</span>&#x2003;Real Content</a>
 </p>
 
 
 <p>
-<a href="Real-Content.html#autosec-82" class="tocsection" >
+<a href="Real-Content.html#autosec-83" class="tocsection" >
 SQL</a>
 </p>
 
 
 <p>
-<a href="Code-Commands.html#autosec-91" class="tocsection" >
+<a href="Code-Commands.html#autosec-92" class="tocsection" >
 Code Commands</a>
 </p>
 
 
 <p>
-<a href="Commands.html#autosec-123" class="tocsection" >
+<a href="Commands.html#autosec-124" class="tocsection" >
 Commands</a>
 </p>
 
 
 <p>
-<a href="Scripts-Tools.html#autosec-126" class="tocsection" >
+<a href="Scripts-Tools.html#autosec-127" class="tocsection" >
 Scripts and Tools</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-170" class="tocchapter" >
+<a href="Index-0.html#autosec-171" class="tocchapter" >
 Index</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-173" class="tocchapter" >
+<a href="Index-0.html#autosec-174" class="tocchapter" >
 Glossary</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-175" class="tocchapter" >
+<a href="Index-0.html#autosec-176" class="tocchapter" >
 Acronyms</a>
 </p>
 
@@ -469,6 +469,59 @@ Market moves with many human factors that are difficult to measure.
 <p>
 Exogenous and endogenous factors both drive changes in share prices. Technical strategies tend to focus on endogenous factors and event-driven strategies focus on exogenous factors.
 </p>
+
+<p>
+Strategies range from low-frequency, at least by trading standards, to high-frequency. You must implement high-frequency trading strategies with software and market interfaces that can handle sub-millisecond order creation and submission. Quant strategies are also a
+type of forecasting method that attempts to predict the future value of a stock or other instrument where the direction of a price spread between two instruments. These forecasts are based on an observed price response to factors that you have identified as statistically
+significant in predicting changes in an instrument’s price. Mean reversion strategies depend on the stability or stationarity of an asset’s price or spread relative to another asset. When the price risk spread gets too high, it becomes more likely that it will decrease, and so
+revert to its long-term mean or neutral value. When the price risk spread gets too low, it becomes more likely that it will increase, and again revert to its mean. Correlation is a measure of how well two variables move together over time.
+</p>
+
+<p>
+C sharp ou can use dotnet to make secrets, which make a json file.
+</p>
+<pre><code class = "language-python">
+import { useState, useEffect } from &apos;react&apos;
+const useFetch = (initialUrl, initialParams = {}, skip = false) =&gt; {
+  const [url, updateUrl] = useState(initialUrl)
+  const [params, updateParams] = useState( initialParams )
+  const [data, setData] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [hasError, setHasError] = useState(false)
+  const [errorMessage, setErrorMessage ] = useState(&apos;&apos;)
+  const [refetchIndex, setRefetchIndex ] = useState(0)
+const queryString = Object.keys(params)
+    .map((key) =&gt; encodeURIComponent (key) + &apos;=&apos; +
+    encodeURIComponent (params[key])).join(&apos;&amp;&apos;)
+const refetch = () =&gt; setRefetchIndex (( prevRefetchIndex ) =&gt; prevRefetchIndex + 1)
+useEffect(() =&gt; {
+    const fetchData = async () =&gt; {
+      if (skip) return
+      setIsLoading(true)
+      try {
+        const response = await fetch(&grave;${url}${queryString}&grave;)
+        const result = await response.json()
+        if (response.ok) {
+          setData(result)
+        } else {
+          setHasError(true)
+          setErrorMessage (result)
+        }
+      } catch (err) {
+        setHasError(true)
+        setErrorMessage (err.message)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchData()
+  }, [url, params, refetchIndex ])
+return { data, isLoading, hasError, errorMessage, updateUrl, updateParams, refetch }
+}
+export default useFetch
+</code>
+</pre>
+
 
 </section>
 
