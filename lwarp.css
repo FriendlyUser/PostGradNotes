@@ -276,7 +276,7 @@ div.epigraph p, div.dictum p { padding: .5ex ; margin: 0ex ;}
 div.epigraphsource p, div.dictumauthor p { padding: .5ex 0ex 0ex 0ex ; margin: 0ex ;}
 div.dictumauthor { font-style:italic }
 
-/* copyrightbox package */
+/* copyrightbox package: */
 div.copyrightbox { margin: .5ex .5em }
 div.copyrightbox p {margin: 0px .5em ; padding: 0px}
 div.copyrightboxnote {text-align: left ; font-size: 60%}
@@ -336,6 +336,12 @@ span.capsspacing {
 }
 
 span.highlight { background: #F8E800 ; }
+
+/* keystroke package: */
+span.keystroke {
+    border-style: outset ;
+    padding: 0pt .5em 0pt .5em ;
+}
 
 html body {
   margin: 0 ;
