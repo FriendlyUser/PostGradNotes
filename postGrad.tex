@@ -107,7 +107,7 @@ mathjax,                    % Use MathJax to display math.
 \setcounter{FileDepth}{1}       % Split \HTML\ files at sections
 \booltrue{CombineHigherDepths}  % Combine parts/chapters/sections
 \setcounter{SideTOCDepth}{1}    % Include subsections in the side\TOC
-\HTMLTitle{Webpage Title}       % Overrides \title for the web page.
+\HTMLTitle{Personal Notes}       % Overrides \title for the web page.
 \HTMLAuthor{Some Author}        % Sets the HTML meta author tag.
 \HTMLLanguage{en-US}            % Sets the HTML meta language.
 \HTMLDescription{A description.}% Sets the HTML meta description.
@@ -229,7 +229,7 @@ mathjax,                    % Use MathJax to display math.
 
 \input{chapters/important/interviews.tex}
 
-\chapter{Real Content}
+\chapter{2019}
 
 \input{chapters/todo/2019.tex}
 
@@ -243,8 +243,11 @@ mathjax,                    % Use MathJax to display math.
 \input{chapters/projects/felgo.tex}
 
 \input{chapters/important/yuzu.tex}
-\input{chapters/important/legacy.tex}
 \input{chapters/important/algorithms/basicAlgo.tex}
+
+
+\input{chapters/important/legacy.tex}
+
 % Note to self, refer to all go programs are go programs, golang is reserved for the code.
 \begin{lstlisting}[caption={Golang Program}]
 package main
@@ -254,6 +257,10 @@ import (
 	"io/ioutil"
 )
 \end{lstlisting}
+
+\Chapter{Code Reference}
+\input{chapters/important/code_ref.tex}
+
 
 \input{chapters/backMatter/main.tex}
 
