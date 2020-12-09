@@ -276,3 +276,16 @@ kubectl get services
 curl $(minikube ip):$NODE_PORT 
 kubectl exec -ti $POD_NAME curl localhost:8080
 \end{lstlisting}
+
+
+\begin{lstlisting}[caption={Bash Script uncomment line in sed for osx}]
+#!/bin/bash
+sed -i '' "8,8 s#//##" $BITRISE_SOURCE_DIR/src/helpers/constants/config.js
+\end{lstlisting}
+
+Upgrade the php upload limit on linux ami for codeformation launched wordpress instance.
+
+\begin{verbatim}
+sudo vim php.ini in /etc
+run sudo service httpd graceful
+\end{verbatim}
