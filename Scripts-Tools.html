@@ -327,19 +327,19 @@ Scripts and Tools</a>
 
 
 <p>
-<a href="Index-0.html#autosec-171" class="tocchapter" >
+<a href="Index-0.html#autosec-173" class="tocchapter" >
 Index</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-174" class="tocchapter" >
+<a href="Index-0.html#autosec-176" class="tocchapter" >
 Glossary</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-176" class="tocchapter" >
+<a href="Index-0.html#autosec-178" class="tocchapter" >
 Acronyms</a>
 </p>
 
@@ -592,6 +592,32 @@ kubectl delete service -l run=kebernetes-bootcamp
 kubectl get services
 curl $(minikube ip):$NODE_PORT
 kubectl exec -ti $POD_NAME curl localhost :8080
+</code>
+</pre>
+
+<a id="autoid-57" ></a >
+
+
+<div class="figurecaption" >
+
+<p>
+Listing&nbsp;5.4:&nbsp;Bash Script uncomment line in sed for osx
+</p>
+</div>
+<pre><code class = "language-bash">
+#!/bin/bash
+sed -i &apos;&apos; "8,8␣s#//##" $BITRISE_SOURCE_DIR /src/helpers/constants/config.js
+</code>
+</pre>
+
+
+<p>
+Upgrade the php upload limit on linux ami for codeformation launched wordpress instance.
+</p>
+<pre class="verbatim">
+sudo vim php.ini in /etc
+run sudo service httpd graceful
+
 </code>
 </pre>
 
