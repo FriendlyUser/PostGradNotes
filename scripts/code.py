@@ -43,6 +43,8 @@ for outputFile in lwarpFiles:
     golang = "language-go"
     js = "language-javascript"
     sql = "language-sql"
+    # add powershell - 
+    # future languages include kotlinphp typescript markdown and dart
     # Go through each even entry in replacements and then check if a replacement should happen
     replacementTerms = ["Cpp", cplusplus, "Latex Code", latex, "Python Script", python, 
         "Bash Script", bash,"Matlab Script", matlab,"Yaml File", yaml,
