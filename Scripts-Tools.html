@@ -327,19 +327,19 @@ Scripts and Tools</a>
 
 
 <p>
-<a href="Index-0.html#autosec-175" class="tocchapter" >
+<a href="Index-0.html#autosec-177" class="tocchapter" >
 Index</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-178" class="tocchapter" >
+<a href="Index-0.html#autosec-180" class="tocchapter" >
 Glossary</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-180" class="tocchapter" >
+<a href="Index-0.html#autosec-182" class="tocchapter" >
 Acronyms</a>
 </p>
 
@@ -681,6 +681,27 @@ choco install go
 
 
 </p>
+
+<p>
+To get all the latest commits since the last tags on windows
+</p>
+<pre class="verbatim">
+for /f "delims=" %a in ('git describe --tags --abbrev^=0') do @set latesttag=%a
+git log %latesttag%..HEAD --oneline
+
+</code>
+</pre>
+
+
+<p>
+on linux
+</p>
+<pre class="verbatim">
+git log $(git describe --tags --abbrev=0)..HEAD --oneline
+
+</code>
+</pre>
+
 </section>
 
 </div>
