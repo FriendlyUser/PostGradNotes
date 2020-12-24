@@ -298,3 +298,16 @@ run sudo service httpd graceful
 
 
 \lstinputlisting[caption={Bash Script to check python version}]{chapters/important/scripts/install.ps1}
+
+
+To get all the latest commits since the last tags on windows
+\begin{verbatim}
+for /f "delims=" %a in ('git describe --tags --abbrev^=0') do @set latesttag=%a
+git log %latesttag%..HEAD --oneline
+\end{verbatim}
+
+on linux
+
+\begin{verbatim}
+git log $(git describe --tags --abbrev=0)..HEAD --oneline
+\end{verbatim}
