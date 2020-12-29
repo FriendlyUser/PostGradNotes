@@ -311,3 +311,7 @@ on linux
 \begin{verbatim}
 git log $(git describe --tags --abbrev=0)..HEAD --oneline
 \end{verbatim}
+
+To deploy to nuget, make sure I push up tags first and then create releases from the tags.
+
+Creating a new tag with a release does not trigger github actions.
