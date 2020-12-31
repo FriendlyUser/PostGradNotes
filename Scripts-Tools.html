@@ -327,19 +327,19 @@ Scripts and Tools</a>
 
 
 <p>
-<a href="Index-0.html#autosec-177" class="tocchapter" >
+<a href="Index-0.html#autosec-178" class="tocchapter" >
 Index</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-180" class="tocchapter" >
+<a href="Index-0.html#autosec-181" class="tocchapter" >
 Glossary</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-182" class="tocchapter" >
+<a href="Index-0.html#autosec-183" class="tocchapter" >
 Acronyms</a>
 </p>
 
@@ -710,6 +710,21 @@ To deploy to nuget, make sure I push up tags first and then create releases from
 <p>
 Creating a new tag with a release does not trigger github actions.
 </p>
+<a id="autoid-60" ></a >
+
+
+<div class="figurecaption" >
+
+<p>
+Listing&nbsp;5.7:&nbsp;Bash Script to get largest files
+</p>
+</div>
+<pre><code class = "language-bash">
+#!/bin/bash
+du -sk * | sort -rn | head
+</code>
+</pre>
+
 </section>
 
 </div>

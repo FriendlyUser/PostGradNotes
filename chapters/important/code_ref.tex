@@ -315,3 +315,8 @@ git log $(git describe --tags --abbrev=0)..HEAD --oneline
 To deploy to nuget, make sure I push up tags first and then create releases from the tags.
 
 Creating a new tag with a release does not trigger github actions.
+
+\begin{lstlisting}[caption={Bash Script to get largest files}]
+#!/bin/bash
+du -sk * | sort -rn | head
+\end{lstlisting}
