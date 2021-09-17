@@ -87,7 +87,7 @@ SELECT su.id AS userId, system_user.email, js.first_name AS firstName,
     ORDER BY js.created_date
 \end{lstlisting}
 
-\begin{lstlsting}[caption={SQL query to get entry from json data}]
+\begin{lstlisting}[caption={SQL query to get entry from json data}]
 SELECT id, job_type, run_date, data, version, user_id,
     JSON_EXTRACT(JSON_UNQUOTE(data), '$.tripId') as tripId
     FROM nj where
