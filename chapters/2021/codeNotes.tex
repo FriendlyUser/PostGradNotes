@@ -53,14 +53,6 @@ to run migrations manually for typeorm on windows, build javascript files
 npm run build
 \end{lstlisting}
 
-Point to the javascript files
-\begin{lstlisting}
-TYPEORM_MIGRATIONS=dist/src/database/migrationsTest/*.js
-TYPEORM_MIGRATIONS_DIR=dist/src/database/migrationsTest
-TYPEORM_ENTITIES=dist/src/api/models/*.js
-TYPEORM_ENTITIES_DIR=dist/src/api/models
-\end{lstlisting}
-
 Use the migration commands with standard nodejs
 \begin{lstlisting}
 node node_modules/typeorm/cli.js migrations:show
