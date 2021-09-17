@@ -65,3 +65,32 @@ Use the migration commands with standard nodejs
 \begin{lstlisting}
 node node_modules/typeorm/cli.js migrations:show
 \end{lstlisting}
+
+\begin{lstlisting}[caption={SQL Query Count}]
+SELECT status, count(*) as scan_status FROM js GROUP BY status
+\end{lstlisting}
+
+\begin{lstlsting}[caption={SQL Query example}]
+SELECT AVG(number_of_star) AS meanRating FROM review WHERE vehicle_id = ?
+\end{lstlisting}
+
+\begin{lstlisting}[caption={SQL Query example verification}]
+SELECT su.id AS userId, system_user.email, js.first_name AS firstName,
+    js.last_name AS lastName, su.is_verified_driver_license AS systemApproved,
+    js.id AS scanId, js.status AS scanStatus, js.created_date AS scanDate,
+    id.id AS decisionId, id.decision AS decisionStatus,
+    id.created_at AS decisionDate
+    FROM su
+    LEFT JOIN js ON su.id = js.user_id
+    LEFT JOIN id ON su.id = id.user_id
+    WHERE js.created_date BETWEEN ? AND ?
+    ORDER BY js.created_date
+\end{lstlisting}
+
+\begin{lstlsting}[caption={SQL query to get entry from json data}]
+SELECT id, job_type, run_date, data, version, user_id,
+    JSON_EXTRACT(JSON_UNQUOTE(data), '$.tripId') as tripId
+    FROM nj where
+    JSON_EXTRACT(JSON_UNQUOTE(data), '$.tripId') = ?
+    and (job_type = 'NEW')`;
+\end{lstlisting}
