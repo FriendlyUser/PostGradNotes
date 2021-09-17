@@ -285,61 +285,61 @@ GCP Finance course</a>
 
 
 <p>
-<a href="Interviews.html#autosec-74" class="tocchapter" >
+<a href="Interviews.html#autosec-81" class="tocchapter" >
 <span class="sectionnumber" >3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
-<a href="2019.html#autosec-80" class="tocchapter" >
+<a href="2019.html#autosec-87" class="tocchapter" >
 <span class="sectionnumber" >4</span>&#x2003;2019</a>
 </p>
 
 
 <p>
-<a href="2019.html#autosec-83" class="tocsection" >
+<a href="2019.html#autosec-90" class="tocsection" >
 SQL</a>
 </p>
 
 
 <p>
-<a href="Code-Reference.html#autosec-128" class="tocchapter" >
+<a href="Code-Reference.html#autosec-135" class="tocchapter" >
 <span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
 </p>
 
 
 <p>
-<a href="Code-Reference.html#autosec-129" class="tocsection" >
+<a href="Code-Reference.html#autosec-136" class="tocsection" >
 Code Commands</a>
 </p>
 
 
 <p>
-<a href="Commands.html#autosec-157" class="tocsection" >
+<a href="Commands.html#autosec-164" class="tocsection" >
 Commands</a>
 </p>
 
 
 <p>
-<a href="Scripts-Tools.html#autosec-160" class="tocsection" >
+<a href="Scripts-Tools.html#autosec-167" class="tocsection" >
 Scripts and Tools</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-178" class="tocchapter" >
+<a href="Index-0.html#autosec-185" class="tocchapter" >
 Index</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-181" class="tocchapter" >
+<a href="Index-0.html#autosec-188" class="tocchapter" >
 Glossary</a>
 </p>
 
 
 <p>
-<a href="Index-0.html#autosec-183" class="tocchapter" >
+<a href="Index-0.html#autosec-190" class="tocchapter" >
 Acronyms</a>
 </p>
 
@@ -527,6 +527,102 @@ useEffect(() =&gt; {
 return { data, isLoading, hasError, errorMessage, updateUrl, updateParams, refetch }
 }
 export default useFetch
+</code>
+</pre>
+
+
+<p>
+To generate a new migration on windows.
+</p>
+<pre><code class = "language-cpp">
+npx ts-node node_modules/typeorm/cli.js migration:generate -n AddUserIdToNodeJobs
+</code>
+</pre>
+
+
+<p>
+to run migrations manually for typeorm on windows, build javascript files
+</p>
+<pre><code class = "language-cpp">
+npm run build
+</code>
+</pre>
+
+
+<p>
+Use the migration commands with standard nodejs
+</p>
+<pre><code class = "language-cpp">
+node node_modules/typeorm/cli.js migrations:show
+</code>
+</pre>
+
+<a id="autoid-40" ></a >
+
+
+<div class="figurecaption" >
+
+<p>
+Listing&nbsp;2.35:&nbsp;SQL Query Count
+</p>
+</div>
+<pre><code class = "language-sql">
+SELECT status, count(*) as scan_status FROM js GROUP BY status
+</code>
+</pre>
+
+<a id="autoid-41" ></a >
+
+
+<div class="figurecaption" >
+
+<p>
+Listing&nbsp;2.36:&nbsp;SQL Query example
+</p>
+</div>
+<pre><code class = "language-sql">
+SELECT AVG( number_of_star ) AS meanRating FROM review WHERE vehicle_id = ?
+</code>
+</pre>
+
+<a id="autoid-42" ></a >
+
+
+<div class="figurecaption" >
+
+<p>
+Listing&nbsp;2.37:&nbsp;SQL Query example verification
+</p>
+</div>
+<pre><code class = "language-sql">
+SELECT su.id AS userId, system_user.email, js.first_name AS firstName,
+    js.last_name AS lastName, su. is_verified_driver_license AS systemApproved ,
+    js.id AS scanId, js.status AS scanStatus, js.created_date AS scanDate,
+    id.id AS decisionId, id.decision AS decisionStatus ,
+    id.created_at AS decisionDate
+    FROM su
+    LEFT JOIN js ON su.id = js.user_id
+    LEFT JOIN id ON su.id = id.user_id
+    WHERE js.created_date BETWEEN ? AND ?
+    ORDER BY js.created_date
+</code>
+</pre>
+
+<a id="autoid-43" ></a >
+
+
+<div class="figurecaption" >
+
+<p>
+Listing&nbsp;2.38:&nbsp;SQL query to get entry from json data
+</p>
+</div>
+<pre><code class = "language-cpp">
+SELECT id, job_type, run_date, data, version, user_id,
+    JSON_EXTRACT(JSON_UNQUOTE(data), &apos;$.tripId&apos;) as tripId
+    FROM nj where
+    JSON_EXTRACT(JSON_UNQUOTE(data), &apos;$.tripId&apos;) = ?
+   and (job_type = &apos;NEW&apos;)&grave;;
 </code>
 </pre>
 
