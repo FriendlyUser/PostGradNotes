@@ -59,10 +59,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -86,6 +89,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -101,9 +123,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -170,7 +192,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -191,10 +213,10 @@ MathJax = {
 
 </head>
 <body>
-<header>
-
+<!--|Using lwarp|index-0.html|-->
 
 <p>
+<header>
 Name and <span
     class="fbox"
     style="display:inline-block ; border:1pt solid #000000; padding:3pt ; color:#000000"
@@ -202,20 +224,20 @@ Name and <span
 </p>
 </header>
 
-<div class="bodywithoutsidetoc" >
+<div class="bodywithoutsidetoc">
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <a id="postGrad-autofile-0"></a>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -224,6 +246,10 @@ Name and <span
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -239,6 +265,12 @@ Name and <span
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -250,6 +282,10 @@ Name and <span
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -263,7 +299,31 @@ Name and <span
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -271,7 +331,11 @@ Name and <span
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -282,15 +346,15 @@ Name and <span
 </div>
 
 <a id="postGrad-autopage-1"></a>
-<div class="titlepage" >
+<div class="titlepage">
 
 <h1>The Lwarp Tutorial</h1>
 
 
-<div class="author" >
+<div class="author">
 
 
-<div class="oneauthor" >
+<div class="oneauthor">
 
 <p>
 Some Author
@@ -300,18 +364,18 @@ Some Author
 </div>
 
 
-<div class="titledate" >
+<div class="titledate">
 
 <p>
-September 17, 2021
+September 18, 2021
 </p>
 </div>
 
 </div>
-<div class="center" >
+<div class="center">
 
 <p>
-<span class="textsc" >Personal Study Notes</span><br />
+<span class="textsc">Personal Study Notes</span><br />
 <span
     style="background:black; width:1012pt ; height:1pt ;
     -ms-transform: translate(0pt,-26pt);
@@ -319,18 +383,18 @@ September 17, 2021
     transform: translate(0pt,-26pt);
     display:inline-block;"
 ><!----></span><br />
-<b><span class="textsc" >Software Engineer</span></b><br />
-<span class="textsc" >Post Grad Notes</span><br />
-<span class="textsc" >Victoria, British Columbia, Canada</span><br />
+<b><span class="textsc">Software Engineer</span></b><br />
+<span class="textsc">Post Grad Notes</span><br />
+<span class="textsc">Victoria, British Columbia, Canada</span><br />
 
 </p>
 
 <p>
-<span class="textsc" >September 17, 2021</span><br />
+<span class="textsc">September 18, 2021</span><br />
 <b>Name:</b> &#x2003;&#x2003;David Li<br />
 <b>Student Number:</b> &#x2003;&#x2003;V00818631<br />
 <b>Email:</b> &#x2003;&#x2003;<a href="mailto:davidli012345@gmail.ca" target="_blank" >davidli012345@gmail.ca</a><br />
-<span class="textsc" >In partial fulfillment of the never ending quest to learn.<br />
+<span class="textsc">In partial fulfillment of the never ending quest to learn.<br />
 </span>
 </p>
 </div>
@@ -339,11 +403,11 @@ September 17, 2021
 
 
 
-<nav class="toc" >
+<nav class="toc">
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -367,7 +431,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -379,7 +443,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -439,13 +503,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -499,7 +563,7 @@ Hugo Tools to Consider</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -615,11 +679,11 @@ Acronyms</a>
 
 
 
-<nav class="lof" >
+<nav class="lof">
 
 <p>
 <a href="Example-chapter.html#autoid-1" class="tocfigure" >
-<span class="sectionnumber" >1.1</span>&#x2003;A figure with text</a>
+<span class="sectionnumber">1.1</span>&#x2003;A figure with text</a>
 </p>
 </nav>
 <h3 id="autosec-6">Listings</h3>
@@ -627,371 +691,371 @@ Acronyms</a>
 
 
 
-<nav class="lol" >
+<nav class="lol">
 
 <p>
 <a href="Example-chapter.html#autoid-2" class="toclstlisting" >
-<span class="sectionnumber" >1.1</span>&#x2003;Cpp Testing </a>
+<span class="sectionnumber">1.1</span>&#x2003;Cpp Testing </a>
 </p>
 
 
 <p>
 <a href="Example-chapter.html#autoid-3" class="toclstlisting" >
-<span class="sectionnumber" >1.2</span>&#x2003;Golang Program </a>
+<span class="sectionnumber">1.2</span>&#x2003;Golang Program </a>
 </p>
 
 
 <p>
 <a href="Example-chapter.html#autoid-4" class="toclstlisting" >
-<span class="sectionnumber" >1.3</span>&#x2003;Python Script </a>
+<span class="sectionnumber">1.3</span>&#x2003;Python Script </a>
 </p>
 
 
 <p>
 <a href="2020.html#autoid-5" class="toclstlisting" >
-<span class="sectionnumber" >1.4</span>&#x2003;Bash Script </a>
+<span class="sectionnumber">1.4</span>&#x2003;Bash Script </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-6" class="toclstlisting" >
-<span class="sectionnumber" >2.1</span>&#x2003;spaCy Basic English NLP </a>
+<span class="sectionnumber">2.1</span>&#x2003;spaCy Basic English NLP </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-7" class="toclstlisting" >
-<span class="sectionnumber" >2.2</span>&#x2003;spaCy First Token </a>
+<span class="sectionnumber">2.2</span>&#x2003;spaCy First Token </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-8" class="toclstlisting" >
-<span class="sectionnumber" >2.3</span>&#x2003;spaCy Slice Doc </a>
+<span class="sectionnumber">2.3</span>&#x2003;spaCy Slice Doc </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-9" class="toclstlisting" >
-<span class="sectionnumber" >2.4</span>&#x2003;spaCy Detect Percentages </a>
+<span class="sectionnumber">2.4</span>&#x2003;spaCy Detect Percentages </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-10" class="toclstlisting" >
-<span class="sectionnumber" >2.5</span>&#x2003;spaCy Loading Models </a>
+<span class="sectionnumber">2.5</span>&#x2003;spaCy Loading Models </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-11" class="toclstlisting" >
-<span class="sectionnumber" >2.6</span>&#x2003;spaCy Linguistic Annotations V1 </a>
+<span class="sectionnumber">2.6</span>&#x2003;spaCy Linguistic Annotations V1 </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-12" class="toclstlisting" >
-<span class="sectionnumber" >2.7</span>&#x2003;spaCy Linguistic Annotations V2 </a>
+<span class="sectionnumber">2.7</span>&#x2003;spaCy Linguistic Annotations V2 </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-13" class="toclstlisting" >
-<span class="sectionnumber" >2.8</span>&#x2003;spaCy Linguistic Annotations V2 </a>
+<span class="sectionnumber">2.8</span>&#x2003;spaCy Linguistic Annotations V2 </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-14" class="toclstlisting" >
-<span class="sectionnumber" >2.9</span>&#x2003;spaCy Matcher </a>
+<span class="sectionnumber">2.9</span>&#x2003;spaCy Matcher </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-15" class="toclstlisting" >
-<span class="sectionnumber" >2.10</span>&#x2003;spaCy Writing Matcher </a>
+<span class="sectionnumber">2.10</span>&#x2003;spaCy Writing Matcher </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-16" class="toclstlisting" >
-<span class="sectionnumber" >2.11</span>&#x2003;spaCy Writing Matcher II </a>
+<span class="sectionnumber">2.11</span>&#x2003;spaCy Writing Matcher II </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-17" class="toclstlisting" >
-<span class="sectionnumber" >2.12</span>&#x2003;spaCy Writing Matcher III </a>
+<span class="sectionnumber">2.12</span>&#x2003;spaCy Writing Matcher III </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-18" class="toclstlisting" >
-<span class="sectionnumber" >2.13</span>&#x2003;spaCy Cat hash </a>
+<span class="sectionnumber">2.13</span>&#x2003;spaCy Cat hash </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-19" class="toclstlisting" >
-<span class="sectionnumber" >2.14</span>&#x2003;spaCy Person hash </a>
+<span class="sectionnumber">2.14</span>&#x2003;spaCy Person hash </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-20" class="toclstlisting" >
-<span class="sectionnumber" >2.15</span>&#x2003;spaCy Docs, spans and entities from scratch </a>
+<span class="sectionnumber">2.15</span>&#x2003;spaCy Docs, spans and entities from scratch </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-21" class="toclstlisting" >
-<span class="sectionnumber" >2.16</span>&#x2003;spaCy Code rewrite to use spaCy functions </a>
+<span class="sectionnumber">2.16</span>&#x2003;spaCy Code rewrite to use spaCy functions </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-22" class="toclstlisting" >
-<span class="sectionnumber" >2.17</span>&#x2003;spaCy Word Vectors </a>
+<span class="sectionnumber">2.17</span>&#x2003;spaCy Word Vectors </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-23" class="toclstlisting" >
-<span class="sectionnumber" >2.18</span>&#x2003;spaCy Similarities I </a>
+<span class="sectionnumber">2.18</span>&#x2003;spaCy Similarities I </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-24" class="toclstlisting" >
-<span class="sectionnumber" >2.19</span>&#x2003;spaCy Similarities II </a>
+<span class="sectionnumber">2.19</span>&#x2003;spaCy Similarities II </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-25" class="toclstlisting" >
-<span class="sectionnumber" >2.20</span>&#x2003;spaCy Extracting Countries and Relationship </a>
+<span class="sectionnumber">2.20</span>&#x2003;spaCy Extracting Countries and Relationship </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-26" class="toclstlisting" >
-<span class="sectionnumber" >2.21</span>&#x2003;spaCy Extracting Countries and Relationship </a>
+<span class="sectionnumber">2.21</span>&#x2003;spaCy Extracting Countries and Relationship </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-27" class="toclstlisting" >
-<span class="sectionnumber" >2.22</span>&#x2003;spaCy Efficient Phrase </a>
+<span class="sectionnumber">2.22</span>&#x2003;spaCy Efficient Phrase </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-28" class="toclstlisting" >
-<span class="sectionnumber" >2.23</span>&#x2003;spaCy Inspecting Code </a>
+<span class="sectionnumber">2.23</span>&#x2003;spaCy Inspecting Code </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-29" class="toclstlisting" >
-<span class="sectionnumber" >2.24</span>&#x2003;spaCy Custom Components </a>
+<span class="sectionnumber">2.24</span>&#x2003;spaCy Custom Components </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-30" class="toclstlisting" >
-<span class="sectionnumber" >2.25</span>&#x2003;spaCy Complex Components </a>
+<span class="sectionnumber">2.25</span>&#x2003;spaCy Complex Components </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-31" class="toclstlisting" >
-<span class="sectionnumber" >2.26</span>&#x2003;spaCy Extension Attributes 1 </a>
+<span class="sectionnumber">2.26</span>&#x2003;spaCy Extension Attributes 1 </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-32" class="toclstlisting" >
-<span class="sectionnumber" >2.27</span>&#x2003;spaCy Extension Attributes 2 </a>
+<span class="sectionnumber">2.27</span>&#x2003;spaCy Extension Attributes 2 </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-33" class="toclstlisting" >
-<span class="sectionnumber" >2.28</span>&#x2003;spaCy Extension Attributes I </a>
+<span class="sectionnumber">2.28</span>&#x2003;spaCy Extension Attributes I </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-34" class="toclstlisting" >
-<span class="sectionnumber" >2.29</span>&#x2003;spaCy Extension Attributes II </a>
+<span class="sectionnumber">2.29</span>&#x2003;spaCy Extension Attributes II </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-35" class="toclstlisting" >
-<span class="sectionnumber" >2.30</span>&#x2003;spaCy Entities Extension </a>
+<span class="sectionnumber">2.30</span>&#x2003;spaCy Entities Extension </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-36" class="toclstlisting" >
-<span class="sectionnumber" >2.31</span>&#x2003;spaCy Training Data 1 </a>
+<span class="sectionnumber">2.31</span>&#x2003;spaCy Training Data 1 </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-37" class="toclstlisting" >
-<span class="sectionnumber" >2.32</span>&#x2003;spaCy Training Data 2 </a>
+<span class="sectionnumber">2.32</span>&#x2003;spaCy Training Data 2 </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-38" class="toclstlisting" >
-<span class="sectionnumber" >2.33</span>&#x2003;spaCy Setting Up Pipeline </a>
+<span class="sectionnumber">2.33</span>&#x2003;spaCy Setting Up Pipeline </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-39" class="toclstlisting" >
-<span class="sectionnumber" >2.34</span>&#x2003;spaCy Training Loop </a>
+<span class="sectionnumber">2.34</span>&#x2003;spaCy Training Loop </a>
 </p>
 
 
 <p>
 <a href="GCP-Finance-course.html#autoid-40" class="toclstlisting" >
-<span class="sectionnumber" >2.35</span>&#x2003;SQL Query Count </a>
+<span class="sectionnumber">2.35</span>&#x2003;SQL Query Count </a>
 </p>
 
 
 <p>
 <a href="GCP-Finance-course.html#autoid-41" class="toclstlisting" >
-<span class="sectionnumber" >2.36</span>&#x2003;SQL Query example </a>
+<span class="sectionnumber">2.36</span>&#x2003;SQL Query example </a>
 </p>
 
 
 <p>
 <a href="GCP-Finance-course.html#autoid-42" class="toclstlisting" >
-<span class="sectionnumber" >2.37</span>&#x2003;SQL Query example verification </a>
+<span class="sectionnumber">2.37</span>&#x2003;SQL Query example verification </a>
 </p>
 
 
 <p>
 <a href="GCP-Finance-course.html#autoid-43" class="toclstlisting" >
-<span class="sectionnumber" >2.38</span>&#x2003;SQL query to get entry from json data </a>
+<span class="sectionnumber">2.38</span>&#x2003;SQL query to get entry from json data </a>
 </p>
 
 
 <p>
 <a href="Interviews.html#autoid-44" class="toclstlisting" >
-<span class="sectionnumber" >3.1</span>&#x2003;SQL Query for KPMG Interview </a>
+<span class="sectionnumber">3.1</span>&#x2003;SQL Query for KPMG Interview </a>
 </p>
 
 
 <p>
 <a href="Interviews.html#autoid-45" class="toclstlisting" >
-<span class="sectionnumber" >3.2</span>&#x2003;SQL Query for KPMG Interview – Answer </a>
+<span class="sectionnumber">3.2</span>&#x2003;SQL Query for KPMG Interview – Answer </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-47" class="toclstlisting" >
-<span class="sectionnumber" >4.1</span>&#x2003;Javascript Program: Quantum random spy hunter </a>
+<span class="sectionnumber">4.1</span>&#x2003;Javascript Program: Quantum random spy hunter </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-48" class="toclstlisting" >
-<span class="sectionnumber" >4.2</span>&#x2003;SQL Query for length </a>
+<span class="sectionnumber">4.2</span>&#x2003;SQL Query for length </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-49" class="toclstlisting" >
-<span class="sectionnumber" >4.3</span>&#x2003;SQL Query for addresses </a>
+<span class="sectionnumber">4.3</span>&#x2003;SQL Query for addresses </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-50" class="toclstlisting" >
-<span class="sectionnumber" >4.4</span>&#x2003;Javascript Program get ip address </a>
+<span class="sectionnumber">4.4</span>&#x2003;Javascript Program get ip address </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-51" class="toclstlisting" >
-<span class="sectionnumber" >4.5</span>&#x2003;Javascript Program HTTP server </a>
+<span class="sectionnumber">4.5</span>&#x2003;Javascript Program HTTP server </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-52" class="toclstlisting" >
-<span class="sectionnumber" >4.6</span>&#x2003;Cpp Testing </a>
+<span class="sectionnumber">4.6</span>&#x2003;Cpp Testing </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-53" class="toclstlisting" >
-<span class="sectionnumber" >4.7</span>&#x2003;Golang Adaptor Example </a>
+<span class="sectionnumber">4.7</span>&#x2003;Golang Adaptor Example </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-54" class="toclstlisting" >
-<span class="sectionnumber" >4.8</span>&#x2003;Golang Adaptor Example </a>
+<span class="sectionnumber">4.8</span>&#x2003;Golang Adaptor Example </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-57" class="toclstlisting" >
-<span class="sectionnumber" >4.9</span>&#x2003;Golang Program </a>
+<span class="sectionnumber">4.9</span>&#x2003;Golang Program </a>
 </p>
 
 
 <p>
 <a href="Scripts-Tools.html#autoid-58" class="toclstlisting" >
-<span class="sectionnumber" >5.1</span>&#x2003;Python Script to download from google drive </a>
+<span class="sectionnumber">5.1</span>&#x2003;Python Script to download from google drive </a>
 </p>
 
 
 <p>
 <a href="Scripts-Tools.html#autoid-59" class="toclstlisting" >
-<span class="sectionnumber" >5.2</span>&#x2003;Python Script to remove watermark </a>
+<span class="sectionnumber">5.2</span>&#x2003;Python Script to remove watermark </a>
 </p>
 
 
 <p>
 <a href="Scripts-Tools.html#autoid-60" class="toclstlisting" >
-<span class="sectionnumber" >5.3</span>&#x2003;Bash Script for kubernates </a>
+<span class="sectionnumber">5.3</span>&#x2003;Bash Script for kubernates </a>
 </p>
 
 
 <p>
 <a href="Scripts-Tools.html#autoid-61" class="toclstlisting" >
-<span class="sectionnumber" >5.4</span>&#x2003;Bash Script uncomment line in sed for osx </a>
+<span class="sectionnumber">5.4</span>&#x2003;Bash Script uncomment line in sed for osx </a>
 </p>
 
 
 <p>
 <a href="Scripts-Tools.html#autoid-62" class="toclstlisting" >
-<span class="sectionnumber" >5.5</span>&#x2003;Powershell script to install key software </a>
+<span class="sectionnumber">5.5</span>&#x2003;Powershell script to install key software </a>
 </p>
 
 
 <p>
 <a href="Scripts-Tools.html#autoid-63" class="toclstlisting" >
-<span class="sectionnumber" >5.6</span>&#x2003;Bash Script to check python version </a>
+<span class="sectionnumber">5.6</span>&#x2003;Bash Script to check python version </a>
 </p>
 
 
 <p>
 <a href="Scripts-Tools.html#autoid-64" class="toclstlisting" >
-<span class="sectionnumber" >5.7</span>&#x2003;Bash Script to get largest files </a>
+<span class="sectionnumber">5.7</span>&#x2003;Bash Script to get largest files </a>
 </p>
 </nav>
 
 </section>
 
-</div>
+</main>
 
 </div>
 
@@ -1060,10 +1124,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -1087,6 +1154,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -1102,9 +1188,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -1171,7 +1257,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -1195,7 +1281,7 @@ MathJax = {
 
 
 <a id="postGrad-autopage-7"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+<nav class="topnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 <header>
@@ -1210,17 +1296,17 @@ Home</a></nav>
 </header>
 
 
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
+<div class="bodyandsidetoc">
+<div class="sidetoccontainer">
 
 
-<nav class="sidetoc" >
+<nav class="sidetoc">
 
 
-<div class="sidetoctitle" >
+<div class="sidetoctitle">
 
 <p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+<span class="sidetocthetitle">The Lwarp Tutorial</span>
 </p>
 
 <p>
@@ -1229,7 +1315,7 @@ Contents
 </div>
 
 
-<div class="sidetoccontents" >
+<div class="sidetoccontents">
 
 <p>
 <a href="index.html" class="linkhome" >
@@ -1238,7 +1324,7 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -1256,7 +1342,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -1268,7 +1354,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -1286,13 +1372,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -1304,7 +1390,7 @@ SQL</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -1351,17 +1437,17 @@ Acronyms</a>
 </div>
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <h1>The Lwarp Tutorial</h1>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -1370,6 +1456,10 @@ Acronyms</a>
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -1385,6 +1475,12 @@ Acronyms</a>
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -1396,6 +1492,10 @@ Acronyms</a>
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -1409,7 +1509,31 @@ Acronyms</a>
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -1417,7 +1541,11 @@ Acronyms</a>
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -1428,7 +1556,7 @@ Acronyms</a>
 </div>
 
 <p>
-<h3 id="autosec-8">Chapter&nbsp;<span class="sectionnumber" >1&#x2003;</span>Example chapter</h3>
+<h3 id="autosec-8">Chapter&nbsp;<span class="sectionnumber">1&#x2003;</span>Example chapter</h3>
 <a id="postGrad-autopage-8"></a>
 <a id="postGrad-autofile-1"></a>
 <h4 id="autosec-9">A section</h4>
@@ -1460,7 +1588,7 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 "
 >
 <p>
-<span class="textrm textbf textup textulc" >SENG475 Example Code Listing</span>
+<span class="textrm textbf textup textulc">SENG475 Example Code Listing</span>
 </p>
 </div>
 <p>
@@ -1483,7 +1611,7 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 "
 >
 <p>
-<span class="textrm textbf textup textulc" >SENG475 Example Code Listing</span>
+<span class="textrm textbf textup textulc">SENG475 Example Code Listing</span>
 </p>
 </div>
 <p>
@@ -1506,7 +1634,7 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 "
 >
 <p>
-<span class="textrm textbf textup textulc" >SENG475 Example Code Listing</span>
+<span class="textrm textbf textup textulc">SENG475 Example Code Listing</span>
 </p>
 </div>
 <p>
@@ -1516,7 +1644,7 @@ All for the sake of glory city. We see that in ?? that mdframed makes environmen
 </div>
 
 <figure id="autoid-1" class="figure ">
-<div class="center" >
+<div class="center">
 
 <p>
 <span
@@ -1528,7 +1656,7 @@ All for the sake of glory city. We see that in ?? that mdframed makes environmen
 >Text in a figure.</span></span>
 </p>
 
-<div class="figurecaption" >
+<div class="figurecaption">
 <p>
 Figure 1.1:&nbsp;A figure with text<a id="fig:withtext"></a>
 </p>
@@ -1540,7 +1668,7 @@ Figure 1.1:&nbsp;A figure with text<a id="fig:withtext"></a>
 <a id="autoid-2" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;1.1:&nbsp;Cpp Testing
@@ -1554,7 +1682,7 @@ Listing&nbsp;1.1:&nbsp;Cpp Testing
 <a id="autoid-3" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;1.2:&nbsp;Golang Program
@@ -1573,7 +1701,7 @@ import (
 <a id="autoid-4" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;1.3:&nbsp;Python Script
@@ -1681,13 +1809,13 @@ print(&apos;Script is Done creating files&apos;)
 
 
 <p>
-Using references is [<a href="Index-0.html#LWR-ht-cite.0@book:2300108">1</a>]
+Using references is <a id="postGrad-autopage-14"></a>[<a href="Index-0.html#LWR-ht-cite.0@book:2300108">1</a>]
 </p>
 
 
 </section>
 
-</div>
+</main>
 
 </div>
 
@@ -1700,7 +1828,7 @@ Contact Information and Copyright
 </footer>
 
 
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+<nav class="botnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 </body>
@@ -1768,10 +1896,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -1795,6 +1926,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -1810,9 +1960,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -1879,7 +2029,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -1903,7 +2053,7 @@ MathJax = {
 
 
 <a id="postGrad-autopage-15"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+<nav class="topnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 <header>
@@ -1918,17 +2068,17 @@ Home</a></nav>
 </header>
 
 
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
+<div class="bodyandsidetoc">
+<div class="sidetoccontainer">
 
 
-<nav class="sidetoc" >
+<nav class="sidetoc">
 
 
-<div class="sidetoctitle" >
+<div class="sidetoctitle">
 
 <p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+<span class="sidetocthetitle">The Lwarp Tutorial</span>
 </p>
 
 <p>
@@ -1937,7 +2087,7 @@ Contents
 </div>
 
 
-<div class="sidetoccontents" >
+<div class="sidetoccontents">
 
 <p>
 <a href="index.html" class="linkhome" >
@@ -1946,7 +2096,7 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -1964,7 +2114,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -1976,7 +2126,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -1994,13 +2144,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -2012,7 +2162,7 @@ SQL</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -2059,17 +2209,17 @@ Acronyms</a>
 </div>
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <h1>The Lwarp Tutorial</h1>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -2078,6 +2228,10 @@ Acronyms</a>
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -2093,6 +2247,12 @@ Acronyms</a>
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -2104,6 +2264,10 @@ Acronyms</a>
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -2117,7 +2281,31 @@ Acronyms</a>
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -2125,7 +2313,11 @@ Acronyms</a>
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -2144,13 +2336,12 @@ Acronyms</a>
 Inline math: \(r = r_0 + vt - \frac {1}{2}at^2\) followed by display math:
 </p>
 
-<span class="hidden" > \(\seteqnumber{0}{1.}{0}\)</span>
+<span class="hidden"> \(\seteqnumber{0}{1.}{0}\)</span>
 
 <!--
 
 
-                                                                                                 a2 + b2 = c2   (1.1)
-
+                                                                                                         a2 + b2 = c2   (1.1)
 
 -->
 
@@ -2164,7 +2355,7 @@ a^2 + b^2 = c^2
 
 </section>
 
-</div>
+</main>
 
 </div>
 
@@ -2177,7 +2368,7 @@ Contact Information and Copyright
 </footer>
 
 
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+<nav class="botnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 </body>
@@ -2245,10 +2436,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -2272,6 +2466,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -2287,9 +2500,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -2356,7 +2569,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -2380,7 +2593,7 @@ MathJax = {
 
 
 <a id="postGrad-autopage-17"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+<nav class="topnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 <header>
@@ -2395,17 +2608,17 @@ Home</a></nav>
 </header>
 
 
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
+<div class="bodyandsidetoc">
+<div class="sidetoccontainer">
 
 
-<nav class="sidetoc" >
+<nav class="sidetoc">
 
 
-<div class="sidetoctitle" >
+<div class="sidetoctitle">
 
 <p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+<span class="sidetocthetitle">The Lwarp Tutorial</span>
 </p>
 
 <p>
@@ -2414,7 +2627,7 @@ Contents
 </div>
 
 
-<div class="sidetoccontents" >
+<div class="sidetoccontents">
 
 <p>
 <a href="index.html" class="linkhome" >
@@ -2423,7 +2636,7 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -2441,7 +2654,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -2453,7 +2666,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -2471,13 +2684,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -2489,7 +2702,7 @@ SQL</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -2536,17 +2749,17 @@ Acronyms</a>
 </div>
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <h1>The Lwarp Tutorial</h1>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -2555,6 +2768,10 @@ Acronyms</a>
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -2570,6 +2787,12 @@ Acronyms</a>
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -2581,6 +2804,10 @@ Acronyms</a>
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -2594,7 +2821,31 @@ Acronyms</a>
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -2602,7 +2853,11 @@ Acronyms</a>
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -2613,7 +2868,7 @@ Acronyms</a>
 </div>
 
 <p>
-<h2 id="autosec-18">Part&nbsp;<span class="sectionnumber" >I&#x2003;</span>2020</h2>
+<h2 id="autosec-18">Part&nbsp;<span class="sectionnumber">I&#x2003;</span>2020</h2>
 <a id="postGrad-autopage-18"></a>
 <a id="postGrad-autofile-3"></a>
 
@@ -2634,7 +2889,7 @@ Before running all commands switch to root user, ensure you have the latest vers
 <a id="autoid-5" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;1.4:&nbsp;Bash Script
@@ -2664,7 +2919,7 @@ Clear Storage and Clear Container Registry periodically each month to avoid payi
 
 </section>
 
-</div>
+</main>
 
 </div>
 
@@ -2677,7 +2932,7 @@ Contact Information and Copyright
 </footer>
 
 
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+<nav class="botnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 </body>
@@ -2745,10 +3000,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -2772,6 +3030,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -2787,9 +3064,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -2856,7 +3133,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -2880,7 +3157,7 @@ MathJax = {
 
 
 <a id="postGrad-autopage-21"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+<nav class="topnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 <header>
@@ -2895,17 +3172,17 @@ Home</a></nav>
 </header>
 
 
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
+<div class="bodyandsidetoc">
+<div class="sidetoccontainer">
 
 
-<nav class="sidetoc" >
+<nav class="sidetoc">
 
 
-<div class="sidetoctitle" >
+<div class="sidetoctitle">
 
 <p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+<span class="sidetocthetitle">The Lwarp Tutorial</span>
 </p>
 
 <p>
@@ -2914,7 +3191,7 @@ Contents
 </div>
 
 
-<div class="sidetoccontents" >
+<div class="sidetoccontents">
 
 <p>
 <a href="index.html" class="linkhome" >
@@ -2923,7 +3200,7 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -2941,7 +3218,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -2953,7 +3230,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -2971,13 +3248,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -2989,7 +3266,7 @@ SQL</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -3036,17 +3313,17 @@ Acronyms</a>
 </div>
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <h1>The Lwarp Tutorial</h1>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -3055,6 +3332,10 @@ Acronyms</a>
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -3070,6 +3351,12 @@ Acronyms</a>
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -3081,6 +3368,10 @@ Acronyms</a>
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -3094,7 +3385,31 @@ Acronyms</a>
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -3102,7 +3417,11 @@ Acronyms</a>
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -3113,7 +3432,7 @@ Acronyms</a>
 </div>
 
 <p>
-<h3 id="autosec-22">Chapter&nbsp;<span class="sectionnumber" >2&#x2003;</span>spaCy Tutorials</h3>
+<h3 id="autosec-22">Chapter&nbsp;<span class="sectionnumber">2&#x2003;</span>spaCy Tutorials</h3>
 <a id="postGrad-autopage-22"></a>
 <a id="postGrad-autofile-4"></a>
 <h4 id="autosec-23">Spacy Code Tutorials</h4>
@@ -3126,7 +3445,7 @@ This contains all the spacy code tutorial I have done and gone through.
 <a id="autoid-6" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.1:&nbsp;spaCy Basic English NLP
@@ -3154,7 +3473,7 @@ print(doc.text)
 <a id="autoid-7" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.2:&nbsp;spaCy First Token
@@ -3181,7 +3500,7 @@ print(first_token.text)
 <a id="autoid-8" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.3:&nbsp;spaCy Slice Doc
@@ -3212,7 +3531,7 @@ print( tree_kangaroos_and_narwhals .text)
 <a id="autoid-9" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.4:&nbsp;spaCy Detect Percentages
@@ -3246,7 +3565,7 @@ for token in doc:
 <a id="autoid-10" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.5:&nbsp;spaCy Loading Models
@@ -3280,7 +3599,7 @@ This will be useful for me to grab the percentages from finance youtube videos.
 <a id="autoid-11" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.6:&nbsp;spaCy Linguistic Annotations V1
@@ -3309,7 +3628,7 @@ for token in doc:
 <a id="autoid-12" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.7:&nbsp;spaCy Linguistic Annotations V2
@@ -3337,7 +3656,7 @@ for ent in doc.ents:
 <a id="autoid-13" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.8:&nbsp;spaCy Linguistic Annotations V2
@@ -3371,7 +3690,7 @@ print("Missing␣entity:", iphone_x.text)
 <a id="autoid-14" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.9:&nbsp;spaCy Matcher
@@ -3404,7 +3723,7 @@ print("Matches:", [doc[start:end].text for match_id, start, end in matches])
 <a id="autoid-15" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.10:&nbsp;spaCy Writing Matcher
@@ -3441,7 +3760,7 @@ for match_id, start, end in matches:
 <a id="autoid-16" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.11:&nbsp;spaCy Writing Matcher II
@@ -3478,7 +3797,7 @@ for match_id, start, end in matches:
 <a id="autoid-17" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.12:&nbsp;spaCy Writing Matcher III
@@ -3515,7 +3834,7 @@ for match_id, start, end in matches:
 <a id="autoid-18" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.13:&nbsp;spaCy Cat hash
@@ -3540,7 +3859,7 @@ print(cat_string)
 <a id="autoid-19" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.14:&nbsp;spaCy Person hash
@@ -3565,7 +3884,7 @@ print( person_string )
 <a id="autoid-20" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.15:&nbsp;spaCy Docs, spans and entities from scratch
@@ -3601,7 +3920,7 @@ print([(ent.text, ent.label_) for ent in doc.ents])
 <a id="autoid-21" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.16:&nbsp;spaCy Code rewrite to use spaCy functions
@@ -3643,7 +3962,7 @@ for token in doc:
 <a id="autoid-22" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.17:&nbsp;spaCy Word Vectors
@@ -3667,7 +3986,7 @@ print( bananas_vector )
 <a id="autoid-23" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.18:&nbsp;spaCy Similarities I
@@ -3690,7 +4009,7 @@ print(similarity)
 <a id="autoid-24" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.19:&nbsp;spaCy Similarities II
@@ -3716,7 +4035,7 @@ print(similarity)
 <a id="autoid-25" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.20:&nbsp;spaCy Extracting Countries and Relationship
@@ -3757,7 +4076,7 @@ for match_id, start, end in matcher(doc):
 <a id="autoid-26" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.21:&nbsp;spaCy Extracting Countries and Relationship
@@ -3804,7 +4123,7 @@ print([(ent.text, ent.label_) for ent in doc.ents if ent.label_ == "GPE"])
 <a id="autoid-27" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.22:&nbsp;spaCy Efficient Phrase
@@ -3841,7 +4160,7 @@ print([doc[start:end] for match_id, start, end in matches])
 <a id="autoid-28" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.23:&nbsp;spaCy Inspecting Code
@@ -3864,7 +4183,7 @@ print(nlp.pipeline)
 <a id="autoid-29" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.24:&nbsp;spaCy Custom Components
@@ -3898,7 +4217,7 @@ doc = nlp("Simple␣Text")
 <a id="autoid-30" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.25:&nbsp;spaCy Complex Components
@@ -3941,7 +4260,7 @@ print([(ent.text, ent.label) for ent in doc.ents])
 <a id="autoid-31" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.26:&nbsp;spaCy Extension Attributes 1
@@ -3968,7 +4287,7 @@ print([(token.text, token._.is_country) for token in doc])
 <a id="autoid-32" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.27:&nbsp;spaCy Extension Attributes 2
@@ -3999,7 +4318,7 @@ for token in doc:
 <a id="autoid-33" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.28:&nbsp;spaCy Extension Attributes I
@@ -4030,7 +4349,7 @@ print("has_number:", doc._.has_number)
 <a id="autoid-34" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.29:&nbsp;spaCy Extension Attributes II
@@ -4062,7 +4381,7 @@ print(span._.to_html("strong"))
 <a id="autoid-35" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.30:&nbsp;spaCy Entities Extension
@@ -4104,7 +4423,7 @@ for ent in doc.ents:
 <a id="autoid-36" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.31:&nbsp;spaCy Training Data 1
@@ -4137,7 +4456,7 @@ for doc in nlp.pipe(TEXTS):
 <a id="autoid-37" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.32:&nbsp;spaCy Training Data 2
@@ -4178,7 +4497,7 @@ print(* TRAINING_DATA , sep="\n")
 <a id="autoid-38" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.33:&nbsp;spaCy Setting Up Pipeline
@@ -4202,7 +4521,7 @@ ner.add_label("GADGET")
 <a id="autoid-39" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.34:&nbsp;spaCy Training Loop
@@ -4314,7 +4633,7 @@ Didn’t feel like reading the rest.
 
 </section>
 
-</div>
+</main>
 
 </div>
 
@@ -4327,7 +4646,7 @@ Contact Information and Copyright
 </footer>
 
 
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+<nav class="botnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 </body>
@@ -4395,10 +4714,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -4422,6 +4744,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -4437,9 +4778,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -4506,7 +4847,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -4530,7 +4871,7 @@ MathJax = {
 
 
 <a id="postGrad-autopage-70"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+<nav class="topnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 <header>
@@ -4545,17 +4886,17 @@ Home</a></nav>
 </header>
 
 
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
+<div class="bodyandsidetoc">
+<div class="sidetoccontainer">
 
 
-<nav class="sidetoc" >
+<nav class="sidetoc">
 
 
-<div class="sidetoctitle" >
+<div class="sidetoctitle">
 
 <p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+<span class="sidetocthetitle">The Lwarp Tutorial</span>
 </p>
 
 <p>
@@ -4564,7 +4905,7 @@ Contents
 </div>
 
 
-<div class="sidetoccontents" >
+<div class="sidetoccontents">
 
 <p>
 <a href="index.html" class="linkhome" >
@@ -4573,7 +4914,7 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -4591,7 +4932,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -4603,7 +4944,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -4621,13 +4962,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -4639,7 +4980,7 @@ SQL</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -4686,17 +5027,17 @@ Acronyms</a>
 </div>
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <h1>The Lwarp Tutorial</h1>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -4705,6 +5046,10 @@ Acronyms</a>
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -4720,6 +5065,12 @@ Acronyms</a>
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -4731,6 +5082,10 @@ Acronyms</a>
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -4744,7 +5099,31 @@ Acronyms</a>
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -4752,7 +5131,11 @@ Acronyms</a>
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -4895,7 +5278,7 @@ node node_modules/typeorm/cli.js migrations:show
 <a id="autoid-40" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.35:&nbsp;SQL Query Count
@@ -4909,7 +5292,7 @@ SELECT status, count(*) as scan_status FROM js GROUP BY status
 <a id="autoid-41" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.36:&nbsp;SQL Query example
@@ -4923,7 +5306,7 @@ SELECT AVG( number_of_star ) AS meanRating FROM review WHERE vehicle_id = ?
 <a id="autoid-42" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.37:&nbsp;SQL Query example verification
@@ -4946,7 +5329,7 @@ SELECT su.id AS userId, system_user.email, js.first_name AS firstName,
 <a id="autoid-43" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.38:&nbsp;SQL query to get entry from json data
@@ -4964,7 +5347,7 @@ SELECT id, job_type, run_date, data, version, user_id,
 
 </section>
 
-</div>
+</main>
 
 </div>
 
@@ -4977,7 +5360,7 @@ Contact Information and Copyright
 </footer>
 
 
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+<nav class="botnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 </body>
@@ -5045,10 +5428,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -5072,6 +5458,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -5087,9 +5492,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -5156,7 +5561,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -5180,7 +5585,7 @@ MathJax = {
 
 
 <a id="postGrad-autopage-80"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+<nav class="topnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 <header>
@@ -5195,17 +5600,17 @@ Home</a></nav>
 </header>
 
 
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
+<div class="bodyandsidetoc">
+<div class="sidetoccontainer">
 
 
-<nav class="sidetoc" >
+<nav class="sidetoc">
 
 
-<div class="sidetoctitle" >
+<div class="sidetoctitle">
 
 <p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+<span class="sidetocthetitle">The Lwarp Tutorial</span>
 </p>
 
 <p>
@@ -5214,7 +5619,7 @@ Contents
 </div>
 
 
-<div class="sidetoccontents" >
+<div class="sidetoccontents">
 
 <p>
 <a href="index.html" class="linkhome" >
@@ -5223,7 +5628,7 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -5241,7 +5646,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -5253,7 +5658,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -5271,13 +5676,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -5289,7 +5694,7 @@ SQL</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -5336,17 +5741,17 @@ Acronyms</a>
 </div>
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <h1>The Lwarp Tutorial</h1>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -5355,6 +5760,10 @@ Acronyms</a>
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -5370,6 +5779,12 @@ Acronyms</a>
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -5381,6 +5796,10 @@ Acronyms</a>
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -5394,7 +5813,31 @@ Acronyms</a>
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -5402,7 +5845,11 @@ Acronyms</a>
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -5413,7 +5860,7 @@ Acronyms</a>
 </div>
 
 <p>
-<h3 id="autosec-81">Chapter&nbsp;<span class="sectionnumber" >3&#x2003;</span>Interviews</h3>
+<h3 id="autosec-81">Chapter&nbsp;<span class="sectionnumber">3&#x2003;</span>Interviews</h3>
 <a id="postGrad-autopage-81"></a>
 <a id="postGrad-autofile-6"></a>
 <h4 id="autosec-82">Amazon Interview</h4>
@@ -5527,7 +5974,7 @@ What happens when you go to amazon.com - talk about web server and everything th
 <a id="autoid-44" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;3.1:&nbsp;SQL Query for KPMG Interview
@@ -5573,7 +6020,7 @@ The answer using TOP 1 Using microsoft SQL server
 <a id="autoid-45" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;3.2:&nbsp;SQL Query for KPMG Interview – Answer
@@ -5593,7 +6040,7 @@ ORDER BY productCode DESC
 
 </section>
 
-</div>
+</main>
 
 </div>
 
@@ -5606,7 +6053,7 @@ Contact Information and Copyright
 </footer>
 
 
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+<nav class="botnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 </body>
@@ -5674,10 +6121,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -5701,6 +6151,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -5716,9 +6185,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -5785,7 +6254,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -5809,7 +6278,7 @@ MathJax = {
 
 
 <a id="postGrad-autopage-86"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+<nav class="topnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 <header>
@@ -5824,17 +6293,17 @@ Home</a></nav>
 </header>
 
 
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
+<div class="bodyandsidetoc">
+<div class="sidetoccontainer">
 
 
-<nav class="sidetoc" >
+<nav class="sidetoc">
 
 
-<div class="sidetoctitle" >
+<div class="sidetoctitle">
 
 <p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+<span class="sidetocthetitle">The Lwarp Tutorial</span>
 </p>
 
 <p>
@@ -5843,7 +6312,7 @@ Contents
 </div>
 
 
-<div class="sidetoccontents" >
+<div class="sidetoccontents">
 
 <p>
 <a href="index.html" class="linkhome" >
@@ -5852,7 +6321,7 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -5870,7 +6339,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -5882,7 +6351,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -5900,13 +6369,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -5918,7 +6387,7 @@ SQL</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -5965,17 +6434,17 @@ Acronyms</a>
 </div>
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <h1>The Lwarp Tutorial</h1>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -5984,6 +6453,10 @@ Acronyms</a>
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -5999,6 +6472,12 @@ Acronyms</a>
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -6010,6 +6489,10 @@ Acronyms</a>
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -6023,7 +6506,31 @@ Acronyms</a>
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -6031,7 +6538,11 @@ Acronyms</a>
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -6042,7 +6553,7 @@ Acronyms</a>
 </div>
 
 <p>
-<h3 id="autosec-87">Chapter&nbsp;<span class="sectionnumber" >4&#x2003;</span>2019</h3>
+<h3 id="autosec-87">Chapter&nbsp;<span class="sectionnumber">4&#x2003;</span>2019</h3>
 <a id="postGrad-autopage-87"></a>
 <a id="postGrad-autofile-7"></a>
 
@@ -6063,7 +6574,7 @@ Name
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdp">
 
 <p>
@@ -6077,7 +6588,7 @@ examin pyalgotrade for stock selling and buying
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdp">
 
 <p>
@@ -6091,7 +6602,7 @@ work on web scrapper experiment felgo
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdp">
 
 <p>
@@ -6105,7 +6616,7 @@ gas station network
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdp">
 
 <p>
@@ -6119,7 +6630,7 @@ explore ipfs solutions such as pinata and textile
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdp">
 
 <p>
@@ -6133,7 +6644,7 @@ add dash auth to dashboard
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdp">
 
 </td>
@@ -6145,7 +6656,7 @@ add dash auth to dashboard
 
 </table>
 
-<div class="figurecaption" >
+<div class="figurecaption">
 <p>
 Table 4.1:&nbsp;<b>Todo List 2019/8/5</b>
 </p>
@@ -6175,7 +6686,7 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 "
 >
 <p>
-<span class="textrm textbf textup textulc" >QPU Versus GPU: Some Common Characteristics</span>
+<span class="textrm textbf textup textulc">QPU Versus GPU: Some Common Characteristics</span>
 </p>
 </div>
 <ul style="list-style-type:none">
@@ -6220,7 +6731,7 @@ QPU, and others are not. The QPU runs on a separate clock from the CPU, and usua
 <a id="autoid-47" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.1:&nbsp;Javascript Program: Quantum random spy hunter
@@ -6277,7 +6788,7 @@ Query
 <a id="autoid-48" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.2:&nbsp;SQL Query for length
@@ -6291,7 +6802,7 @@ SELECT first_name, length(first_name) as first_length, last_name, length(last_na
 <a id="autoid-49" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.3:&nbsp;SQL Query for addresses
@@ -6337,7 +6848,7 @@ Learned that ‘::1‘ means localhost for ip 6, and express has a useful functi
 <a id="autoid-50" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.4:&nbsp;Javascript Program get ip address
@@ -6354,7 +6865,7 @@ var ip = req.headers[&apos;x-forwarded-for&apos;] ||
 <a id="autoid-51" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.5:&nbsp;Javascript Program HTTP server
@@ -6433,7 +6944,7 @@ It is important to understand that .NET Standard is just a standard. You are not
 <a id="autoid-52" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.6:&nbsp;Cpp Testing
@@ -6511,7 +7022,7 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 "
 >
 <p>
-<span class="textrm textbf textup textulc" >Algorithm Features</span>
+<span class="textrm textbf textup textulc">Algorithm Features</span>
 </p>
 </div>
 <p>
@@ -6534,7 +7045,7 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 "
 >
 <p>
-<span class="textrm textbf textup textulc" >Data Structures</span>
+<span class="textrm textbf textup textulc">Data Structures</span>
 </p>
 </div>
 <p>
@@ -6613,7 +7124,7 @@ The adapter pattern comprises the target, adaptee, adapter, and client:
 <a id="autoid-53" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.7:&nbsp;Golang Adaptor Example
@@ -6669,7 +7180,7 @@ functionality of concrete classes independent from the interface implementer cla
 <a id="autoid-54" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.8:&nbsp;Golang Adaptor Example
@@ -6746,7 +7257,7 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 "
 >
 <p>
-<span class="textrm textbf textup textulc" >Composite</span>
+<span class="textrm textbf textup textulc">Composite</span>
 </p>
 </div>
 <p>
@@ -6795,7 +7306,7 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 "
 >
 <p>
-<span class="textrm textbf textup textulc" >Decorator</span>
+<span class="textrm textbf textup textulc">Decorator</span>
 </p>
 </div>
 <p>
@@ -6868,6 +7379,8 @@ Three Repos:
 <td class="tdl">
 <div class="minipage" style="vertical-align:top ; justify-content:flex-start ; ">
 
+<a id="postGrad-autopage-103"></a>
+
 <p>
 info
 </p>
@@ -6878,6 +7391,8 @@ info
 </td>
 <td class="tdl">
 <div class="minipage" style="vertical-align:top ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-104"></a>
 
 <p>
 value
@@ -6890,7 +7405,7 @@ value
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdl"></td>
 <td class="tdl"></td>
 </tr>
@@ -6899,6 +7414,8 @@ value
 <tr>
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-105"></a>
 
 <p>
 author:
@@ -6910,6 +7427,8 @@ author:
 </td>
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-106"></a>
 
 <p>
 David Li
@@ -6926,6 +7445,8 @@ David Li
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
 
+<a id="postGrad-autopage-107"></a>
+
 <p>
 Date:
 </p>
@@ -6936,6 +7457,8 @@ Date:
 </td>
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-108"></a>
 
 <p>
 Jan 07, 2018
@@ -6952,6 +7475,8 @@ Jan 07, 2018
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
 
+<a id="postGrad-autopage-109"></a>
+
 <p>
 File Name:
 </p>
@@ -6962,6 +7487,8 @@ File Name:
 </td>
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-110"></a>
 
 <p>
 lim_job_scrapper.py
@@ -7093,6 +7620,8 @@ Also, it will count the number of jobs vs the date
 <td class="tdl">
 <div class="minipage" style="vertical-align:top ; justify-content:flex-start ; ">
 
+<a id="postGrad-autopage-116"></a>
+
 <p>
 Date
 </p>
@@ -7103,6 +7632,8 @@ Date
 </td>
 <td class="tdl">
 <div class="minipage" style="vertical-align:top ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-117"></a>
 
 <p>
 Num of jobs
@@ -7115,7 +7646,7 @@ Num of jobs
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdl"></td>
 <td class="tdl"></td>
 </tr>
@@ -7124,6 +7655,8 @@ Num of jobs
 <tr>
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-118"></a>
 
 <p>
 2018-04-26
@@ -7135,6 +7668,8 @@ Num of jobs
 </td>
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-119"></a>
 
 <p>
 39
@@ -7771,7 +8306,7 @@ Yarn, npm, pandoc, etc .. imagemagick
 <a id="autoid-57" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.9:&nbsp;Golang Program
@@ -7790,7 +8325,7 @@ import (
 
 </section>
 
-</div>
+</main>
 
 </div>
 
@@ -7803,7 +8338,7 @@ Contact Information and Copyright
 </footer>
 
 
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+<nav class="botnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 </body>
@@ -7871,10 +8406,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -7898,6 +8436,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -7913,9 +8470,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -7982,7 +8539,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -8006,7 +8563,7 @@ MathJax = {
 
 
 <a id="postGrad-autopage-134"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+<nav class="topnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 <header>
@@ -8021,17 +8578,17 @@ Home</a></nav>
 </header>
 
 
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
+<div class="bodyandsidetoc">
+<div class="sidetoccontainer">
 
 
-<nav class="sidetoc" >
+<nav class="sidetoc">
 
 
-<div class="sidetoctitle" >
+<div class="sidetoctitle">
 
 <p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+<span class="sidetocthetitle">The Lwarp Tutorial</span>
 </p>
 
 <p>
@@ -8040,7 +8597,7 @@ Contents
 </div>
 
 
-<div class="sidetoccontents" >
+<div class="sidetoccontents">
 
 <p>
 <a href="index.html" class="linkhome" >
@@ -8049,7 +8606,7 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -8067,7 +8624,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -8079,7 +8636,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -8097,13 +8654,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -8115,7 +8672,7 @@ SQL</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -8162,17 +8719,17 @@ Acronyms</a>
 </div>
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <h1>The Lwarp Tutorial</h1>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -8181,6 +8738,10 @@ Acronyms</a>
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -8196,6 +8757,12 @@ Acronyms</a>
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -8207,6 +8774,10 @@ Acronyms</a>
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -8220,7 +8791,31 @@ Acronyms</a>
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -8228,7 +8823,11 @@ Acronyms</a>
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -8239,7 +8838,7 @@ Acronyms</a>
 </div>
 
 <p>
-<h3 id="autosec-135">Chapter&nbsp;<span class="sectionnumber" >5&#x2003;</span>Code Reference</h3>
+<h3 id="autosec-135">Chapter&nbsp;<span class="sectionnumber">5&#x2003;</span>Code Reference</h3>
 <a id="postGrad-autopage-135"></a>
 <a id="postGrad-autofile-8"></a>
 <h4 id="autosec-136">Code Commands</h4>
@@ -8495,7 +9094,7 @@ Or if you want to append data:
 
 </section>
 
-</div>
+</main>
 
 </div>
 
@@ -8508,7 +9107,7 @@ Contact Information and Copyright
 </footer>
 
 
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+<nav class="botnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 </body>
@@ -8576,10 +9175,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -8603,6 +9205,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -8618,9 +9239,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -8687,7 +9308,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -8711,7 +9332,7 @@ MathJax = {
 
 
 <a id="postGrad-autopage-163"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+<nav class="topnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 <header>
@@ -8726,17 +9347,17 @@ Home</a></nav>
 </header>
 
 
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
+<div class="bodyandsidetoc">
+<div class="sidetoccontainer">
 
 
-<nav class="sidetoc" >
+<nav class="sidetoc">
 
 
-<div class="sidetoctitle" >
+<div class="sidetoctitle">
 
 <p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+<span class="sidetocthetitle">The Lwarp Tutorial</span>
 </p>
 
 <p>
@@ -8745,7 +9366,7 @@ Contents
 </div>
 
 
-<div class="sidetoccontents" >
+<div class="sidetoccontents">
 
 <p>
 <a href="index.html" class="linkhome" >
@@ -8754,7 +9375,7 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -8772,7 +9393,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -8784,7 +9405,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -8802,13 +9423,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -8820,7 +9441,7 @@ SQL</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -8867,17 +9488,17 @@ Acronyms</a>
 </div>
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <h1>The Lwarp Tutorial</h1>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -8886,6 +9507,10 @@ Acronyms</a>
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -8901,6 +9526,12 @@ Acronyms</a>
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -8912,6 +9543,10 @@ Acronyms</a>
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -8925,7 +9560,31 @@ Acronyms</a>
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -8933,7 +9592,11 @@ Acronyms</a>
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -8962,7 +9625,7 @@ root@dockerhost:~# nc -l 443
 
 </section>
 
-</div>
+</main>
 
 </div>
 
@@ -8975,7 +9638,7 @@ Contact Information and Copyright
 </footer>
 
 
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+<nav class="botnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 </body>
@@ -9043,10 +9706,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -9070,6 +9736,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -9085,9 +9770,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -9154,7 +9839,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -9178,7 +9863,7 @@ MathJax = {
 
 
 <a id="postGrad-autopage-166"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+<nav class="topnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 <header>
@@ -9193,17 +9878,17 @@ Home</a></nav>
 </header>
 
 
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
+<div class="bodyandsidetoc">
+<div class="sidetoccontainer">
 
 
-<nav class="sidetoc" >
+<nav class="sidetoc">
 
 
-<div class="sidetoctitle" >
+<div class="sidetoctitle">
 
 <p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+<span class="sidetocthetitle">The Lwarp Tutorial</span>
 </p>
 
 <p>
@@ -9212,7 +9897,7 @@ Contents
 </div>
 
 
-<div class="sidetoccontents" >
+<div class="sidetoccontents">
 
 <p>
 <a href="index.html" class="linkhome" >
@@ -9221,7 +9906,7 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -9239,7 +9924,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -9251,7 +9936,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -9269,13 +9954,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -9287,7 +9972,7 @@ SQL</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -9334,17 +10019,17 @@ Acronyms</a>
 </div>
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <h1>The Lwarp Tutorial</h1>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -9353,6 +10038,10 @@ Acronyms</a>
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -9368,6 +10057,12 @@ Acronyms</a>
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -9379,6 +10074,10 @@ Acronyms</a>
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -9392,7 +10091,31 @@ Acronyms</a>
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -9400,7 +10123,11 @@ Acronyms</a>
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -9464,7 +10191,7 @@ postgres=# \c test
 <a id="autoid-58" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;5.1:&nbsp;Python Script to download from google drive
@@ -9526,7 +10253,7 @@ if __name__ == "__main__":
 <a id="autoid-59" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;5.2:&nbsp;Python Script to remove watermark
@@ -9552,7 +10279,7 @@ cv2.imwrite("MT-2005-1-no-w.png", new)
 <a id="autoid-60" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;5.3:&nbsp;Bash Script for kubernates
@@ -9581,7 +10308,7 @@ kubectl exec -ti $POD_NAME curl localhost :8080
 <a id="autoid-61" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;5.4:&nbsp;Bash Script uncomment line in sed for osx
@@ -9607,7 +10334,7 @@ run sudo service httpd graceful
 <a id="autoid-62" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;5.5:&nbsp;Powershell script to install key software
@@ -9637,7 +10364,7 @@ choco install go
 <a id="autoid-63" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;5.6:&nbsp;Bash Script to check python version
@@ -9696,7 +10423,7 @@ Creating a new tag with a release does not trigger github actions.
 <a id="autoid-64" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;5.7:&nbsp;Bash Script to get largest files
@@ -9710,7 +10437,7 @@ du -sk * | sort -rn | head
 
 </section>
 
-</div>
+</main>
 
 </div>
 
@@ -9723,7 +10450,7 @@ Contact Information and Copyright
 </footer>
 
 
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+<nav class="botnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 </body>
@@ -9791,10 +10518,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -9818,6 +10548,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -9833,9 +10582,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -9902,7 +10651,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -9926,7 +10675,7 @@ MathJax = {
 
 
 <a id="postGrad-autopage-184"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+<nav class="topnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 <header>
@@ -9941,17 +10690,17 @@ Home</a></nav>
 </header>
 
 
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
+<div class="bodyandsidetoc">
+<div class="sidetoccontainer">
 
 
-<nav class="sidetoc" >
+<nav class="sidetoc">
 
 
-<div class="sidetoctitle" >
+<div class="sidetoctitle">
 
 <p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+<span class="sidetocthetitle">The Lwarp Tutorial</span>
 </p>
 
 <p>
@@ -9960,7 +10709,7 @@ Contents
 </div>
 
 
-<div class="sidetoccontents" >
+<div class="sidetoccontents">
 
 <p>
 <a href="index.html" class="linkhome" >
@@ -9969,7 +10718,7 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -9987,7 +10736,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -9999,7 +10748,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -10017,13 +10766,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -10035,7 +10784,7 @@ SQL</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -10082,17 +10831,17 @@ Acronyms</a>
 </div>
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <h1>The Lwarp Tutorial</h1>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -10101,6 +10850,10 @@ Acronyms</a>
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -10116,6 +10869,12 @@ Acronyms</a>
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -10127,6 +10886,10 @@ Acronyms</a>
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -10140,7 +10903,31 @@ Acronyms</a>
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -10148,7 +10935,11 @@ Acronyms</a>
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -10168,7 +10959,7 @@ Acronyms</a>
 </p>
 
 <p>
-<span class="indexitem" ><!----></span>Some text., chapter <a href="Example-chapter.html#LWRindex-1">1</a>
+<span class="indexitem"><!----></span>Some text., chapter <a href="Example-chapter.html#LWRindex-1">1</a>
 </p>
 <h3 id="autosec-186">Bibliography</h3>
 <a id="postGrad-autopage-186"></a>
@@ -10179,7 +10970,7 @@ Acronyms</a>
 
 <li>
 <p>
-[1] <a id="LWR-ht-cite.0@book:2300108"></a>Valentina Porcu. <em>Python for Data Mining Quick Syntax Reference</em>. 1st&nbsp;ed. Apress, 2019. <span class="textsc" >isbn</span>: 1484241126, 978-1484241127. <span class="textsc" >url</span>: <a
+[1] <a id="LWR-ht-cite.0@book:2300108"></a>Valentina Porcu. <em>Python for Data Mining Quick Syntax Reference</em>. 1st&nbsp;ed. Apress, 2019. <span class="textsc">isbn</span>: 1484241126, 978-1484241127. <span class="textsc">url</span>: <a
 href="http://gen.lib.rus.ec/book/index.php?md5=719FA57E15A5FAAE9996594FF491F0E1" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=719FA57E15A5FAAE9996594FF491F0E1</a>.
 </p>
 
@@ -10187,7 +10978,7 @@ href="http://gen.lib.rus.ec/book/index.php?md5=719FA57E15A5FAAE9996594FF491F0E1"
 </li>
 <li>
 <p>
-[2] <a id="LWR-ht-cite.0@book:2349913"></a>Igor Livshin. <em>Artificial Neural Networks with Java - Tools for Building Neural Network Applications</em>. Apress, 2019. <span class="textsc" >isbn</span>: 9781484244203. <span class="textsc" >url</span>: <a
+[2] <a id="LWR-ht-cite.0@book:2349913"></a>Igor Livshin. <em>Artificial Neural Networks with Java - Tools for Building Neural Network Applications</em>. Apress, 2019. <span class="textsc">isbn</span>: 9781484244203. <span class="textsc">url</span>: <a
 href="http://gen.lib.rus.ec/book/index.php?md5=1a97921ae2ebdb2acbce0ef06e29667d" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=1a97921ae2ebdb2acbce0ef06e29667d</a>.
 </p>
 
@@ -10195,8 +10986,8 @@ href="http://gen.lib.rus.ec/book/index.php?md5=1a97921ae2ebdb2acbce0ef06e29667d"
 </li>
 <li>
 <p>
-[3] <a id="LWR-ht-cite.0@book:2391166"></a>Mercedes Gimeno-Segovia Eric R. Johnston Nic Harrigan. <em>Programming Quantum Computers: Essential Algorithms and Code Samples</em>. 1st&nbsp;ed. O’Reilly Media, 2019. <span class="textsc" >isbn</span>:
-1492039683, 978-1492039686. <span class="textsc" >url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=71fa12e84983bfe4b6b39c80879077a4" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=71fa12e84983bfe4b6b39c80879077a4</a>.
+[3] <a id="LWR-ht-cite.0@book:2391166"></a>Mercedes Gimeno-Segovia Eric R. Johnston Nic Harrigan. <em>Programming Quantum Computers: Essential Algorithms and Code Samples</em>. 1st&nbsp;ed. O’Reilly Media, 2019. <span class="textsc">isbn</span>:
+1492039683, 978-1492039686. <span class="textsc">url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=71fa12e84983bfe4b6b39c80879077a4" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=71fa12e84983bfe4b6b39c80879077a4</a>.
 </p>
 
 
@@ -10212,15 +11003,15 @@ href="http://gen.lib.rus.ec/book/index.php?md5=1a97921ae2ebdb2acbce0ef06e29667d"
 <li>
 <p>
 [5] <a id="LWR-ht-cite.0@kommadi2019learn"></a>Bhagvan Kommadi. <em>Learn data structures and algorithms with Golang : level up your Go programming skills to develop faster and more efficient code</em>. Birmingham, UK: Packt Publishing, 2019. <span
-class="textsc" >isbn</span>: 1789618509.
+class="textsc">isbn</span>: 1789618509.
 </p>
 
 
 </li>
 <li>
 <p>
-[6] <a id="LWR-ht-cite.0@book:2433880"></a>Andrea Lonza. <em>Reinforcement Learning Algorithms with Python: Learn, understand, and develop smart algorithms for addressing AI challenges</em>. Packt Publishing, 2019. <span class="textsc" >isbn</span>:
-1789131111, 978-1789131116. <span class="textsc" >url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=7836251eda95c9704e26ffece0819082" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=7836251eda95c9704e26ffece0819082</a>.
+[6] <a id="LWR-ht-cite.0@book:2433880"></a>Andrea Lonza. <em>Reinforcement Learning Algorithms with Python: Learn, understand, and develop smart algorithms for addressing AI challenges</em>. Packt Publishing, 2019. <span class="textsc">isbn</span>:
+1789131111, 978-1789131116. <span class="textsc">url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=7836251eda95c9704e26ffece0819082" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=7836251eda95c9704e26ffece0819082</a>.
 </p>
 
 
@@ -10234,7 +11025,7 @@ class="textsc" >isbn</span>: 1789618509.
 </li>
 <li>
 <p>
-[8] <a id="LWR-ht-cite.0@book:2451102"></a>Dan Kottmann Tom Steele Chris Patten. <em>Black Hat Go</em>. 0. <span class="textsc" >isbn</span>: 9781593278656. <span class="textsc" >url</span>: <a
+[8] <a id="LWR-ht-cite.0@book:2451102"></a>Dan Kottmann Tom Steele Chris Patten. <em>Black Hat Go</em>. 0. <span class="textsc">isbn</span>: 9781593278656. <span class="textsc">url</span>: <a
 href="http://gen.lib.rus.ec/book/index.php?md5=8a1b08171862b104b92c673b2161203f" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=8a1b08171862b104b92c673b2161203f</a>.
 </p>
 
@@ -10242,16 +11033,16 @@ href="http://gen.lib.rus.ec/book/index.php?md5=8a1b08171862b104b92c673b2161203f"
 </li>
 <li>
 <p>
-[9] <a id="LWR-ht-cite.0@book:2406637"></a>Frank Zammetti. <em>Practical Flutter: Improve your Mobile Development with Google’s Latest Open-Source SDK</em>. 1st ed. Apress, 2019. <span class="textsc" >isbn</span>: 978-1-4842-4971-0;978-1-4842-4972-7.
-<span class="textsc" >url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=227f03b36ad6b1b4c6c1af4ca444c27d" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=227f03b36ad6b1b4c6c1af4ca444c27d</a>.
+[9] <a id="LWR-ht-cite.0@book:2406637"></a>Frank Zammetti. <em>Practical Flutter: Improve your Mobile Development with Google’s Latest Open-Source SDK</em>. 1st ed. Apress, 2019. <span class="textsc">isbn</span>: 978-1-4842-4971-0;978-1-4842-4972-7. <span
+class="textsc">url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=227f03b36ad6b1b4c6c1af4ca444c27d" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=227f03b36ad6b1b4c6c1af4ca444c27d</a>.
 </p>
 
 
 </li>
 <li>
 <p>
-[10] <a id="LWR-ht-cite.0@book:2558257"></a>Michael L. Perry. <em>The Art of Immutable Architecture: Theory and Practice of Data Management in Distributed Systems</em>. 1st&nbsp;ed. Apress, 2020. <span class="textsc" >isbn</span>:
-1484259548,9781484259542. <span class="textsc" >url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=E0465B9877E4153E21E92EC45F814C90" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=E0465B9877E4153E21E92EC45F814C90</a>.
+[10] <a id="LWR-ht-cite.0@book:2558257"></a>Michael L. Perry. <em>The Art of Immutable Architecture: Theory and Practice of Data Management in Distributed Systems</em>. 1st&nbsp;ed. Apress, 2020. <span class="textsc">isbn</span>:
+1484259548,9781484259542. <span class="textsc">url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=E0465B9877E4153E21E92EC45F814C90" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=E0465B9877E4153E21E92EC45F814C90</a>.
 </p>
 
 
@@ -10259,7 +11050,7 @@ href="http://gen.lib.rus.ec/book/index.php?md5=8a1b08171862b104b92c673b2161203f"
 <li>
 <p>
 [11] <a id="LWR-ht-cite.0@book:2622841"></a>Stefan Jansen. <em>Machine Learning for Algorithmic Trading: Predictive models to extract signals from market and alternative data for systematic trading strategies with Python, 2nd Edition</em>. 2nd&nbsp;ed. Packt
-Publishing, 2020. <span class="textsc" >isbn</span>: 1839217715,9781839217715. <span class="textsc" >url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=453A858931360224BD2485E4A61295FF" target="_blank"
+Publishing, 2020. <span class="textsc">isbn</span>: 1839217715,9781839217715. <span class="textsc">url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=453A858931360224BD2485E4A61295FF" target="_blank"
 >http://gen.lib.rus.ec/book/index.php?md5=453A858931360224BD2485E4A61295FF</a>.
 </p>
 </li>
@@ -10327,7 +11118,7 @@ Publishing, 2020. <span class="textsc" >isbn</span>: 1839217715,9781839217715. <
 
 <a id="postGrad-autofile-last"></a> </section>
 
-</div>
+</main>
 
 </div>
 
@@ -10340,7 +11131,7 @@ Contact Information and Copyright
 </footer>
 
 
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+<nav class="botnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 </body>

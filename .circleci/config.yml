@@ -2,7 +2,7 @@ version: 2
 jobs:
   lwarp:
     docker:
-      - image: grandfleet/dolwarp:v0.893
+      - image:  ghcr.io/friendlyuser/dimages/lwarp_docker:v0.901
     working_directory: ~/latex
     steps:
       - checkout

@@ -60,10 +60,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -87,6 +90,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -102,9 +124,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -171,7 +193,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -195,7 +217,7 @@ MathJax = {
 
 
 <a id="postGrad-autopage-21"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+<nav class="topnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 <header>
@@ -210,17 +232,17 @@ Home</a></nav>
 </header>
 
 
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
+<div class="bodyandsidetoc">
+<div class="sidetoccontainer">
 
 
-<nav class="sidetoc" >
+<nav class="sidetoc">
 
 
-<div class="sidetoctitle" >
+<div class="sidetoctitle">
 
 <p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+<span class="sidetocthetitle">The Lwarp Tutorial</span>
 </p>
 
 <p>
@@ -229,7 +251,7 @@ Contents
 </div>
 
 
-<div class="sidetoccontents" >
+<div class="sidetoccontents">
 
 <p>
 <a href="index.html" class="linkhome" >
@@ -238,7 +260,7 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -256,7 +278,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -268,7 +290,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -286,13 +308,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -304,7 +326,7 @@ SQL</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -351,17 +373,17 @@ Acronyms</a>
 </div>
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <h1>The Lwarp Tutorial</h1>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -370,6 +392,10 @@ Acronyms</a>
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -385,6 +411,12 @@ Acronyms</a>
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -396,6 +428,10 @@ Acronyms</a>
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -409,7 +445,31 @@ Acronyms</a>
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -417,7 +477,11 @@ Acronyms</a>
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -428,7 +492,7 @@ Acronyms</a>
 </div>
 
 <p>
-<h3 id="autosec-22">Chapter&nbsp;<span class="sectionnumber" >2&#x2003;</span>spaCy Tutorials</h3>
+<h3 id="autosec-22">Chapter&nbsp;<span class="sectionnumber">2&#x2003;</span>spaCy Tutorials</h3>
 <a id="postGrad-autopage-22"></a>
 <a id="postGrad-autofile-4"></a>
 <h4 id="autosec-23">Spacy Code Tutorials</h4>
@@ -441,7 +505,7 @@ This contains all the spacy code tutorial I have done and gone through.
 <a id="autoid-6" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.1:&nbsp;spaCy Basic English NLP
@@ -469,7 +533,7 @@ print(doc.text)
 <a id="autoid-7" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.2:&nbsp;spaCy First Token
@@ -496,7 +560,7 @@ print(first_token.text)
 <a id="autoid-8" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.3:&nbsp;spaCy Slice Doc
@@ -527,7 +591,7 @@ print( tree_kangaroos_and_narwhals .text)
 <a id="autoid-9" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.4:&nbsp;spaCy Detect Percentages
@@ -561,7 +625,7 @@ for token in doc:
 <a id="autoid-10" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.5:&nbsp;spaCy Loading Models
@@ -595,7 +659,7 @@ This will be useful for me to grab the percentages from finance youtube videos.
 <a id="autoid-11" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.6:&nbsp;spaCy Linguistic Annotations V1
@@ -624,7 +688,7 @@ for token in doc:
 <a id="autoid-12" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.7:&nbsp;spaCy Linguistic Annotations V2
@@ -652,7 +716,7 @@ for ent in doc.ents:
 <a id="autoid-13" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.8:&nbsp;spaCy Linguistic Annotations V2
@@ -686,7 +750,7 @@ print("Missing␣entity:", iphone_x.text)
 <a id="autoid-14" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.9:&nbsp;spaCy Matcher
@@ -719,7 +783,7 @@ print("Matches:", [doc[start:end].text for match_id, start, end in matches])
 <a id="autoid-15" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.10:&nbsp;spaCy Writing Matcher
@@ -756,7 +820,7 @@ for match_id, start, end in matches:
 <a id="autoid-16" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.11:&nbsp;spaCy Writing Matcher II
@@ -793,7 +857,7 @@ for match_id, start, end in matches:
 <a id="autoid-17" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.12:&nbsp;spaCy Writing Matcher III
@@ -830,7 +894,7 @@ for match_id, start, end in matches:
 <a id="autoid-18" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.13:&nbsp;spaCy Cat hash
@@ -855,7 +919,7 @@ print(cat_string)
 <a id="autoid-19" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.14:&nbsp;spaCy Person hash
@@ -880,7 +944,7 @@ print( person_string )
 <a id="autoid-20" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.15:&nbsp;spaCy Docs, spans and entities from scratch
@@ -916,7 +980,7 @@ print([(ent.text, ent.label_) for ent in doc.ents])
 <a id="autoid-21" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.16:&nbsp;spaCy Code rewrite to use spaCy functions
@@ -958,7 +1022,7 @@ for token in doc:
 <a id="autoid-22" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.17:&nbsp;spaCy Word Vectors
@@ -982,7 +1046,7 @@ print( bananas_vector )
 <a id="autoid-23" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.18:&nbsp;spaCy Similarities I
@@ -1005,7 +1069,7 @@ print(similarity)
 <a id="autoid-24" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.19:&nbsp;spaCy Similarities II
@@ -1031,7 +1095,7 @@ print(similarity)
 <a id="autoid-25" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.20:&nbsp;spaCy Extracting Countries and Relationship
@@ -1072,7 +1136,7 @@ for match_id, start, end in matcher(doc):
 <a id="autoid-26" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.21:&nbsp;spaCy Extracting Countries and Relationship
@@ -1119,7 +1183,7 @@ print([(ent.text, ent.label_) for ent in doc.ents if ent.label_ == "GPE"])
 <a id="autoid-27" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.22:&nbsp;spaCy Efficient Phrase
@@ -1156,7 +1220,7 @@ print([doc[start:end] for match_id, start, end in matches])
 <a id="autoid-28" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.23:&nbsp;spaCy Inspecting Code
@@ -1179,7 +1243,7 @@ print(nlp.pipeline)
 <a id="autoid-29" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.24:&nbsp;spaCy Custom Components
@@ -1213,7 +1277,7 @@ doc = nlp("Simple␣Text")
 <a id="autoid-30" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.25:&nbsp;spaCy Complex Components
@@ -1256,7 +1320,7 @@ print([(ent.text, ent.label) for ent in doc.ents])
 <a id="autoid-31" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.26:&nbsp;spaCy Extension Attributes 1
@@ -1283,7 +1347,7 @@ print([(token.text, token._.is_country) for token in doc])
 <a id="autoid-32" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.27:&nbsp;spaCy Extension Attributes 2
@@ -1314,7 +1378,7 @@ for token in doc:
 <a id="autoid-33" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.28:&nbsp;spaCy Extension Attributes I
@@ -1345,7 +1409,7 @@ print("has_number:", doc._.has_number)
 <a id="autoid-34" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.29:&nbsp;spaCy Extension Attributes II
@@ -1377,7 +1441,7 @@ print(span._.to_html("strong"))
 <a id="autoid-35" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.30:&nbsp;spaCy Entities Extension
@@ -1419,7 +1483,7 @@ for ent in doc.ents:
 <a id="autoid-36" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.31:&nbsp;spaCy Training Data 1
@@ -1452,7 +1516,7 @@ for doc in nlp.pipe(TEXTS):
 <a id="autoid-37" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.32:&nbsp;spaCy Training Data 2
@@ -1493,7 +1557,7 @@ print(* TRAINING_DATA , sep="\n")
 <a id="autoid-38" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.33:&nbsp;spaCy Setting Up Pipeline
@@ -1517,7 +1581,7 @@ ner.add_label("GADGET")
 <a id="autoid-39" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;2.34:&nbsp;spaCy Training Loop
@@ -1629,7 +1693,7 @@ Didn’t feel like reading the rest.
 
 </section>
 
-</div>
+</main>
 
 </div>
 
@@ -1642,7 +1706,7 @@ Contact Information and Copyright
 </footer>
 
 
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+<nav class="botnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 </body>

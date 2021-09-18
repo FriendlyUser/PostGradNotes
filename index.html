@@ -59,10 +59,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -86,6 +89,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -101,9 +123,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -170,7 +192,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -191,10 +213,9 @@ MathJax = {
 
 </head>
 <body>
-<header>
-
 
 <p>
+<header>
 Name and <span
     class="fbox"
     style="display:inline-block ; border:1pt solid #000000; padding:3pt ; color:#000000"
@@ -202,20 +223,20 @@ Name and <span
 </p>
 </header>
 
-<div class="bodywithoutsidetoc" >
+<div class="bodywithoutsidetoc">
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <a id="postGrad-autofile-0"></a>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -224,6 +245,10 @@ Name and <span
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -239,6 +264,12 @@ Name and <span
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -250,6 +281,10 @@ Name and <span
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -263,7 +298,31 @@ Name and <span
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -271,7 +330,11 @@ Name and <span
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -282,15 +345,15 @@ Name and <span
 </div>
 
 <a id="postGrad-autopage-1"></a>
-<div class="titlepage" >
+<div class="titlepage">
 
 <h1>The Lwarp Tutorial</h1>
 
 
-<div class="author" >
+<div class="author">
 
 
-<div class="oneauthor" >
+<div class="oneauthor">
 
 <p>
 Some Author
@@ -300,18 +363,18 @@ Some Author
 </div>
 
 
-<div class="titledate" >
+<div class="titledate">
 
 <p>
-September 17, 2021
+September 18, 2021
 </p>
 </div>
 
 </div>
-<div class="center" >
+<div class="center">
 
 <p>
-<span class="textsc" >Personal Study Notes</span><br />
+<span class="textsc">Personal Study Notes</span><br />
 <span
     style="background:black; width:1012pt ; height:1pt ;
     -ms-transform: translate(0pt,-26pt);
@@ -319,18 +382,18 @@ September 17, 2021
     transform: translate(0pt,-26pt);
     display:inline-block;"
 ><!----></span><br />
-<b><span class="textsc" >Software Engineer</span></b><br />
-<span class="textsc" >Post Grad Notes</span><br />
-<span class="textsc" >Victoria, British Columbia, Canada</span><br />
+<b><span class="textsc">Software Engineer</span></b><br />
+<span class="textsc">Post Grad Notes</span><br />
+<span class="textsc">Victoria, British Columbia, Canada</span><br />
 
 </p>
 
 <p>
-<span class="textsc" >September 17, 2021</span><br />
+<span class="textsc">September 18, 2021</span><br />
 <b>Name:</b> &#x2003;&#x2003;David Li<br />
 <b>Student Number:</b> &#x2003;&#x2003;V00818631<br />
 <b>Email:</b> &#x2003;&#x2003;<a href="mailto:davidli012345@gmail.ca" target="_blank" >davidli012345@gmail.ca</a><br />
-<span class="textsc" >In partial fulfillment of the never ending quest to learn.<br />
+<span class="textsc">In partial fulfillment of the never ending quest to learn.<br />
 </span>
 </p>
 </div>
@@ -339,11 +402,11 @@ September 17, 2021
 
 
 
-<nav class="toc" >
+<nav class="toc">
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -367,7 +430,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -379,7 +442,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -439,13 +502,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -499,7 +562,7 @@ Hugo Tools to Consider</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -615,11 +678,11 @@ Acronyms</a>
 
 
 
-<nav class="lof" >
+<nav class="lof">
 
 <p>
 <a href="Example-chapter.html#autoid-1" class="tocfigure" >
-<span class="sectionnumber" >1.1</span>&#x2003;A figure with text</a>
+<span class="sectionnumber">1.1</span>&#x2003;A figure with text</a>
 </p>
 </nav>
 <h3 id="autosec-6">Listings</h3>
@@ -627,371 +690,371 @@ Acronyms</a>
 
 
 
-<nav class="lol" >
+<nav class="lol">
 
 <p>
 <a href="Example-chapter.html#autoid-2" class="toclstlisting" >
-<span class="sectionnumber" >1.1</span>&#x2003;Cpp Testing </a>
+<span class="sectionnumber">1.1</span>&#x2003;Cpp Testing </a>
 </p>
 
 
 <p>
 <a href="Example-chapter.html#autoid-3" class="toclstlisting" >
-<span class="sectionnumber" >1.2</span>&#x2003;Golang Program </a>
+<span class="sectionnumber">1.2</span>&#x2003;Golang Program </a>
 </p>
 
 
 <p>
 <a href="Example-chapter.html#autoid-4" class="toclstlisting" >
-<span class="sectionnumber" >1.3</span>&#x2003;Python Script </a>
+<span class="sectionnumber">1.3</span>&#x2003;Python Script </a>
 </p>
 
 
 <p>
 <a href="2020.html#autoid-5" class="toclstlisting" >
-<span class="sectionnumber" >1.4</span>&#x2003;Bash Script </a>
+<span class="sectionnumber">1.4</span>&#x2003;Bash Script </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-6" class="toclstlisting" >
-<span class="sectionnumber" >2.1</span>&#x2003;spaCy Basic English NLP </a>
+<span class="sectionnumber">2.1</span>&#x2003;spaCy Basic English NLP </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-7" class="toclstlisting" >
-<span class="sectionnumber" >2.2</span>&#x2003;spaCy First Token </a>
+<span class="sectionnumber">2.2</span>&#x2003;spaCy First Token </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-8" class="toclstlisting" >
-<span class="sectionnumber" >2.3</span>&#x2003;spaCy Slice Doc </a>
+<span class="sectionnumber">2.3</span>&#x2003;spaCy Slice Doc </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-9" class="toclstlisting" >
-<span class="sectionnumber" >2.4</span>&#x2003;spaCy Detect Percentages </a>
+<span class="sectionnumber">2.4</span>&#x2003;spaCy Detect Percentages </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-10" class="toclstlisting" >
-<span class="sectionnumber" >2.5</span>&#x2003;spaCy Loading Models </a>
+<span class="sectionnumber">2.5</span>&#x2003;spaCy Loading Models </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-11" class="toclstlisting" >
-<span class="sectionnumber" >2.6</span>&#x2003;spaCy Linguistic Annotations V1 </a>
+<span class="sectionnumber">2.6</span>&#x2003;spaCy Linguistic Annotations V1 </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-12" class="toclstlisting" >
-<span class="sectionnumber" >2.7</span>&#x2003;spaCy Linguistic Annotations V2 </a>
+<span class="sectionnumber">2.7</span>&#x2003;spaCy Linguistic Annotations V2 </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-13" class="toclstlisting" >
-<span class="sectionnumber" >2.8</span>&#x2003;spaCy Linguistic Annotations V2 </a>
+<span class="sectionnumber">2.8</span>&#x2003;spaCy Linguistic Annotations V2 </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-14" class="toclstlisting" >
-<span class="sectionnumber" >2.9</span>&#x2003;spaCy Matcher </a>
+<span class="sectionnumber">2.9</span>&#x2003;spaCy Matcher </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-15" class="toclstlisting" >
-<span class="sectionnumber" >2.10</span>&#x2003;spaCy Writing Matcher </a>
+<span class="sectionnumber">2.10</span>&#x2003;spaCy Writing Matcher </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-16" class="toclstlisting" >
-<span class="sectionnumber" >2.11</span>&#x2003;spaCy Writing Matcher II </a>
+<span class="sectionnumber">2.11</span>&#x2003;spaCy Writing Matcher II </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-17" class="toclstlisting" >
-<span class="sectionnumber" >2.12</span>&#x2003;spaCy Writing Matcher III </a>
+<span class="sectionnumber">2.12</span>&#x2003;spaCy Writing Matcher III </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-18" class="toclstlisting" >
-<span class="sectionnumber" >2.13</span>&#x2003;spaCy Cat hash </a>
+<span class="sectionnumber">2.13</span>&#x2003;spaCy Cat hash </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-19" class="toclstlisting" >
-<span class="sectionnumber" >2.14</span>&#x2003;spaCy Person hash </a>
+<span class="sectionnumber">2.14</span>&#x2003;spaCy Person hash </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-20" class="toclstlisting" >
-<span class="sectionnumber" >2.15</span>&#x2003;spaCy Docs, spans and entities from scratch </a>
+<span class="sectionnumber">2.15</span>&#x2003;spaCy Docs, spans and entities from scratch </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-21" class="toclstlisting" >
-<span class="sectionnumber" >2.16</span>&#x2003;spaCy Code rewrite to use spaCy functions </a>
+<span class="sectionnumber">2.16</span>&#x2003;spaCy Code rewrite to use spaCy functions </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-22" class="toclstlisting" >
-<span class="sectionnumber" >2.17</span>&#x2003;spaCy Word Vectors </a>
+<span class="sectionnumber">2.17</span>&#x2003;spaCy Word Vectors </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-23" class="toclstlisting" >
-<span class="sectionnumber" >2.18</span>&#x2003;spaCy Similarities I </a>
+<span class="sectionnumber">2.18</span>&#x2003;spaCy Similarities I </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-24" class="toclstlisting" >
-<span class="sectionnumber" >2.19</span>&#x2003;spaCy Similarities II </a>
+<span class="sectionnumber">2.19</span>&#x2003;spaCy Similarities II </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-25" class="toclstlisting" >
-<span class="sectionnumber" >2.20</span>&#x2003;spaCy Extracting Countries and Relationship </a>
+<span class="sectionnumber">2.20</span>&#x2003;spaCy Extracting Countries and Relationship </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-26" class="toclstlisting" >
-<span class="sectionnumber" >2.21</span>&#x2003;spaCy Extracting Countries and Relationship </a>
+<span class="sectionnumber">2.21</span>&#x2003;spaCy Extracting Countries and Relationship </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-27" class="toclstlisting" >
-<span class="sectionnumber" >2.22</span>&#x2003;spaCy Efficient Phrase </a>
+<span class="sectionnumber">2.22</span>&#x2003;spaCy Efficient Phrase </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-28" class="toclstlisting" >
-<span class="sectionnumber" >2.23</span>&#x2003;spaCy Inspecting Code </a>
+<span class="sectionnumber">2.23</span>&#x2003;spaCy Inspecting Code </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-29" class="toclstlisting" >
-<span class="sectionnumber" >2.24</span>&#x2003;spaCy Custom Components </a>
+<span class="sectionnumber">2.24</span>&#x2003;spaCy Custom Components </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-30" class="toclstlisting" >
-<span class="sectionnumber" >2.25</span>&#x2003;spaCy Complex Components </a>
+<span class="sectionnumber">2.25</span>&#x2003;spaCy Complex Components </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-31" class="toclstlisting" >
-<span class="sectionnumber" >2.26</span>&#x2003;spaCy Extension Attributes 1 </a>
+<span class="sectionnumber">2.26</span>&#x2003;spaCy Extension Attributes 1 </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-32" class="toclstlisting" >
-<span class="sectionnumber" >2.27</span>&#x2003;spaCy Extension Attributes 2 </a>
+<span class="sectionnumber">2.27</span>&#x2003;spaCy Extension Attributes 2 </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-33" class="toclstlisting" >
-<span class="sectionnumber" >2.28</span>&#x2003;spaCy Extension Attributes I </a>
+<span class="sectionnumber">2.28</span>&#x2003;spaCy Extension Attributes I </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-34" class="toclstlisting" >
-<span class="sectionnumber" >2.29</span>&#x2003;spaCy Extension Attributes II </a>
+<span class="sectionnumber">2.29</span>&#x2003;spaCy Extension Attributes II </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-35" class="toclstlisting" >
-<span class="sectionnumber" >2.30</span>&#x2003;spaCy Entities Extension </a>
+<span class="sectionnumber">2.30</span>&#x2003;spaCy Entities Extension </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-36" class="toclstlisting" >
-<span class="sectionnumber" >2.31</span>&#x2003;spaCy Training Data 1 </a>
+<span class="sectionnumber">2.31</span>&#x2003;spaCy Training Data 1 </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-37" class="toclstlisting" >
-<span class="sectionnumber" >2.32</span>&#x2003;spaCy Training Data 2 </a>
+<span class="sectionnumber">2.32</span>&#x2003;spaCy Training Data 2 </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-38" class="toclstlisting" >
-<span class="sectionnumber" >2.33</span>&#x2003;spaCy Setting Up Pipeline </a>
+<span class="sectionnumber">2.33</span>&#x2003;spaCy Setting Up Pipeline </a>
 </p>
 
 
 <p>
 <a href="spaCy-Tutorials.html#autoid-39" class="toclstlisting" >
-<span class="sectionnumber" >2.34</span>&#x2003;spaCy Training Loop </a>
+<span class="sectionnumber">2.34</span>&#x2003;spaCy Training Loop </a>
 </p>
 
 
 <p>
 <a href="GCP-Finance-course.html#autoid-40" class="toclstlisting" >
-<span class="sectionnumber" >2.35</span>&#x2003;SQL Query Count </a>
+<span class="sectionnumber">2.35</span>&#x2003;SQL Query Count </a>
 </p>
 
 
 <p>
 <a href="GCP-Finance-course.html#autoid-41" class="toclstlisting" >
-<span class="sectionnumber" >2.36</span>&#x2003;SQL Query example </a>
+<span class="sectionnumber">2.36</span>&#x2003;SQL Query example </a>
 </p>
 
 
 <p>
 <a href="GCP-Finance-course.html#autoid-42" class="toclstlisting" >
-<span class="sectionnumber" >2.37</span>&#x2003;SQL Query example verification </a>
+<span class="sectionnumber">2.37</span>&#x2003;SQL Query example verification </a>
 </p>
 
 
 <p>
 <a href="GCP-Finance-course.html#autoid-43" class="toclstlisting" >
-<span class="sectionnumber" >2.38</span>&#x2003;SQL query to get entry from json data </a>
+<span class="sectionnumber">2.38</span>&#x2003;SQL query to get entry from json data </a>
 </p>
 
 
 <p>
 <a href="Interviews.html#autoid-44" class="toclstlisting" >
-<span class="sectionnumber" >3.1</span>&#x2003;SQL Query for KPMG Interview </a>
+<span class="sectionnumber">3.1</span>&#x2003;SQL Query for KPMG Interview </a>
 </p>
 
 
 <p>
 <a href="Interviews.html#autoid-45" class="toclstlisting" >
-<span class="sectionnumber" >3.2</span>&#x2003;SQL Query for KPMG Interview – Answer </a>
+<span class="sectionnumber">3.2</span>&#x2003;SQL Query for KPMG Interview – Answer </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-47" class="toclstlisting" >
-<span class="sectionnumber" >4.1</span>&#x2003;Javascript Program: Quantum random spy hunter </a>
+<span class="sectionnumber">4.1</span>&#x2003;Javascript Program: Quantum random spy hunter </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-48" class="toclstlisting" >
-<span class="sectionnumber" >4.2</span>&#x2003;SQL Query for length </a>
+<span class="sectionnumber">4.2</span>&#x2003;SQL Query for length </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-49" class="toclstlisting" >
-<span class="sectionnumber" >4.3</span>&#x2003;SQL Query for addresses </a>
+<span class="sectionnumber">4.3</span>&#x2003;SQL Query for addresses </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-50" class="toclstlisting" >
-<span class="sectionnumber" >4.4</span>&#x2003;Javascript Program get ip address </a>
+<span class="sectionnumber">4.4</span>&#x2003;Javascript Program get ip address </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-51" class="toclstlisting" >
-<span class="sectionnumber" >4.5</span>&#x2003;Javascript Program HTTP server </a>
+<span class="sectionnumber">4.5</span>&#x2003;Javascript Program HTTP server </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-52" class="toclstlisting" >
-<span class="sectionnumber" >4.6</span>&#x2003;Cpp Testing </a>
+<span class="sectionnumber">4.6</span>&#x2003;Cpp Testing </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-53" class="toclstlisting" >
-<span class="sectionnumber" >4.7</span>&#x2003;Golang Adaptor Example </a>
+<span class="sectionnumber">4.7</span>&#x2003;Golang Adaptor Example </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-54" class="toclstlisting" >
-<span class="sectionnumber" >4.8</span>&#x2003;Golang Adaptor Example </a>
+<span class="sectionnumber">4.8</span>&#x2003;Golang Adaptor Example </a>
 </p>
 
 
 <p>
 <a href="2019.html#autoid-57" class="toclstlisting" >
-<span class="sectionnumber" >4.9</span>&#x2003;Golang Program </a>
+<span class="sectionnumber">4.9</span>&#x2003;Golang Program </a>
 </p>
 
 
 <p>
 <a href="Scripts-Tools.html#autoid-58" class="toclstlisting" >
-<span class="sectionnumber" >5.1</span>&#x2003;Python Script to download from google drive </a>
+<span class="sectionnumber">5.1</span>&#x2003;Python Script to download from google drive </a>
 </p>
 
 
 <p>
 <a href="Scripts-Tools.html#autoid-59" class="toclstlisting" >
-<span class="sectionnumber" >5.2</span>&#x2003;Python Script to remove watermark </a>
+<span class="sectionnumber">5.2</span>&#x2003;Python Script to remove watermark </a>
 </p>
 
 
 <p>
 <a href="Scripts-Tools.html#autoid-60" class="toclstlisting" >
-<span class="sectionnumber" >5.3</span>&#x2003;Bash Script for kubernates </a>
+<span class="sectionnumber">5.3</span>&#x2003;Bash Script for kubernates </a>
 </p>
 
 
 <p>
 <a href="Scripts-Tools.html#autoid-61" class="toclstlisting" >
-<span class="sectionnumber" >5.4</span>&#x2003;Bash Script uncomment line in sed for osx </a>
+<span class="sectionnumber">5.4</span>&#x2003;Bash Script uncomment line in sed for osx </a>
 </p>
 
 
 <p>
 <a href="Scripts-Tools.html#autoid-62" class="toclstlisting" >
-<span class="sectionnumber" >5.5</span>&#x2003;Powershell script to install key software </a>
+<span class="sectionnumber">5.5</span>&#x2003;Powershell script to install key software </a>
 </p>
 
 
 <p>
 <a href="Scripts-Tools.html#autoid-63" class="toclstlisting" >
-<span class="sectionnumber" >5.6</span>&#x2003;Bash Script to check python version </a>
+<span class="sectionnumber">5.6</span>&#x2003;Bash Script to check python version </a>
 </p>
 
 
 <p>
 <a href="Scripts-Tools.html#autoid-64" class="toclstlisting" >
-<span class="sectionnumber" >5.7</span>&#x2003;Bash Script to get largest files </a>
+<span class="sectionnumber">5.7</span>&#x2003;Bash Script to get largest files </a>
 </p>
 </nav>
 
 </section>
 
-</div>
+</main>
 
 </div>
 

@@ -60,10 +60,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -87,6 +90,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -102,9 +124,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -171,7 +193,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -195,7 +217,7 @@ MathJax = {
 
 
 <a id="postGrad-autopage-86"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+<nav class="topnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 <header>
@@ -210,17 +232,17 @@ Home</a></nav>
 </header>
 
 
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
+<div class="bodyandsidetoc">
+<div class="sidetoccontainer">
 
 
-<nav class="sidetoc" >
+<nav class="sidetoc">
 
 
-<div class="sidetoctitle" >
+<div class="sidetoctitle">
 
 <p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+<span class="sidetocthetitle">The Lwarp Tutorial</span>
 </p>
 
 <p>
@@ -229,7 +251,7 @@ Contents
 </div>
 
 
-<div class="sidetoccontents" >
+<div class="sidetoccontents">
 
 <p>
 <a href="index.html" class="linkhome" >
@@ -238,7 +260,7 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -256,7 +278,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -268,7 +290,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -286,13 +308,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -304,7 +326,7 @@ SQL</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -351,17 +373,17 @@ Acronyms</a>
 </div>
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <h1>The Lwarp Tutorial</h1>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -370,6 +392,10 @@ Acronyms</a>
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -385,6 +411,12 @@ Acronyms</a>
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -396,6 +428,10 @@ Acronyms</a>
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -409,7 +445,31 @@ Acronyms</a>
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -417,7 +477,11 @@ Acronyms</a>
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -428,7 +492,7 @@ Acronyms</a>
 </div>
 
 <p>
-<h3 id="autosec-87">Chapter&nbsp;<span class="sectionnumber" >4&#x2003;</span>2019</h3>
+<h3 id="autosec-87">Chapter&nbsp;<span class="sectionnumber">4&#x2003;</span>2019</h3>
 <a id="postGrad-autopage-87"></a>
 <a id="postGrad-autofile-7"></a>
 
@@ -449,7 +513,7 @@ Name
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdp">
 
 <p>
@@ -463,7 +527,7 @@ examin pyalgotrade for stock selling and buying
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdp">
 
 <p>
@@ -477,7 +541,7 @@ work on web scrapper experiment felgo
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdp">
 
 <p>
@@ -491,7 +555,7 @@ gas station network
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdp">
 
 <p>
@@ -505,7 +569,7 @@ explore ipfs solutions such as pinata and textile
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdp">
 
 <p>
@@ -519,7 +583,7 @@ add dash auth to dashboard
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdp">
 
 </td>
@@ -531,7 +595,7 @@ add dash auth to dashboard
 
 </table>
 
-<div class="figurecaption" >
+<div class="figurecaption">
 <p>
 Table 4.1:&nbsp;<b>Todo List 2019/8/5</b>
 </p>
@@ -561,7 +625,7 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 "
 >
 <p>
-<span class="textrm textbf textup textulc" >QPU Versus GPU: Some Common Characteristics</span>
+<span class="textrm textbf textup textulc">QPU Versus GPU: Some Common Characteristics</span>
 </p>
 </div>
 <ul style="list-style-type:none">
@@ -606,7 +670,7 @@ QPU, and others are not. The QPU runs on a separate clock from the CPU, and usua
 <a id="autoid-47" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.1:&nbsp;Javascript Program: Quantum random spy hunter
@@ -663,7 +727,7 @@ Query
 <a id="autoid-48" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.2:&nbsp;SQL Query for length
@@ -677,7 +741,7 @@ SELECT first_name, length(first_name) as first_length, last_name, length(last_na
 <a id="autoid-49" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.3:&nbsp;SQL Query for addresses
@@ -723,7 +787,7 @@ Learned that ‘::1‘ means localhost for ip 6, and express has a useful functi
 <a id="autoid-50" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.4:&nbsp;Javascript Program get ip address
@@ -740,7 +804,7 @@ var ip = req.headers[&apos;x-forwarded-for&apos;] ||
 <a id="autoid-51" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.5:&nbsp;Javascript Program HTTP server
@@ -819,7 +883,7 @@ It is important to understand that .NET Standard is just a standard. You are not
 <a id="autoid-52" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.6:&nbsp;Cpp Testing
@@ -897,7 +961,7 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 "
 >
 <p>
-<span class="textrm textbf textup textulc" >Algorithm Features</span>
+<span class="textrm textbf textup textulc">Algorithm Features</span>
 </p>
 </div>
 <p>
@@ -920,7 +984,7 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 "
 >
 <p>
-<span class="textrm textbf textup textulc" >Data Structures</span>
+<span class="textrm textbf textup textulc">Data Structures</span>
 </p>
 </div>
 <p>
@@ -999,7 +1063,7 @@ The adapter pattern comprises the target, adaptee, adapter, and client:
 <a id="autoid-53" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.7:&nbsp;Golang Adaptor Example
@@ -1055,7 +1119,7 @@ functionality of concrete classes independent from the interface implementer cla
 <a id="autoid-54" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.8:&nbsp;Golang Adaptor Example
@@ -1132,7 +1196,7 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 "
 >
 <p>
-<span class="textrm textbf textup textulc" >Composite</span>
+<span class="textrm textbf textup textulc">Composite</span>
 </p>
 </div>
 <p>
@@ -1181,7 +1245,7 @@ box-shadow: 8pt 8pt 8pt #808080 ;
 "
 >
 <p>
-<span class="textrm textbf textup textulc" >Decorator</span>
+<span class="textrm textbf textup textulc">Decorator</span>
 </p>
 </div>
 <p>
@@ -1254,6 +1318,8 @@ Three Repos:
 <td class="tdl">
 <div class="minipage" style="vertical-align:top ; justify-content:flex-start ; ">
 
+<a id="postGrad-autopage-103"></a>
+
 <p>
 info
 </p>
@@ -1264,6 +1330,8 @@ info
 </td>
 <td class="tdl">
 <div class="minipage" style="vertical-align:top ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-104"></a>
 
 <p>
 value
@@ -1276,7 +1344,7 @@ value
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdl"></td>
 <td class="tdl"></td>
 </tr>
@@ -1285,6 +1353,8 @@ value
 <tr>
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-105"></a>
 
 <p>
 author:
@@ -1296,6 +1366,8 @@ author:
 </td>
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-106"></a>
 
 <p>
 David Li
@@ -1312,6 +1384,8 @@ David Li
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
 
+<a id="postGrad-autopage-107"></a>
+
 <p>
 Date:
 </p>
@@ -1322,6 +1396,8 @@ Date:
 </td>
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-108"></a>
 
 <p>
 Jan 07, 2018
@@ -1338,6 +1414,8 @@ Jan 07, 2018
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
 
+<a id="postGrad-autopage-109"></a>
+
 <p>
 File Name:
 </p>
@@ -1348,6 +1426,8 @@ File Name:
 </td>
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-110"></a>
 
 <p>
 lim_job_scrapper.py
@@ -1479,6 +1559,8 @@ Also, it will count the number of jobs vs the date
 <td class="tdl">
 <div class="minipage" style="vertical-align:top ; justify-content:flex-start ; ">
 
+<a id="postGrad-autopage-116"></a>
+
 <p>
 Date
 </p>
@@ -1489,6 +1571,8 @@ Date
 </td>
 <td class="tdl">
 <div class="minipage" style="vertical-align:top ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-117"></a>
 
 <p>
 Num of jobs
@@ -1501,7 +1585,7 @@ Num of jobs
 </tr>
 
 
-<tr class="hline" >
+<tr class="hline">
 <td class="tdl"></td>
 <td class="tdl"></td>
 </tr>
@@ -1510,6 +1594,8 @@ Num of jobs
 <tr>
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-118"></a>
 
 <p>
 2018-04-26
@@ -1521,6 +1607,8 @@ Num of jobs
 </td>
 <td class="tdl">
 <div class="minipage" style="vertical-align:bottom ; justify-content:flex-start ; ">
+
+<a id="postGrad-autopage-119"></a>
 
 <p>
 39
@@ -2157,7 +2245,7 @@ Yarn, npm, pandoc, etc .. imagemagick
 <a id="autoid-57" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;4.9:&nbsp;Golang Program
@@ -2176,7 +2264,7 @@ import (
 
 </section>
 
-</div>
+</main>
 
 </div>
 
@@ -2189,7 +2277,7 @@ Contact Information and Copyright
 </footer>
 
 
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+<nav class="botnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 </body>

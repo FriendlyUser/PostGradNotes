@@ -60,10 +60,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -87,6 +90,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -102,9 +124,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -171,7 +193,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -195,7 +217,7 @@ MathJax = {
 
 
 <a id="postGrad-autopage-17"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+<nav class="topnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 <header>
@@ -210,17 +232,17 @@ Home</a></nav>
 </header>
 
 
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
+<div class="bodyandsidetoc">
+<div class="sidetoccontainer">
 
 
-<nav class="sidetoc" >
+<nav class="sidetoc">
 
 
-<div class="sidetoctitle" >
+<div class="sidetoctitle">
 
 <p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+<span class="sidetocthetitle">The Lwarp Tutorial</span>
 </p>
 
 <p>
@@ -229,7 +251,7 @@ Contents
 </div>
 
 
-<div class="sidetoccontents" >
+<div class="sidetoccontents">
 
 <p>
 <a href="index.html" class="linkhome" >
@@ -238,7 +260,7 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -256,7 +278,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -268,7 +290,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -286,13 +308,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -304,7 +326,7 @@ SQL</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -351,17 +373,17 @@ Acronyms</a>
 </div>
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <h1>The Lwarp Tutorial</h1>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -370,6 +392,10 @@ Acronyms</a>
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -385,6 +411,12 @@ Acronyms</a>
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -396,6 +428,10 @@ Acronyms</a>
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -409,7 +445,31 @@ Acronyms</a>
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -417,7 +477,11 @@ Acronyms</a>
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -428,7 +492,7 @@ Acronyms</a>
 </div>
 
 <p>
-<h2 id="autosec-18">Part&nbsp;<span class="sectionnumber" >I&#x2003;</span>2020</h2>
+<h2 id="autosec-18">Part&nbsp;<span class="sectionnumber">I&#x2003;</span>2020</h2>
 <a id="postGrad-autopage-18"></a>
 <a id="postGrad-autofile-3"></a>
 
@@ -449,7 +513,7 @@ Before running all commands switch to root user, ensure you have the latest vers
 <a id="autoid-5" ></a >
 
 
-<div class="figurecaption" >
+<div class="figurecaption">
 
 <p>
 Listing&nbsp;1.4:&nbsp;Bash Script
@@ -479,7 +543,7 @@ Clear Storage and Clear Container Registry periodically each month to avoid payi
 
 </section>
 
-</div>
+</main>
 
 </div>
 
@@ -492,7 +556,7 @@ Contact Information and Copyright
 </footer>
 
 
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+<nav class="botnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 </body>

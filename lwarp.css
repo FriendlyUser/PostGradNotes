@@ -1,6 +1,6 @@
 /*
   CSS stylesheet for the LaTeX Lwarp package
-  Copyright 2016-2020 Brian Dunn — BD Tech Concepts LLC
+  Copyright 2016-2021 Brian Dunn — BD Tech Concepts LLC
 */
 
 /* a fix for older browsers: */
@@ -69,9 +69,11 @@ kbd, span.texttt, p span.texttt {
 
 pre { padding: 3pt ; }
 
-span.strong, span.textbf, div.strong, div.textbf { font-weight: bold; }
+span.strong, span.textbf, div.strong, div.textbf, table td.tdbfseries { font-weight: bold; }
 
-span.textit, div.textit { font-style: italic; }
+span.textit, div.textit, table td.tditshape { font-style: italic; }
+
+table td.tdbfit { font-weight: bold ; font-style:italic }
 
 span.textmd, div.textmd { font-weight: normal; }
 
@@ -475,12 +477,12 @@ div.marginblock br ,
 div.marginparblock br
     { margin-bottom: 2ex ; }
 
-div.bodycontainer {
+main.bodycontainer {
     float: left ;
     width: 80% ;
 }
 
-div.bodywithoutsidetoc div.bodycontainer {
+div.bodywithoutsidetoc main.bodycontainer {
     float: none ;
     width: 100% ;
 }
@@ -854,7 +856,10 @@ dl dd:after { content: "" ; display: block ; clear: both }
 
 dl dd p { margin-top: 0em; }
 
-dd ul, dd ol, dd dl { clear: both ; padding-top: 1ex }
+dd ul, dd ol, dd dl {
+    clear: both ;
+/*    padding-top: 1ex ; */
+}
 
 nav {
     font-family: "URW Classico", Optima, "Linux Biolinum O",
@@ -947,6 +952,12 @@ figure.subfigure, figure.subtable  {
 
 div.figurecaption .minipage { margin:0 ; padding: 0 }
 
+/* for subcaptions: */
+figure div.minipage div.figurecaption {
+    max-width: 100% ;   /* fallback if min() does not work */
+    max-width: min(30em,100%)
+}
+
 div.minipage figure { border: none ; box-shadow: none ; }
 div.minipage figure.table { margin: 0ex }
 div.minipage div.footnotes { margin: 1ex 2em 0ex 2em }
@@ -958,12 +969,20 @@ div.floatrow figure { display: inline-block ; margin: 1ex 2% ; }
 div.floatfoot { font-size: .85em ;
     border-top: 1px solid silver ; line-height: 1.2 ; }
 
+/* Center if only one line, "start" align if more than one line: */
 div.figurecaption , .lstlistingtitle {
     font-size: .85em ;
-    text-align: center ;
     font-weight: bold ;
-    margin-top: 1ex ;
-    margin-bottom: 1ex ;
+    text-align: start ;
+    margin: 1ex auto;
+    width: max-content;
+    max-width: 100%;
+}
+
+/* A marginblock is small, so always center and don't mess with the width. */
+div.marginblock div.figurecaption {
+    width: 100% ;
+    text-align: center ;
 }
 
 figure.subfigure div.figurecaption, figure.subtable div.figurecaption  {
@@ -1027,9 +1046,6 @@ table td.tdr { text-align: right ; vertical-align: middle ; }
 table td.tdp { text-align: left ; vertical-align: bottom ; }
 table td.tdm { text-align: left ; vertical-align: middle ; }
 table td.tdb { text-align: left ; vertical-align: top ; }
-table td.tdP { text-align: center ; vertical-align: bottom ; }
-table td.tdM { text-align: center ; vertical-align: middle ; }
-table td.tdB { text-align: center ; vertical-align: top ; }
 
 table td.tvertbarl { border-left: 1px solid black }
 table td.tvertbarldouble { border-left: 4px double black }
@@ -1040,6 +1056,10 @@ table td.tvertbarldash { border-left: 1px dashed black }
 table td.tvertbarldoubledash { border-left: 2px dashed black }
 table td.tvertbarrdash { border-right: 1px dashed black }
 table td.tvertbarrdoubledash { border-right: 2px dashed black }
+
+table td.tdcenter { text-align: center}
+table td.tdleft { text-align: left}
+table td.tdright { text-align: right}
 
 /* for cmidrules: */
 table td.tdrule {
@@ -1277,15 +1297,12 @@ img.lateximage{
     border: none ;
 }
 
-/* The -1px right margin compensates for the 1px right border. */
-/* Without this -1px margin, the body container appears below instead */
-/* of floating to the side. */
 div.sidetoccontainer {
     font-family: "DejaVu Serif", "Bitstream Vera Serif",
         "Lucida Bright", Georgia, serif;
     float: left ;
-    width: 20%;
-    margin: 0pt -1px 3ex 0pt ;
+    width: 19%; /* room for border-right next to 80% main */
+    margin: 0pt 0em 3ex 0pt ;
     border-right: 1px solid silver;
     border-bottom: 1px solid silver;
     background: #FAF7F4 ;
@@ -1313,8 +1330,11 @@ section.textbody { margin: 0ex 1em 0ex 1em ;}
 
 div.multicolsheading { -webkit-column-span: all;
     -moz-column-span: all; column-span: all; }
-div.multicols { -webkit-columns: 3 380px ;
-    -moz-columns: 3 380px ; columns: 3 380px ; }
+div.multicols {
+    -webkit-columns: 3 auto ;
+    -moz-columns: 3 auto ;
+    columns: 3 auto ;
+}
 div.multicols p {margin-top: 0ex}
 
 /* Used for xfrac and nicefrac: */
@@ -1519,6 +1539,9 @@ span.nolbreaks { white-space: nowrap ; }
 /*
 For CSS LaTeX and related logos:
 Based on spacing demonstrated by the metafont package.
+
+The subscripts are shrunk instead of lowered below the baseline,
+to avoid browser rendering errors with the line height in lists, etc.
 */
 
 .latexlogofont {
@@ -1530,7 +1553,6 @@ Based on spacing demonstrated by the metafont package.
 .latexlogo {
     font-family: "Linux Libertine O", "Nimbus Roman No 9 L",
         "FreeSerif", "Hoefler Text", Times, "Times New Roman", serif;
-    font-size: 1.1em;
 }
 
 .latexlogosup {
@@ -1544,10 +1566,11 @@ Based on spacing demonstrated by the metafont package.
 
 .latexlogosub {
   text-transform: uppercase;
-  vertical-align: -0.27ex;
+/*  vertical-align: -0.27ex; */
   margin-left: -0.08em;
   margin-right: -0.07em;
-  font-size: 1em;
+/*  font-size: 1em; */
+    font-size: .7em ;
 }
 
 .latexlogotwoe {
@@ -1557,24 +1580,25 @@ Based on spacing demonstrated by the metafont package.
 
 .latexlogotwoesub {
   font-style:italic ;
-  vertical-align: -0.27ex;
+/*  vertical-align: -0.27ex; */
   margin-left: -0.11em;
   margin-right: -0.1em;
-  font-size: 1em;
+/*  font-size: 1em; */
+    font-size: .7em ;
 }
 
 .xelatexlogo {
     font-family: "Linux Libertine O", "Nimbus Roman No 9 L",
         "FreeSerif", "Hoefler Text", Times, "Times New Roman", serif;
     letter-spacing: .03em ;
-    font-size: 1.1em;
 }
 
 .xelatexlogosub {
-  vertical-align: -0.27ex;
+/*  vertical-align: -0.27ex; */
   margin-left: -0.0667em;
   margin-right: -.05em;
-  font-size: 1em;
+/*  font-size: 1em; */
+    font-size: .7em ;
   letter-spacing: .03em ;
 }
 
@@ -1600,6 +1624,14 @@ nav.botnavigation { display:none; }
 /* Only display the sidetoc's webpage title if a small screen */
 span.sidetocthetitle { display: none }
 
+@media screen and (max-width: 100em) {
+    div.multicols {
+        -webkit-columns: 2 auto ;
+        -moz-columns: 2 auto ;
+        columns: 2 auto ;
+    }
+}
+
 @media screen and (max-width: 50em) {
     div.sidetoccontainer {
         float: none ;
@@ -1613,12 +1645,17 @@ span.sidetocthetitle { display: none }
     span.sidetocthetitle { display: inline }
     nav.topnavigation { display:block }
     nav.botnavigation { display:block }
-    div.bodycontainer { width: 100% }
+    main.bodycontainer { width: 100% }
     .marginpar {
         max-width: 100%;
         float: none;
         display:block ;
         margin: 1ex 1em 1ex 1em ;
+    }
+    div.multicols {
+        -webkit-columns: 1 auto ;
+        -moz-columns: 1 auto ;
+        columns: 1 auto ;
     }
 }
 
@@ -1632,19 +1669,19 @@ span.sidetocthetitle { display: none }
     div.sidetoccontainer { display:none; }
     nav.topnavigation { display: none; }
     nav.botnavigation { display: none; }
-    div.bodycontainer { width: 100% }
+    main.bodycontainer { width: 100% }
 }
 
 @media handheld {
     div.sidetoccontainer { display:none; }
     nav.topnavigation { display:block }
     nav.botnavigation { display:block }
-    div.bodycontainer { width: 100% }
+    main.bodycontainer { width: 100% }
 }
 
 @media projection {
     div.sidetoccontainer { display:none; }
     nav.topnavigation { display:block }
     nav.botnavigation { display:block }
-    div.bodycontainer { width: 100% }
+    main.bodycontainer { width: 100% }
 }

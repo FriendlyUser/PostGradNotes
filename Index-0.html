@@ -60,10 +60,13 @@ MathJax = {
           }
         }
 
-        // Create the command map for \ifstar, \ifnextchar, \seteqnumber
-        new CommandMap('ifstar-ifnextchar-setequnumber', {
+        // Create the command map for:
+        //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \seteqnumber
+        new CommandMap('Lwarp-macros', {
           ifstar: 'IfstarFunction',
           ifnextchar: 'IfnextcharFunction',
+          ifblank: 'IfblankFunction',
+          ifstrequal: 'IfstrequalFunction',
           seteqnumber: 'SeteqnumberFunction'
         }, {
           // This function implements an ifstar macro.
@@ -87,6 +90,25 @@ MathJax = {
             useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
           },
 
+          // This function implements an ifblank macro.
+          IfblankFunction(parser, name) {
+            const blankarg = parser.GetArgument(name);
+            const resultblank = parser.GetArgument(name);
+            const resultnotblank = parser.GetArgument(name);
+            const isblank = (blankarg.trim() == "");
+            useArgument(parser, isblank ? resultblank : resultnotblank);
+          },
+
+          // This function implements an ifstrequal macro.
+          IfstrequalFunction(parser, name) {
+            const strequalfirst = parser.GetArgument(name);
+            const strequalsecond = parser.GetArgument(name);
+            const resultequal = parser.GetArgument(name);
+            const resultnotequal = parser.GetArgument(name);
+            const isequal = (strequalfirst == strequalsecond);
+            useArgument(parser, isequal ? resultequal : resultnotequal);
+          },
+
           // This function modifies the equation numbers.
           SeteqnumberFunction(parser, name) {
               // Get the macro parameters
@@ -102,9 +124,9 @@ MathJax = {
 
         });
 
-        // Create the ifstar-ifnextchar-setequnumber package
-        Configuration.create('ifstar-ifnextchar-setequnumber', {
-          handler: {macro: ['ifstar-ifnextchar-setequnumber']}
+        // Create the Lwarp-macros package
+        Configuration.create('Lwarp-macros', {
+          handler: {macro: ['Lwarp-macros']}
         });
 
         MathJax.startup.defaultReady();
@@ -171,7 +193,7 @@ MathJax = {
   },      // startup
 
   tex: {
-    packages: {'[+]': ['tagformat', 'ifstar-ifnextchar-setequnumber', 'textmacros']},
+    packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
     tags: "ams",
          tagformat: {
              number: function (n) {
@@ -195,7 +217,7 @@ MathJax = {
 
 
 <a id="postGrad-autopage-184"></a>
-<nav class="topnavigation" ><a href="index.html" class="linkhome" >
+<nav class="topnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 <header>
@@ -210,17 +232,17 @@ Home</a></nav>
 </header>
 
 
-<div class="bodyandsidetoc" >
-<div class="sidetoccontainer" >
+<div class="bodyandsidetoc">
+<div class="sidetoccontainer">
 
 
-<nav class="sidetoc" >
+<nav class="sidetoc">
 
 
-<div class="sidetoctitle" >
+<div class="sidetoctitle">
 
 <p>
-<span class="sidetocthetitle" >The Lwarp Tutorial</span>
+<span class="sidetocthetitle">The Lwarp Tutorial</span>
 </p>
 
 <p>
@@ -229,7 +251,7 @@ Contents
 </div>
 
 
-<div class="sidetoccontents" >
+<div class="sidetoccontents">
 
 <p>
 <a href="index.html" class="linkhome" >
@@ -238,7 +260,7 @@ Home</a>
 
 <p>
 <a href="Example-chapter.html#autosec-8" class="tocchapter" >
-<span class="sectionnumber" >1</span>&#x2003;Example chapter</a>
+<span class="sectionnumber">1</span>&#x2003;Example chapter</a>
 </p>
 
 
@@ -256,7 +278,7 @@ Some math</a>
 
 <p>
 <a href="2020.html#autosec-18" class="tocpart" >
-<span class="sectionnumber" >I</span>&#x2003;2020</a>
+<span class="sectionnumber">I</span>&#x2003;2020</a>
 </p>
 
 
@@ -268,7 +290,7 @@ Setting up Rasa on GCP</a>
 
 <p>
 <a href="spaCy-Tutorials.html#autosec-22" class="tocchapter" >
-<span class="sectionnumber" >2</span>&#x2003;spaCy Tutorials</a>
+<span class="sectionnumber">2</span>&#x2003;spaCy Tutorials</a>
 </p>
 
 
@@ -286,13 +308,13 @@ GCP Finance course</a>
 
 <p>
 <a href="Interviews.html#autosec-81" class="tocchapter" >
-<span class="sectionnumber" >3</span>&#x2003;Interviews</a>
+<span class="sectionnumber">3</span>&#x2003;Interviews</a>
 </p>
 
 
 <p>
 <a href="2019.html#autosec-87" class="tocchapter" >
-<span class="sectionnumber" >4</span>&#x2003;2019</a>
+<span class="sectionnumber">4</span>&#x2003;2019</a>
 </p>
 
 
@@ -304,7 +326,7 @@ SQL</a>
 
 <p>
 <a href="Code-Reference.html#autosec-135" class="tocchapter" >
-<span class="sectionnumber" >5</span>&#x2003;Code Reference</a>
+<span class="sectionnumber">5</span>&#x2003;Code Reference</a>
 </p>
 
 
@@ -351,17 +373,17 @@ Acronyms</a>
 </div>
 
 
-<div class="bodycontainer" >
+<main class="bodycontainer">
 
 
-<section class="textbody" >
+<section class="textbody">
 
 <h1>The Lwarp Tutorial</h1>
 
 <!--MathJax customizations:-->
 
 
-<div class="hidden" >
+<div class="hidden">
 
 \(\newcommand{\footnotename}{footnote}\)
 
@@ -370,6 +392,10 @@ Acronyms</a>
 \(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
 
 \(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
 
 \(\newcommand {\mathnormal }[1]{{#1}}\)
 
@@ -385,6 +411,12 @@ Acronyms</a>
 
 \(\newcommand {\addtocounter }[2]{}\)
 
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
 \(\newcommand {\cline }[1]{}\)
 
 \(\newcommand {\directlua }[1]{\text {(directlua)}}\)
@@ -396,6 +428,10 @@ Acronyms</a>
 \(\def \LWRabsorbnumber #1 {}\)
 
 \(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
 
 \(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
 
@@ -409,7 +445,31 @@ Acronyms</a>
 
 \(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
 
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
 \(\newcommand {\intertext }[1]{\text {#1}\notag \\}\)
+
+\(\let \Hat \hat \)
+
+\(\let \Check \check \)
+
+\(\let \Tilde \tilde \)
+
+\(\let \Acute \acute \)
+
+\(\let \Grave \grave \)
+
+\(\let \Dot \dot \)
+
+\(\let \Ddot \ddot \)
+
+\(\let \Breve \breve \)
+
+\(\let \Bar \bar \)
+
+\(\let \Vec \vec \)
 
 \(\newcommand {\toprule }[1][]{\hline }\)
 
@@ -417,7 +477,11 @@ Acronyms</a>
 
 \(\let \bottomrule \toprule \)
 
-\(\newcommand {\cmidrule }[2][]{}\)
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
 
 \(\newcommand {\morecmidrules }{}\)
 
@@ -437,7 +501,7 @@ Acronyms</a>
 </p>
 
 <p>
-<span class="indexitem" ><!----></span>Some text., chapter <a href="Example-chapter.html#LWRindex-1">1</a>
+<span class="indexitem"><!----></span>Some text., chapter <a href="Example-chapter.html#LWRindex-1">1</a>
 </p>
 <h3 id="autosec-186">Bibliography</h3>
 <a id="postGrad-autopage-186"></a>
@@ -448,7 +512,7 @@ Acronyms</a>
 
 <li>
 <p>
-[1] <a id="LWR-ht-cite.0@book:2300108"></a>Valentina Porcu. <em>Python for Data Mining Quick Syntax Reference</em>. 1st&nbsp;ed. Apress, 2019. <span class="textsc" >isbn</span>: 1484241126, 978-1484241127. <span class="textsc" >url</span>: <a
+[1] <a id="LWR-ht-cite.0@book:2300108"></a>Valentina Porcu. <em>Python for Data Mining Quick Syntax Reference</em>. 1st&nbsp;ed. Apress, 2019. <span class="textsc">isbn</span>: 1484241126, 978-1484241127. <span class="textsc">url</span>: <a
 href="http://gen.lib.rus.ec/book/index.php?md5=719FA57E15A5FAAE9996594FF491F0E1" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=719FA57E15A5FAAE9996594FF491F0E1</a>.
 </p>
 
@@ -456,7 +520,7 @@ href="http://gen.lib.rus.ec/book/index.php?md5=719FA57E15A5FAAE9996594FF491F0E1"
 </li>
 <li>
 <p>
-[2] <a id="LWR-ht-cite.0@book:2349913"></a>Igor Livshin. <em>Artificial Neural Networks with Java - Tools for Building Neural Network Applications</em>. Apress, 2019. <span class="textsc" >isbn</span>: 9781484244203. <span class="textsc" >url</span>: <a
+[2] <a id="LWR-ht-cite.0@book:2349913"></a>Igor Livshin. <em>Artificial Neural Networks with Java - Tools for Building Neural Network Applications</em>. Apress, 2019. <span class="textsc">isbn</span>: 9781484244203. <span class="textsc">url</span>: <a
 href="http://gen.lib.rus.ec/book/index.php?md5=1a97921ae2ebdb2acbce0ef06e29667d" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=1a97921ae2ebdb2acbce0ef06e29667d</a>.
 </p>
 
@@ -464,8 +528,8 @@ href="http://gen.lib.rus.ec/book/index.php?md5=1a97921ae2ebdb2acbce0ef06e29667d"
 </li>
 <li>
 <p>
-[3] <a id="LWR-ht-cite.0@book:2391166"></a>Mercedes Gimeno-Segovia Eric R. Johnston Nic Harrigan. <em>Programming Quantum Computers: Essential Algorithms and Code Samples</em>. 1st&nbsp;ed. O’Reilly Media, 2019. <span class="textsc" >isbn</span>:
-1492039683, 978-1492039686. <span class="textsc" >url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=71fa12e84983bfe4b6b39c80879077a4" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=71fa12e84983bfe4b6b39c80879077a4</a>.
+[3] <a id="LWR-ht-cite.0@book:2391166"></a>Mercedes Gimeno-Segovia Eric R. Johnston Nic Harrigan. <em>Programming Quantum Computers: Essential Algorithms and Code Samples</em>. 1st&nbsp;ed. O’Reilly Media, 2019. <span class="textsc">isbn</span>:
+1492039683, 978-1492039686. <span class="textsc">url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=71fa12e84983bfe4b6b39c80879077a4" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=71fa12e84983bfe4b6b39c80879077a4</a>.
 </p>
 
 
@@ -481,15 +545,15 @@ href="http://gen.lib.rus.ec/book/index.php?md5=1a97921ae2ebdb2acbce0ef06e29667d"
 <li>
 <p>
 [5] <a id="LWR-ht-cite.0@kommadi2019learn"></a>Bhagvan Kommadi. <em>Learn data structures and algorithms with Golang : level up your Go programming skills to develop faster and more efficient code</em>. Birmingham, UK: Packt Publishing, 2019. <span
-class="textsc" >isbn</span>: 1789618509.
+class="textsc">isbn</span>: 1789618509.
 </p>
 
 
 </li>
 <li>
 <p>
-[6] <a id="LWR-ht-cite.0@book:2433880"></a>Andrea Lonza. <em>Reinforcement Learning Algorithms with Python: Learn, understand, and develop smart algorithms for addressing AI challenges</em>. Packt Publishing, 2019. <span class="textsc" >isbn</span>:
-1789131111, 978-1789131116. <span class="textsc" >url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=7836251eda95c9704e26ffece0819082" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=7836251eda95c9704e26ffece0819082</a>.
+[6] <a id="LWR-ht-cite.0@book:2433880"></a>Andrea Lonza. <em>Reinforcement Learning Algorithms with Python: Learn, understand, and develop smart algorithms for addressing AI challenges</em>. Packt Publishing, 2019. <span class="textsc">isbn</span>:
+1789131111, 978-1789131116. <span class="textsc">url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=7836251eda95c9704e26ffece0819082" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=7836251eda95c9704e26ffece0819082</a>.
 </p>
 
 
@@ -503,7 +567,7 @@ class="textsc" >isbn</span>: 1789618509.
 </li>
 <li>
 <p>
-[8] <a id="LWR-ht-cite.0@book:2451102"></a>Dan Kottmann Tom Steele Chris Patten. <em>Black Hat Go</em>. 0. <span class="textsc" >isbn</span>: 9781593278656. <span class="textsc" >url</span>: <a
+[8] <a id="LWR-ht-cite.0@book:2451102"></a>Dan Kottmann Tom Steele Chris Patten. <em>Black Hat Go</em>. 0. <span class="textsc">isbn</span>: 9781593278656. <span class="textsc">url</span>: <a
 href="http://gen.lib.rus.ec/book/index.php?md5=8a1b08171862b104b92c673b2161203f" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=8a1b08171862b104b92c673b2161203f</a>.
 </p>
 
@@ -511,16 +575,16 @@ href="http://gen.lib.rus.ec/book/index.php?md5=8a1b08171862b104b92c673b2161203f"
 </li>
 <li>
 <p>
-[9] <a id="LWR-ht-cite.0@book:2406637"></a>Frank Zammetti. <em>Practical Flutter: Improve your Mobile Development with Google’s Latest Open-Source SDK</em>. 1st ed. Apress, 2019. <span class="textsc" >isbn</span>: 978-1-4842-4971-0;978-1-4842-4972-7.
-<span class="textsc" >url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=227f03b36ad6b1b4c6c1af4ca444c27d" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=227f03b36ad6b1b4c6c1af4ca444c27d</a>.
+[9] <a id="LWR-ht-cite.0@book:2406637"></a>Frank Zammetti. <em>Practical Flutter: Improve your Mobile Development with Google’s Latest Open-Source SDK</em>. 1st ed. Apress, 2019. <span class="textsc">isbn</span>: 978-1-4842-4971-0;978-1-4842-4972-7. <span
+class="textsc">url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=227f03b36ad6b1b4c6c1af4ca444c27d" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=227f03b36ad6b1b4c6c1af4ca444c27d</a>.
 </p>
 
 
 </li>
 <li>
 <p>
-[10] <a id="LWR-ht-cite.0@book:2558257"></a>Michael L. Perry. <em>The Art of Immutable Architecture: Theory and Practice of Data Management in Distributed Systems</em>. 1st&nbsp;ed. Apress, 2020. <span class="textsc" >isbn</span>:
-1484259548,9781484259542. <span class="textsc" >url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=E0465B9877E4153E21E92EC45F814C90" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=E0465B9877E4153E21E92EC45F814C90</a>.
+[10] <a id="LWR-ht-cite.0@book:2558257"></a>Michael L. Perry. <em>The Art of Immutable Architecture: Theory and Practice of Data Management in Distributed Systems</em>. 1st&nbsp;ed. Apress, 2020. <span class="textsc">isbn</span>:
+1484259548,9781484259542. <span class="textsc">url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=E0465B9877E4153E21E92EC45F814C90" target="_blank" >http://gen.lib.rus.ec/book/index.php?md5=E0465B9877E4153E21E92EC45F814C90</a>.
 </p>
 
 
@@ -528,7 +592,7 @@ href="http://gen.lib.rus.ec/book/index.php?md5=8a1b08171862b104b92c673b2161203f"
 <li>
 <p>
 [11] <a id="LWR-ht-cite.0@book:2622841"></a>Stefan Jansen. <em>Machine Learning for Algorithmic Trading: Predictive models to extract signals from market and alternative data for systematic trading strategies with Python, 2nd Edition</em>. 2nd&nbsp;ed. Packt
-Publishing, 2020. <span class="textsc" >isbn</span>: 1839217715,9781839217715. <span class="textsc" >url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=453A858931360224BD2485E4A61295FF" target="_blank"
+Publishing, 2020. <span class="textsc">isbn</span>: 1839217715,9781839217715. <span class="textsc">url</span>: <a href="http://gen.lib.rus.ec/book/index.php?md5=453A858931360224BD2485E4A61295FF" target="_blank"
 >http://gen.lib.rus.ec/book/index.php?md5=453A858931360224BD2485E4A61295FF</a>.
 </p>
 </li>
@@ -596,7 +660,7 @@ Publishing, 2020. <span class="textsc" >isbn</span>: 1839217715,9781839217715. <
 
 <a id="postGrad-autofile-last"></a> </section>
 
-</div>
+</main>
 
 </div>
 
@@ -609,7 +673,7 @@ Contact Information and Copyright
 </footer>
 
 
-<nav class="botnavigation" ><a href="index.html" class="linkhome" >
+<nav class="botnavigation"><a href="index.html" class="linkhome" >
 Home</a></nav>
 
 </body>
