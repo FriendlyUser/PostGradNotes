@@ -1,0 +1,20 @@
+name: Build LaTeX document
+on: [push]
+jobs:
+  build_latex:
+    container:
+      image:  ghcr.io/friendlyuser/dimages/lwarp_docker:v0.901
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Pdf
+        run: |
+          apt-get update && apt-get install poppler-utils -y
+          pdflatex postGrad.tex
+          lwarpmk printglossary
+          lwarpmk printindex
+          lwarpmk print
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: pdf doc
+          path: postGrad.pdf

@@ -77,17 +77,17 @@ jobs:
           paths: 
             - docs
           
-  surge:
-    docker:
-      - image: node:latest
-    working_directory: ~/docs
-    steps:
-      - checkout
-      - attach_workspace:
-         at: docs
-      - run: mv CNAME docs/CNAME
-      - run: npm install surge --save-dev
-      - run: echo | ./node_modules/.bin/surge --project docs
+  # surge:
+  #   docker:
+  #     - image: node:latest
+  #   working_directory: ~/docs
+  #   steps:
+  #     - checkout
+  #     - attach_workspace:
+  #        at: docs
+  #     - run: mv CNAME docs/CNAME
+  #     - run: npm install surge --save-dev
+  #     - run: echo | ./node_modules/.bin/surge --project docs
 
 workflows:
   version: 2
@@ -97,6 +97,6 @@ workflows:
       - python:
           requires:
             - lwarp
-      - surge:
-          requires:
-            - python
+      # - surge:
+      #     requires:
+      #       - python
