@@ -28,6 +28,17 @@ for outputFile in lwarpFiles:
     # include prismCss and prismjs in the final html final, consider merging the existing css file with prism.css
     prismCss = r'<link rel="stylesheet" href="prism.css" type="text/css">'
     prismJs  = r'<script src="prism.js" type="text/javascript"> </script>'
+    googleAnalytics = r"""<script async src="https://www.googletagmanager.com/gtag/js?id=G-452Q9YNE0N"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-452Q9YNE0N');
+        </script>
+    """
+    googleAdSense = r"""<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2479144310234386"
+     crossorigin="anonymous"></script>"""
     
     # Replace the lwarp <pre class="programlisting" >
     # with something that works for prism
@@ -59,7 +70,7 @@ for outputFile in lwarpFiles:
     #replacementLine = ""
     for line in htmlFile:
         # Include prism.js and prism.css after the title in the html document 
-        newline = re.sub(r'</title>',r'</title>' + '\n' + prismCss + '\n' + prismJs, line)
+        newline = re.sub(r'</title>',r'</title>' + '\n' + prismCss + '\n' + prismJs + '\n' + googleAnalytics + '\n' + googleAdSense + '\n', line)
         
         # CHange if the next pre tag should be changed, if it is not true already.
         if changeNextPre == False:
