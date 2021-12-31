@@ -12,6 +12,18 @@
 <title>Personal Notes</title>
 <link rel="stylesheet" href="prism.css" type="text/css">
 <script src="prism.js" type="text/javascript"> </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-452Q9YNE0N"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-452Q9YNE0N');
+        </script>
+    
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2479144310234386"
+     crossorigin="anonymous"></script>
+
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
 <script>
@@ -367,7 +379,7 @@ Some Author
 <div class="titledate">
 
 <p>
-December 14, 2021
+December 31, 2021
 </p>
 </div>
 
@@ -390,7 +402,7 @@ December 14, 2021
 </p>
 
 <p>
-<span class="textsc">December 14, 2021</span><br />
+<span class="textsc">December 31, 2021</span><br />
 <b>Name:</b> &#x2003;&#x2003;David Li<br />
 <b>Student Number:</b> &#x2003;&#x2003;V00818631<br />
 <b>Email:</b> &#x2003;&#x2003;<a href="mailto:davidli012345@gmail.ca" target="_blank" >davidli012345@gmail.ca</a><br />
@@ -1083,6 +1095,18 @@ Acronyms</a>
 <title>Personal Notes — Example chapter</title>
 <link rel="stylesheet" href="prism.css" type="text/css">
 <script src="prism.js" type="text/javascript"> </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-452Q9YNE0N"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-452Q9YNE0N');
+        </script>
+    
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2479144310234386"
+     crossorigin="anonymous"></script>
+
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
 <script>
@@ -1744,8 +1768,19 @@ for outputFile in lwarpFiles:
     # include prismCss and prismjs in the final html final, consider merging the existing css file with prism.css
     prismCss = r&apos;&lt;link rel="stylesheet" href="prism.css" type="text/css"&gt;&apos;
     prismJs = r&apos;&lt;script src="prism.js" type="text/javascript"&gt; &lt;/script&gt;&apos;
+    googleAnalytics = r"""&lt;script async src="https://www. googletagmanager .com/gtag/js?id=G-452Q9YNE0N"&gt;&lt;/script&gt;
+         &lt;script&gt;
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag(&apos;js&apos;, new Date());
 
-    # Replace the lwarp &lt;pre class=" programlisting " &gt;
+          gtag(&apos;config&apos;, &apos;G-452Q9YNE0N&apos;);
+          &lt;/script&gt;
+    """
+␣␣␣␣ googleAdSense ␣=␣r"""&lt;script async src="https://pagead2. googlesyndication .com/pagead/js/adsbygoogle.js?client=ca-pub -2479144310234386 "
+      crossorigin="anonymous"&gt;&lt;/script&gt;"""
+
+␣␣␣␣#␣Replace␣the␣lwarp␣&lt;pre␣class=" programlisting " &gt;
     # with something that works for prism
     lwarpCodeSyn = r&apos;&lt;pre class=" programlisting "&gt;&apos;
     lwarpCodeVerb = r&apos;&lt;pre class="verbatim"&gt;&apos;
@@ -1775,7 +1810,7 @@ for outputFile in lwarpFiles:
     # replacementLine = ""
     for line in htmlFile:
          # Include prism.js and prism.css after the title in the html document
-         newline = re.sub(r&apos;&lt;/title&gt;&apos;,r&apos;&lt;/title&gt;&apos; + &apos;\n&apos; + prismCss + &apos;\n&apos; + prismJs, line)
+         newline = re.sub(r&apos;&lt;/title&gt;&apos;,r&apos;&lt;/title&gt;&apos; + &apos;\n&apos; + prismCss + &apos;\n&apos; + prismJs + &apos;\n&apos; + googleAnalytics + &apos;\n&apos; + googleAdSense + &apos;\n&apos;, line)
 
           # CHange if the next pre tag should be changed, if it is not true already.
           if changeNextPre == False:
@@ -1855,6 +1890,18 @@ Home</a></nav>
 <title>Personal Notes — Some math</title>
 <link rel="stylesheet" href="prism.css" type="text/css">
 <script src="prism.js" type="text/javascript"> </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-452Q9YNE0N"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-452Q9YNE0N');
+        </script>
+    
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2479144310234386"
+     crossorigin="anonymous"></script>
+
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
 <script>
@@ -2395,6 +2442,18 @@ Home</a></nav>
 <title>Personal Notes — 2020</title>
 <link rel="stylesheet" href="prism.css" type="text/css">
 <script src="prism.js" type="text/javascript"> </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-452Q9YNE0N"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-452Q9YNE0N');
+        </script>
+    
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2479144310234386"
+     crossorigin="anonymous"></script>
+
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
 <script>
@@ -2959,6 +3018,18 @@ Home</a></nav>
 <title>Personal Notes — spaCy Tutorials</title>
 <link rel="stylesheet" href="prism.css" type="text/css">
 <script src="prism.js" type="text/javascript"> </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-452Q9YNE0N"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-452Q9YNE0N');
+        </script>
+    
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2479144310234386"
+     crossorigin="anonymous"></script>
+
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
 <script>
@@ -4673,6 +4744,18 @@ Home</a></nav>
 <title>Personal Notes — GCP Finance course</title>
 <link rel="stylesheet" href="prism.css" type="text/css">
 <script src="prism.js" type="text/javascript"> </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-452Q9YNE0N"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-452Q9YNE0N');
+        </script>
+    
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2479144310234386"
+     crossorigin="anonymous"></script>
+
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
 <script>
@@ -5414,6 +5497,18 @@ Home</a></nav>
 <title>Personal Notes — Interviews</title>
 <link rel="stylesheet" href="prism.css" type="text/css">
 <script src="prism.js" type="text/javascript"> </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-452Q9YNE0N"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-452Q9YNE0N');
+        </script>
+    
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2479144310234386"
+     crossorigin="anonymous"></script>
+
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
 <script>
@@ -6107,6 +6202,18 @@ Home</a></nav>
 <title>Personal Notes — 2019</title>
 <link rel="stylesheet" href="prism.css" type="text/css">
 <script src="prism.js" type="text/javascript"> </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-452Q9YNE0N"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-452Q9YNE0N');
+        </script>
+    
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2479144310234386"
+     crossorigin="anonymous"></script>
+
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
 <script>
@@ -8392,6 +8499,18 @@ Home</a></nav>
 <title>Personal Notes — Code Reference</title>
 <link rel="stylesheet" href="prism.css" type="text/css">
 <script src="prism.js" type="text/javascript"> </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-452Q9YNE0N"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-452Q9YNE0N');
+        </script>
+    
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2479144310234386"
+     crossorigin="anonymous"></script>
+
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
 <script>
@@ -9161,6 +9280,18 @@ Home</a></nav>
 <title>Personal Notes — Commands</title>
 <link rel="stylesheet" href="prism.css" type="text/css">
 <script src="prism.js" type="text/javascript"> </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-452Q9YNE0N"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-452Q9YNE0N');
+        </script>
+    
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2479144310234386"
+     crossorigin="anonymous"></script>
+
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
 <script>
@@ -9692,6 +9823,18 @@ Home</a></nav>
 <title>Personal Notes — Scripts and Tools</title>
 <link rel="stylesheet" href="prism.css" type="text/css">
 <script src="prism.js" type="text/javascript"> </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-452Q9YNE0N"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-452Q9YNE0N');
+        </script>
+    
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2479144310234386"
+     crossorigin="anonymous"></script>
+
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
 <script>
@@ -10504,6 +10647,18 @@ Home</a></nav>
 <title>Personal Notes — Index</title>
 <link rel="stylesheet" href="prism.css" type="text/css">
 <script src="prism.js" type="text/javascript"> </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-452Q9YNE0N"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-452Q9YNE0N');
+        </script>
+    
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2479144310234386"
+     crossorigin="anonymous"></script>
+
 <link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
 
 <script>
