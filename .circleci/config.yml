@@ -66,6 +66,8 @@ jobs:
               cd out
               git remote rm origin
               git remote add origin https://$USERNAME:$GITHUB_TOKEN@github.com/$USERNAME/$REPO.git
+              # add google ads file
+              echo "google.com, pub-2479144310234386, DIRECT, f08c47fec0942fa0" > ads.txt
               git add -A
               git commit -m "Automated deployment: ${CIRCLE_SHA1} [ci skip]" --allow-empty
               git push origin $TARGET_BRANCH
